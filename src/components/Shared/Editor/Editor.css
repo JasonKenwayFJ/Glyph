@@ -1,0 +1,92 @@
+/* Editor.css */
+.ProseMirror {
+    min-height: 300px;
+    padding: 20px;
+    outline: none; /* убираем стандартную синюю рамку фокуса браузера */
+    color: var(--text);
+    font-size: 15px;
+    line-height: 165%;
+    background-color: red;
+    width: 100vw;
+    height: 100vw;
+}
+
+.ProseMirror p {
+    margin: 0 0 12px;
+}
+
+.ProseMirror h1 {
+    font-size: 24px;
+    font-weight: 500;
+    margin: 24px 0 12px;
+    color: var(--text);
+}
+
+.ProseMirror h2 {
+    font-size: 19px;
+    font-weight: 500;
+    margin: 20px 0 10px;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+    padding-left: 24px;
+    margin: 0 0 12px;
+}
+
+.ProseMirror code {
+    background: var(--bg-accent);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 13px;
+}
+
+.ProseMirror pre {
+    background: var(--bg-accent);
+    border-radius: 8px;
+    padding: 14px;
+    overflow-x: auto;
+}
+
+/* placeholder текст, когда редактор пустой (нужен отдельный extension, см. ниже) */
+.ProseMirror p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    color: var(--text-disabled);
+    float: left;
+    pointer-events: none;
+    height: 0;
+}
+
+.BubbleMenu,
+.FloatingMenu {
+    display: flex;
+    gap: 4px;
+    background: var(--bg-main-light);
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    padding: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.BubbleMenu button,
+.FloatingMenu button {
+    background: transparent;
+    border: none;
+    color: var(--text);
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.BubbleMenu button:hover,
+.FloatingMenu button:hover {
+    background: var(--bg-accent);
+}
+
+.BubbleMenu button.active,
+.FloatingMenu button.active {
+    background: var(--accent-primary);
+    color: #fff;
+}

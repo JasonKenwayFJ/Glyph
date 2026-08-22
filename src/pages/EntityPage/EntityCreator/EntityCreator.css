@@ -1,0 +1,248 @@
+.EntityCreatorOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.EntityCreatorForm {
+    background: var(--bg-main);
+    border: 1px solid var(--border-default);
+    border-radius: 12px;
+    padding: 1.5rem;
+    width: 35rem;
+    max-height: 85vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.EntityCreatorForm input,
+.EntityCreatorForm textarea {
+    background: var(--bg-main-light);
+    border: 1px solid var(--border-default);
+    border-radius: 7px;
+    padding: 9px 11px;
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease;
+}
+
+.EntityCreatorForm input:focus,
+.EntityCreatorForm textarea:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+/* ==== Header ==== */
+.EntityCreatorHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.EntityCreatorHeader h2 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.EntityCreatorTypeSelect {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--bg-main-light);
+    border: 1px solid var(--border-default);
+    color: var(--text-disabled);
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.EntityCreatorTypeSelect:hover {
+    border-color: var(--accent-primary);
+    color: var(--accent-hover);
+}
+
+/* ==== Body ==== */
+.EntityCreatorBody {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: start;
+}
+
+.EntityCreatorBodyFooter {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+/* ==== Image uploader ==== */
+
+
+/* ==== Title + tags ==== */
+.EntityCreatorInputContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.EntityCreatorInputTitle {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+
+
+
+
+/* ==== Fields ==== */
+.EntityCreatorField {
+    display: flex;
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+.EntityCreatorField textarea{
+    resize: vertical;
+    min-height: 60px;
+    max-height: 200px;
+}
+
+.EntityCreatorField p {
+    margin: 0;
+    font-size: 12px;
+    color: var(--text-disabled);
+}
+
+/* ==== Extra fields ==== */
+.EntityCreatorExtraFields {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.EntityCreatorExtraFieldsHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.EntityCreatorExtraFieldsHeader span:first-child {
+    font-size: 12px;
+    color: var(--text-disabled);
+}
+
+.EntityCreatorExtraFieldAdd {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent-hover);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+.EntityCreatorExtraFieldRow {
+    display: flex;
+    gap: 6px;
+}
+
+.EntityCreatorExtraFieldRow input {
+    font-size: 13px;
+    padding: 7px 10px;
+}
+
+.EntityCreatorExtraFieldRemove {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    background: var(--bg-accent, var(--bg-main-light));
+    border: 1px solid var(--border-default);
+    border-radius: 6px;
+    color: var(--text-disabled);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.EntityCreatorExtraFieldRemove:hover {
+    border-color: var(--error);
+    color: var(--error);
+}
+
+/* ==== Buttons ==== */
+.EntityCreatorButtonHandler {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    border-top: 1px solid var(--border-default);
+    padding-top: 16px;
+}
+.EntitySelectedCategories{
+    display: flex;
+    overflow: auto;
+}
+.EntityCreatorCategories{
+    display: flex;
+    flex-direction: row;
+    overflow: auto;
+    
+}
+.EntityCreatorButtonHandler button {
+    height: auto;
+    width: auto;
+    padding: 9px 18px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+#EntityCreatorButton {
+    background: var(--accent-primary);
+    color: #fff;
+}
+
+#EntityCreatorButton:hover {
+    background: var(--accent-hover);
+}
+
+.EntityCreatorCancelButton {
+    background: transparent;
+    border: 1px solid var(--border-default) !important;
+    color: var(--text-disabled);
+}
+
+.EntityCreatorCancelButton:hover {
+    color: var(--text);
+    border-color: var(--border-hover) !important;
+}
+
+
+
+
+.categoryItem{
+
+}
+.TagHandler{
+    display: flex;
+    flex-direction: row;
+}

@@ -1,0 +1,90 @@
+import "./Toolbar.css"
+import {useEffect, useRef, useState} from "react";
+import {router} from "../../../router/router.tsx";
+import {useProject} from "../../../app/ProjectContext.tsx";
+import {clearToken, isVerified, subscribeAuth} from "../../../services/Network/AuthorizationService.ts";
+
+type ToolbarProp = {
+    isCollapsed: boolean
+}
+const Toolbar = ({isCollapsed} : ToolbarProp) => {
+    const [isOpen, setOpen] = useState<boolean>(false)
+    const [Verified, setVerified] = useState<boolean>(false)
+    const ref = useRef<HTMLDivElement>(null);
+    const {project, loading} = useProject()
+
+    useEffect(() => {
+        const handleClick = (event: MouseEvent) => {
+            const target = event.target as Node;
+
+            if (!ref.current?.contains(target)) {
+                toggleMainButton(false);
+            }
+        };
+
+        document.addEventListener("mouseover", handleClick);
+
+        return () => {
+            document.removeEventListener("mouseover", handleClick);
+        };
+    }, []);
+    useEffect(() => {
+        isVerified().then(setVerified);
+        return subscribeAuth(setVerified)
+    }, []);
+
+
+    function toggleMainButton(value: boolean) {
+        setOpen(value)
+    }
+    if (loading) {
+        return <div className="Toolbar">Загрузка...</div>; // или просто return null
+    }
+    return (
+        <div className={`Toolbar ${isCollapsed ? "collapsed" : ""}`}>
+
+
+            <div className="WindowTitle" ref={ref} onClick={() => toggleMainButton(!isOpen)}>
+                <label style={{display: "block",margin: 0}}>Glyph</label>
+                <p style={{display: "block", marginTop: 0, width: 100}}>{project?.title ?? "Без проекта"}</p>
+                {isOpen &&
+                    <div className="dropDownPanel">
+                        <button className="dropDownButton">
+                            <p>Новый проект</p>
+                        </button>
+                        <button className="dropDownButton" onClick={() => router.navigate("/projectPage")}>
+                            <p>Сменить проект</p></button>
+                        <button className="dropDownButton">
+                            <p>Настройки</p>
+                        </button>
+
+                        {Verified ? (
+                            <button
+                                className="dropDownButton"
+                                onClick={clearToken}
+                            >
+                                <p>Выйти из аккаунта</p>
+                            </button>
+                        ) : (
+                            <button
+                                className="dropDownButton"
+                                onClick={() => router.navigate("/login")}
+                            >
+                                <p>Войти</p>
+                            </button>
+                        )}
+
+                        <button className="dropDownButton">
+                            <p>Выйти</p>
+                        </button>
+                    </div>}
+            </div>
+
+
+            <div>
+
+            </div>
+        </div>
+    )
+}
+export default Toolbar

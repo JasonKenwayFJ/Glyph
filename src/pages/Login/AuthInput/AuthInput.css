@@ -1,0 +1,38 @@
+.AuthInputWrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-main-light);
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    padding: 10px 12px;
+    transition: border-color 0.15s ease;
+}
+
+/* ключевой момент: рамка "переезжает" на контейнер при фокусе на инпуте внутри */
+.AuthInputWrap:focus-within {
+    border-color: var(--accent-primary);
+}
+
+.AuthInputIcon {
+    display: flex;
+    align-items: center;
+    color: var(--text-disabled);
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+.AuthInputField {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    min-width: 0; /* чтобы длинный текст не распирал flex-контейнер */
+}
+
+.AuthInputField::placeholder {
+    color: var(--text-disabled);
+}

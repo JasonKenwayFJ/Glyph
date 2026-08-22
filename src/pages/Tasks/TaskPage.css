@@ -1,0 +1,59 @@
+.TasksContainer {
+    height: fit-content;
+    width: 100vw;
+}
+
+.Task {
+    width: 400px;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: var(--bg-main-light);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.Task:hover{
+    background-color: var(--bg-main-dark);
+}
+
+.TaskTag {
+    background-color: purple;
+    padding: 2px 5px;
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+.TaskTitle {
+    padding: 15px;
+    text-align: start;
+
+}
+
+.TaskTitle label {
+    font-size: 24px;
+    font-weight: bold;
+}
+.TaskDescription{
+    display: flex;
+    gap: 10px;
+    margin: 7px 0;
+}
+
+.TaskCategory{
+    background-color: purple;
+    border-radius: 10px;
+    padding: 0 5px;
+}
+.TaskButtons{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: end;
+}
+.TaskButtons button{
+    height: 30px;
+    width: 30px;
+    border-radius: 10px;
+}

@@ -1,0 +1,19 @@
+.ButtonLoginSwitcher{
+    border: 5px solid var(--bg-main-dark);
+    height: 100px;
+    width: 200px;
+    background-color: var(--accent-hover);
+}
+.SelectedButtonLoginSwitcher{
+
+    background-color: var(--bg-main);
+    height: 100px;
+    width: 200px;
+}
+.ButtonLoginSwitcher:hover{
+    height: 50px;
+    width: 200px;
+}
+.ButtonLoginSwitcher:active{
+    border: 5px solid var(--bg-main-dark);
+}

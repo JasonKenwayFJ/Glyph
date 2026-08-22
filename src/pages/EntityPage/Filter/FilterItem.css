@@ -1,0 +1,85 @@
+.FilterItemContainer {
+    background-color: transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 0.5rem 0.3rem;
+    margin: 5px 0;
+}
+
+.FilterItemContainer,
+.FilterItemContainer * {
+    cursor: pointer;
+}
+
+.FilterItemContainer:hover {
+    background-color: var(--bg-main-dark);
+}
+
+.FilterItem {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}
+
+.FilterItemInfo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    line-height: 1;
+    color: var(--text);
+}
+
+.FilterItemInfo.muted {
+    color: var(--text-disabled);
+}
+
+.FilterItemIcon {
+    display: flex;
+    align-items: center;
+    line-height: 0;
+}
+
+.FilterItemIcon svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+}
+
+.FilterItemLabel {
+    line-height: 1;
+}
+
+.FilterItemQuantity {
+    display: flex;
+    align-items: center;
+    line-height: 1;
+}
+
+#AddFilterItem {
+    border: 3px dotted var(--bg-main-light);
+    justify-content: start;
+    display: flex;
+    flex-direction: row;
+}
+
+.AddFilterItemButton {
+    width: 100%;
+    text-align: left;
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin-left: 0;
+    cursor: pointer;
+}
+
+.AddFilterItemButton:hover {
+    border: none;
+    background-color: transparent;
+}
+
+.AddFilterItemSpan {
+    margin: 0 5px;
+}

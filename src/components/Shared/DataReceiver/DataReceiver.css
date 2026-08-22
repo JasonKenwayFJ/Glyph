@@ -1,0 +1,94 @@
+.DataReceiverOverlay {
+    position: fixed;
+    inset: 0;
+    background: var(--overlay);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: overlayFade 0.25s ease both;
+}
+
+.DataReceiverContainer {
+    position: relative;
+    background: var(--backgroundSelected);
+    display: flex;
+    flex-direction: column;
+    width: 40vw;
+    min-height: 35vh;
+    padding: 28px;
+    border-radius: 16px;
+    gap: 22px;
+    box-shadow: 0 20px 60px var(--shadowElevated);
+    border: 1px solid var(--borderDefault);
+    animation: modalIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+    overflow: hidden;
+}
+
+.DataReceiverContainer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accentPrimary), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 2.5s linear infinite;
+}
+
+.DataReceiverTitle {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--textPrimary);
+    letter-spacing: -0.2px;
+}
+
+.FloatField {
+    position: relative;
+}
+
+.DataReceiverInput,
+.DataReceiverTextarea {
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--backgroundDark);
+    border: 1px solid var(--inputBorder);
+    border-radius: 10px;
+    padding: 18px 12px 8px;
+    color: var(--inputText);
+    font: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.DataReceiverTextarea {
+    min-height: 70px;
+    resize: vertical;
+}
+
+.FloatField label {
+    position: absolute;
+    left: 13px;
+    top: 15px;
+    font-size: 14px;
+    color: var(--inputPlaceholder);
+    pointer-events: none;
+    transform-origin: left top;
+    transition: transform 0.18s ease, color 0.18s ease, top 0.18s ease;
+}
+
+.DataReceiverInput:not(:placeholder-shown) ~ label,
+.DataReceiverInput:focus ~ label,
+.DataReceiverTextarea:not(:placeholder-shown) ~ label,
+.DataReceiverTextarea:focus ~ label {
+    top: 6px;
+    transform: scale(0.78);
+    color: var(--accentPrimary);
+}
+
+.DataReceiverIn

@@ -1,0 +1,49 @@
+.EntityCreatorInputTagAdder:hover {
+    border-color: var(--accent-primary);
+    color: var(--accent-hover);
+}
+
+.EntityCreatorInputTagAdder p {
+    margin: 0;
+
+}
+.EntityCreatorInputTagAdder {
+    align-self: flex-start;
+    background: transparent;
+    border: 1px dashed var(--accent-hover);
+    border-radius: 1rem;
+    padding: 4px 11px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--text);
+    font-size: 12px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease;
+    margin-right: 0.5rem;
+}
+
+.EntityCreatorInputTagEmpty{
+    align-self: flex-start;
+    background: transparent;
+    border: 1px dashed var(--text);
+    border-radius: 1rem;
+    padding: 4px 11px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--text);
+    font-size: 12px;
+    cursor: pointer;
+    margin-right: 0.5rem;
+
+    transition: border-color 0.15s ease, color 0.15s ease;
+}
+.EntityCreatorInputTagEmpty:hover {
+    border-color: var(--accent-primary);
+    color: var(--accent-hover);
+}
+
+.EntityCreatorInputTagEmpty p {
+    margin: 0;
+}

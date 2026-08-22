@@ -1,0 +1,22 @@
+.Divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+}
+
+.DividerTitle {
+    white-space: nowrap;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.DividerLine {
+    flex: 1;
+    height: 1px;
+    background: var(--border-default);
+}
+
+.DividerButton {
+    white-space: nowrap;
+}

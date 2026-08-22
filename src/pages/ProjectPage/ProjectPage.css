@@ -1,0 +1,228 @@
+.ProjectSelectPage {
+    padding: 48px 40px;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: left;
+
+}
+
+.ProjectSelectHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    animation: fadeSlideDown 0.5s ease both;
+}
+
+.ProjectSelectHeader h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--textPrimary);
+}
+
+.ProjectSelectHeader p {
+    margin: 4px 0 0;
+    font-size: 13px;
+    color: var(--textDisabled);
+}
+
+.ProjectCreateButton {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accentPrimary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+
+}
+
+.ProjectCreateButton:hover {
+    background: var(--accentHover);
+    transform: translateY(-1px);
+}
+
+.ProjectCreateButton:active {
+    transform: translateY(0) scale(0.97);
+}
+
+.ProjectSearch {
+    display: block;
+    background: var(--backgroundAccent);
+    border: 1px solid var(--borderDefault);
+    border-radius: 8px;
+    padding: 9px 12px;
+    color: var(--textPrimary);
+    font: inherit;
+    font-size: 13px;
+    max-width: 280px;
+    margin: 26px 0 20px;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    animation: fadeSlideDown 0.5s ease 0.1s both;
+
+}
+
+.ProjectSearch:focus {
+    outline: none;
+    border-color: var(--accentPrimary);
+    box-shadow: 0 0 0 3px rgba(41, 121, 255, 0.15);
+}
+
+.ProjectSearch::placeholder {
+    color: var(--textDisabled);
+}
+
+.ProjectGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.ProjectCard {
+    background: var(--backgroundLight);
+    border: 1px solid var(--borderDefault);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s ease, transform 0.15s ease;
+    transform-style: preserve-3d;
+    will-change: transform;
+    animation: cardIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.ProjectCard:hover {
+    border-color: var(--borderHover);
+}
+
+.ProjectCardCover {
+    height: 100px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: 10px;
+    box-sizing: border-box;
+    background: var(--backgroundAccent);
+}
+
+.ProjectCardAurora {
+    position: absolute;
+    inset: -40%;
+    background: conic-gradient(
+            from 0deg,
+            var(--backgroundAccent) 0deg,
+            transparent 90deg,
+            var(--accentSecondary, var(--backgroundAccent)) 180deg,
+            transparent 270deg,
+            var(--backgroundAccent) 360deg
+    );
+    opacity: 0.14;
+    filter: blur(20px);
+    animation: auroraSpin 12s linear infinite;
+}
+
+.ProjectActiveBadge {
+    position: relative;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(76, 175, 80, 0.15);
+    color: var(--successText);
+    border: 1px solid rgba(76, 175, 80, 0.4);
+}
+
+.ProjectCardBody {
+    padding: 14px;
+}
+
+.ProjectCardBody h3 {
+    margin: 0 0 4px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--textPrimary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ProjectCardBody p {
+    margin: 0 0 10px;
+    font-size: 12px;
+    color: var(--textDisabled);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.ProjectCardFooter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--textDisabled);
+}
+
+.ProjectCardNew {
+    border: 1px dashed var(--borderDefault);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--textDisabled);
+    min-height: 186px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+    animation: cardIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.ProjectCardNew:hover {
+    border-color: var(--accentPrimary);
+    color: var(--accentHover);
+}
+
+.ProjectCardNew:hover .ProjectCardNewPlus {
+    animation: pulsePlus 1s ease infinite;
+}
+
+.ProjectCardNewPlus {
+    font-size: 22px;
+    font-weight: 300;
+}
+
+.ProjectCardNew p {
+    margin: 0;
+    font-size: 13px;
+}
+
+@keyframes fadeSlideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cardIn {
+    from { opacity: 0; transform: translateY(14px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes auroraSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes pulsePlus {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.25); }
+}

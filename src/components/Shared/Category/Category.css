@@ -1,0 +1,36 @@
+.CategoryContainer{
+    background-color: var(--bg-accent);
+    width: fit-content;
+    padding: 0 7px;
+    height: fit-content;
+    border-radius: 15px;
+    cursor: pointer;
+    border: 3px dotted var(--border-default);
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.SelectedCategoryContainer{
+    background-color: var(--accent-hover);
+    width: fit-content;
+    padding: 5px 10px;
+    height: fit-content;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+.SelectedCategoryContainer p {
+    font-size: 12px;
+    text-align: center;
+    color: inherit;
+}
+
+.CategoryContainer:hover{
+    background-color: var(--accent-hover);
+    color: var(--text-reverse);
+}
+
+.CategoryContainer p{
+    font-size: 12px;
+    text-align: center;
+    color: inherit;
+}

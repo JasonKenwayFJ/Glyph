@@ -1,0 +1,10 @@
+.SearcherContainer{
+
+}
+.SearcherInput{
+    padding: 20px;
+    width: 30vw;
+    border-radius: 10px;
+    border: none;
+    background-color: var(--bg-main-light);
+}

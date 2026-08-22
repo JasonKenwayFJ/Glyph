@@ -1,0 +1,20 @@
+.sBar{
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-main-dark);
+    border-radius: 10px;
+
+}
+.sBarButton {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}

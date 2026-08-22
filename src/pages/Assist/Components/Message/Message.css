@@ -1,0 +1,90 @@
+.MessageBubble {
+    border-radius: 10px;
+    padding: 10px;
+    margin: 0 0 8px;
+    max-width: 85%;
+    width: fit-content;
+    background: var(--bg-accent); /* аналог SecondraryColor из XAML */
+}
+
+/* Аналог DataTrigger IsFromUser=True */
+.MessageBubble.fromUser {
+    background: var(--accent-primary); /* аналог ButtonColors */
+    margin-left: auto; /* HorizontalAlignment="Right" */
+}
+
+.MessageBubble.fromOther {
+    margin-right: auto; /* HorizontalAlignment="Left" */
+}
+
+/* Заголовок с аватаром */
+.MessageHeader {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.MessageAvatar {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: radial-gradient(
+            circle at 25% 25%,
+            #4a90e2 0%,
+            #6c5ce7 65%,
+            #50e3c2 100%
+    );
+}
+
+.MessageUserName {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--text);
+}
+
+/* Разделитель */
+.MessageDivider {
+    height: 1px;
+    background: var(--text);
+    opacity: 0.2;
+    margin: 5px 0;
+}
+
+/* Текст сообщения */
+.MessageText {
+    margin: 0;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--text);
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* Статус и время */
+.MessageFooter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 5px;
+}
+
+.MessageStatus {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: var(--text);
+    opacity: 0.7;
+}
+
+.MessageStatusIcon {
+    font-size: 10px;
+}
+
+.MessageTime {
+    font-size: 11px;
+    color: var(--text);
+    opacity: 0.7;
+    flex-shrink: 0;
+}

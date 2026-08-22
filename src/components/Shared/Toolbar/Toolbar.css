@@ -1,0 +1,92 @@
+.Toolbar {
+    display: flex;
+    flex-direction: row;
+    padding: 5px 10px;
+    -webkit-app-region: drag;
+    user-select: none;
+
+    box-sizing: border-box;
+
+    transition: width 0.3s ease;
+}
+
+.Toolbar.collapsed {
+    width: 0;
+    padding-left: 0;
+    padding-right: 0;
+}
+.WindowTitle {
+    font-weight: bold;
+    margin-right: 20px;
+    -webkit-app-region: no-drag;
+
+    text-align: start;
+    position: relative;
+    cursor: pointer;
+
+    border-radius: 10px;
+    padding: 0 8px;
+
+    color: var(--text);
+
+    transition:
+            color 0.25s ease,
+            transform 0.25s cubic-bezier(.2, .8, .2, 1);
+}
+
+.WindowTitle::after {
+    content: "";
+
+    position: absolute;
+    left: 8px;
+    bottom: 3px;
+
+    width: 0;
+    height: 2px;
+
+    border-radius: 999px;
+    background: var(--accent-hover);
+
+    transition:
+            width 0.35s cubic-bezier(.16, 1, .3, 1);
+}
+
+.WindowTitle:hover {
+    color: var(--accent-hover);
+    transform: translateY(-1px);
+
+}
+
+.WindowTitle:hover::after {
+    width: calc(100% - 16px);
+}
+
+.WindowTitle p{
+    font-size: 12px;
+}
+.WindowButtons{
+    -webkit-app-region: no-drag;
+}
+.ToolbarActions{
+    display: flex;
+    position: relative;
+    -webkit-app-region: no-drag;
+}
+
+.dropDownPanel{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    background-color: var(--bg-main-light);
+    border-radius: 10px;
+    width: 7rem;
+    translate: -5% 15%
+}
+.WindowButtons button{
+    width: 100%;
+    height: 100%;
+    align-content: center;
+}
+.dropDownButton p {
+    font-size: 12px;
+}

@@ -1,0 +1,46 @@
+
+
+.Sidebar {
+
+    padding: 10px 0;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.SidebarContainer {
+    display: flex;
+    width: 15rem;
+    flex-direction: column;
+    background-color: var(--bg-main-dark);
+    border-radius: 0 15px;
+
+}
+
+.SidebarItem {
+    width: 15rem;
+}
+
+
+.SidebarLink {
+    color: var(--text);
+    height: 2.5rem;
+    align-content: center;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: block;
+    font-size: 13px;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.SidebarLink:hover {
+    background: var(--bg-main-light);
+    color: var(--text);
+}
+
+.SidebarLink.active {
+    background: rgba(41, 121, 255, 0.1);
+    color: var(--accent-primary);
+    font-weight: 500;
+}
+
