@@ -1,13 +1,30 @@
 import "./Toolbar.css"
 import {useEffect, useRef, useState} from "react";
 import {router} from "../../../router/router.tsx";
-import {useProject} from "../../../app/ProjectContext.tsx";
 import {clearToken, isVerified, subscribeAuth} from "../../../services/Network/AuthorizationService.ts";
+import {listen} from '@tauri-apps/api/event'
 
 type ToolbarProp = {
     isCollapsed: boolean
 }
 const Toolbar = ({isCollapsed} : ToolbarProp) => {
+
+    const [project, setProject] = useState(null);
+
+    useEffect(() => {
+        const unlisten = listen<Project>('OnProjectChanged', (event) => {
+            console.log('Проект изменился:', event.payload)
+            setProject()
+        })
+
+        return () => {
+            unlisten.then(fn => fn()) // отписка при размонтировании компонента
+        }
+    }, [])
+
+
+
+
     const [isOpen, setOpen] = useState<boolean>(false)
     const [Verified, setVerified] = useState<boolean>(false)
     const ref = useRef<HTMLDivElement>(null);

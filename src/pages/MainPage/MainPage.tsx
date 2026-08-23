@@ -5,7 +5,18 @@ import EntityCreator from "../EntityPage/EntityCreator/EntityCreator.tsx";
 import "./MainPage.css";
 import {documentsService} from "../../services/entityServices/documentService.ts";
 
+import {listen} from '@tauri-apps/api/event'
+
+
+
 const MainPage = () => {
+
+
+
+
+
+
+
     //Если mainPage был инвоукнут с параметром, то есть произошло открытие mainPage при нажатии на документ во вкладке Documents, пихаем айдишник в переменную
     const {id} = useParams();
     const {setProject} = useProject()

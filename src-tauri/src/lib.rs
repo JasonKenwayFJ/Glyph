@@ -1,5 +1,16 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-use glyph_core::ProjectManager;
+use glyph_core::{ProjectManager, Project};
+use tauri::Emitter;
+
+#[tauri::command]
+fn open_project(
+    app: tauri::AppHandle,
+    state: tauri::State<ProjectManager>,
+    project: Project,
+){
+    state.set_project(project);
+    app.emit("OnProjectChanged", project).unwrap();
+}
 
 #[tauri::command]
 fn greet(name: &str) -> String {
