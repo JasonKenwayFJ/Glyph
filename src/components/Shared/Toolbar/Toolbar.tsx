@@ -9,12 +9,12 @@ type ToolbarProp = {
 }
 const Toolbar = ({isCollapsed} : ToolbarProp) => {
 
-    const [project, setProject] = useState(null);
+    const [project, setProject] = useState<Project>();
 
     useEffect(() => {
         const unlisten = listen<Project>('OnProjectChanged', (event) => {
             console.log('Проект изменился:', event.payload)
-            setProject()
+            setProject(event.payload)
         })
 
         return () => {
@@ -28,7 +28,7 @@ const Toolbar = ({isCollapsed} : ToolbarProp) => {
     const [isOpen, setOpen] = useState<boolean>(false)
     const [Verified, setVerified] = useState<boolean>(false)
     const ref = useRef<HTMLDivElement>(null);
-    const {project, loading} = useProject()
+
 
     useEffect(() => {
         const handleClick = (event: MouseEvent) => {
@@ -54,9 +54,8 @@ const Toolbar = ({isCollapsed} : ToolbarProp) => {
     function toggleMainButton(value: boolean) {
         setOpen(value)
     }
-    if (loading) {
-        return <div className="Toolbar">Загрузка...</div>; // или просто return null
-    }
+
+
     return (
         <div className={`Toolbar ${isCollapsed ? "collapsed" : ""}`}>
 

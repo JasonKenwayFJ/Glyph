@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
-import { projectService } from "../../services/entityServices/projectService.ts";
-import type { projectEntity } from "../../../types/Entities.ts";
+import {useEffect, useState} from "react";
+import {projectService} from "../../services/entityServices/projectService.ts";
+
 import "./ProjectPage.css";
 import DataReceiver from "../../components/Shared/DataReceiver/DataReceiver.tsx";
 import {createProject} from "../../services/entityControllers/projectController.ts";
+import {invoke} from "@tauri-apps/api/core";
 
 const ProjectPage = () => {
-    const [projects, setProjects] = useState<projectEntity[]>([]);
+    const [projects, setProjects] = useState<Project[]>([]);
     const [search, setSearch] = useState("");
     const [dataReceiver, setDataReceiver] = useState<boolean>(false);
     useEffect(() => {
@@ -14,6 +15,7 @@ const ProjectPage = () => {
             const data = await projectService.getAllLocally();
             setProjects(data);
         }
+
         load();
     }, []);
 
@@ -21,10 +23,14 @@ const ProjectPage = () => {
         p.title.toLowerCase().includes(search.toLowerCase())
     );
 
-    const openProject = (project: projectEntity) => {
-        window.projectController.setProject(project);
-        window.electron.closeWindow();
-    };
+    async function openProject(project: Project) {
+        await invoke('open_project', {
+            project: project
+        })
+
+        setProjects(prev => [...prev, project]);
+
+    }
 
     function handleTilt(e: React.MouseEvent<HTMLDivElement>) {
         const card = e.currentTarget;
@@ -47,10 +53,12 @@ const ProjectPage = () => {
 
     async function submitProjectCreation(title: string, description: string) {
 
-        const project : projectEntity = {
-            category: [], createdAt: "", entities: [], id: crypto.randomUUID(), tags: [], updatedAt: "",
+        const project: Project = {
+            id: crypto.randomUUID(),
             title,
-            description
+            description,
+            createdAt: "", entities: [], tags: [], updatedAt: "",
+
         }
         console.log(await createProject(project));
         setDataReceiver(false);
@@ -59,7 +67,8 @@ const ProjectPage = () => {
 
     return (
         <div className="ProjectSelectPage">
-            {dataReceiver && <DataReceiver onCreate={(title, description) => submitProjectCreation(title, description)} onClose={() => toggleDataReceiver(!dataReceiver)}/>}
+            {dataReceiver && <DataReceiver onCreate={(title, description) => submitProjectCreation(title, description)}
+                                           onClose={() => toggleDataReceiver(!dataReceiver)}/>}
             <div className="ProjectSelectHeader">
                 <div>
                     <h1>Твои проекты</h1>
@@ -87,13 +96,13 @@ const ProjectPage = () => {
                     <div
                         key={project.id}
                         className="ProjectCard"
-                        style={{ animationDelay: `${i * 60}ms` }}
+                        style={{animationDelay: `${i * 60}ms`}}
                         onMouseMove={handleTilt}
                         onMouseLeave={resetTilt}
                         onClick={() => openProject(project)}
                     >
                         <div className="ProjectCardCover">
-                            <div className="ProjectCardAurora" />
+                            <div className="ProjectCardAurora"/>
                             <span className="ProjectActiveBadge">активен</span>
                         </div>
                         <div className="ProjectCardBody">

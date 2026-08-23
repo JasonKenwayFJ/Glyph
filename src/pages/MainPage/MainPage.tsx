@@ -6,11 +6,23 @@ import "./MainPage.css";
 import {documentsService} from "../../services/entityServices/documentService.ts";
 
 import {listen} from '@tauri-apps/api/event'
+import {baseEntity} from "../../types/Entities.ts";
 
 
 
 const MainPage = () => {
+    const [project, setProject] = useState<Project>();
 
+    useEffect(() => {
+        const unlisten = listen<Project>('OnProjectChanged', (event) => {
+            setProject(event.payload);
+        });
+
+        return () => {
+            unlisten.then(fn => fn())
+        }
+
+    }, []);
 
 
 
@@ -19,7 +31,6 @@ const MainPage = () => {
 
     //Если mainPage был инвоукнут с параметром, то есть произошло открытие mainPage при нажатии на документ во вкладке Documents, пихаем айдишник в переменную
     const {id} = useParams();
-    const {setProject} = useProject()
     //Хватаем систему навигации (видимо, чтобы перенаправлять на другие страницы/вкладки)
     const navigate = useNavigate();
 
@@ -29,6 +40,7 @@ const MainPage = () => {
     const [content, setContent] = useState<string>("");
     const [showCreator, setShowCreator] = useState(false);
     const [loading, setLoading] = useState(!!id);
+
     useEffect(() => {
         async function load() {
             //Если страница была ивоукнута без параметра, то есть при первом запуске приложения, то забиваем хуй на последующую обработку, она нам не нужна
@@ -36,7 +48,6 @@ const MainPage = () => {
                 setLoading(false);
                 return;
             }
-            setProject(await window.projectController.getProject())
             //Если параметр всё-таки прибыл, достаём документы из базы данных
             const all = await documentsService.getAllLocally();
             //Находим документ айдишник которого прибыл в mainPage (если он был воукнут с параметром)
@@ -48,7 +59,7 @@ const MainPage = () => {
             //Перестаём показывать меню загрузки
             setLoading(false);
 
-            console.log("🔥 SELECTED PROJECT: " + window.projectController.getProject()!);
+            console.log("🔥 SELECTED PROJECT: " + project);
         }
         //Начинаем процесс обработки обоих сценариев
         load();

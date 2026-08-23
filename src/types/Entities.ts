@@ -22,17 +22,7 @@ export type characteristicWithEntities = baseCharacteristic & {
     documents?: baseEntity[]
 }
 
-export type projectEntity = {
-    id: string,
-    title: string,
-    description: string,
-    imagePath?: string,
-    category: baseCharacteristic[],
-    tags: baseCharacteristic[],
-    entities: baseEntity[],
-    createdAt: string,
-    updatedAt: string,
-}
+
 
 export type authForm = {
     email: string,

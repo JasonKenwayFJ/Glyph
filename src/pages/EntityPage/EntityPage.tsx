@@ -1,6 +1,5 @@
 import "./EntityList.css"
 import {useEffect, useState} from "react";
-import type {baseEntity} from "../../../types/Entities.ts";
 import Card from "../../components/Card/Card.tsx";
 import Searcher from "../../components/Shared/Searcher/Searcher.tsx";
 import {cardsService} from "../../services/entityServices/cardsService.ts";
@@ -9,7 +8,8 @@ import {useNavigate, useParams} from "react-router-dom";
 import {documentsService} from "../../services/entityServices/documentService.ts";
 import DocumentTemplate from "../../components/Document/Document.tsx"
 import FilterContainer from "./Filter/EntityCategories/FilterContainer.tsx";
-import {useProject} from "../../app/ProjectContext.tsx";
+import {baseEntity} from "../../types/Entities.ts";
+import {invoke} from "@tauri-apps/api/core";
 
 const CreatorMode = {
     None: "none",
@@ -24,13 +24,22 @@ function NotFound() {
 }
 
 const EntityPage = () => {
+    const [project, setProject] = useState<Project | null>(null)
+    useEffect(() => {
+        const getProject = async () => {
+            setProject(await invoke<Project | null>('get_project'))
+        }
+        getProject();
+    }, []);
+
+
     type EntityType = "cards" | "documents";
     const {type} = useParams<{ type: EntityType }>();
 
     const [entities, setEntities] = useState<baseEntity[]>([]);
     const [filteredEntities, setFilteredEntities] = useState<baseEntity[]>([]);
 
-    const {project} = useProject();
+
     const navigate = useNavigate()
 
     const [loading, setLoading] = useState(true);
