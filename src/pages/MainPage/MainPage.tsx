@@ -2,10 +2,8 @@ import {useState, useEffect} from "react";
 import {useParams, useNavigate} from "react-router-dom";
 import Editor from "../../components/Shared/Editor/Editor.tsx";
 import EntityCreator from "../EntityPage/EntityCreator/EntityCreator.tsx";
-import type {baseEntity} from "../../../types/Entities.ts";
 import "./MainPage.css";
 import {documentsService} from "../../services/entityServices/documentService.ts";
-import {useProject} from "../../app/ProjectContext.tsx";
 
 const MainPage = () => {
     //Если mainPage был инвоукнут с параметром, то есть произошло открытие mainPage при нажатии на документ во вкладке Documents, пихаем айдишник в переменную
