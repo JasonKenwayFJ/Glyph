@@ -1,24 +1,40 @@
 use std::sync::Mutex;
-use uuid::Uuid;
-use crate::entities::entity::Entity;
-use crate::entities::project_entity::Project;
+use crate::entities::entity::{Entity, EntityType};
+
+
 
 pub struct EntityManager {
-    entities: Mutex<Option<Entity>>   
+    entities: Mutex<Vec<Entity>>
 }
 
 impl EntityManager {
     pub fn new() -> EntityManager {
         EntityManager{
-            entities: Mutex::new(None)
+            entities: Mutex::new(Vec::new())
         }
     }
-    pub async fn load_entities(&self) -> Option<Entity> {
-        
+
+    pub fn get_entities(&self, r#type: EntityType) -> Vec<Entity> {
+        let entities = self.entities
+            .lock().unwrap();
+        entities.iter().filter(|e| e.entity_type == r#type).cloned().collect()
     }
-    pub fn get_entities(&self) -> Option<Entity> {
-        self.entities.lock().unwrap().clone()
+    pub fn add_entity_locally(&self, entity: &Entity){
+        let mut entities = self.entities.lock().unwrap();
+        entities.push(entity.clone());
     }
-    
+
+    pub fn update_entity_locally(&self, entity: &Entity) {
+        let mut entities = self.entities.lock().unwrap();
+        if let Some(index) = entities.iter().position(|x| x.id == entity.id){
+            entities[index] = entity.clone();
+        }
+    }
+    pub fn delete_entity_locally(&self, entity: &Entity){
+        let mut entities = self.entities.lock().unwrap();
+        entities.retain(|e| e.id != entity.id);
+    }
+
+
 }
 

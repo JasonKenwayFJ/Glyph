@@ -1,22 +1,27 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+#[derive(Clone, Copy, PartialEq, Serialize, Deserialize)]
+pub enum EntityType{
+    Card,
+    Document
+}
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Entity {
-    id: Uuid,
+    pub(crate) id: Uuid,
     project_id: Uuid,
     title: String,
     description: String,
     content: String,
     image_path: String,
+    pub entity_type: EntityType,
     created_at: DateTime<Utc>,
     updated_at: DateTime<Utc>,
     category: Vec<Characteristic>,
     tags: Vec<Characteristic>,
     extra_fields: Vec<ExtraField>,
 }
-
 impl Entity {
     pub fn new(
         project_id: Uuid,
@@ -24,8 +29,7 @@ impl Entity {
         description: &str,
         content: &str,
         image_path: &str,
-        created_at: DateTime<Utc>,
-        updated_at: DateTime<Utc>,
+        entity_type: EntityType,
         category: Vec<Characteristic>,
         tags: Vec<Characteristic>,
         extra_fields: Vec<ExtraField>,
@@ -38,8 +42,9 @@ impl Entity {
             description: description.to_string(),
             content: content.to_string(),
             image_path: image_path.to_string(),
-            created_at,
-            updated_at,
+            entity_type,
+            created_at: now,
+            updated_at: now,
             category,
             tags,
             extra_fields,
