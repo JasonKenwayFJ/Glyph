@@ -35,7 +35,7 @@ pub async fn authorization(
     // Шаг 3: отправляем через ApiClient, получаем строку JSON назад
     let response_text = client.post("/api/auth/login", json_body).await?;
     // Шаг 4: разбираем строку JSON в конкретную структуру AuthResponse
-    let auth_response :AuthorizationResponse = serde_json::from_str(&response_text).map_err(|err| err.to_string())?;
+    let auth_response : TokenResponse = serde_json::from_str(&response_text).map_err(|err| err.to_string())?;
     Ok(auth_response)
 }
 
@@ -55,8 +55,8 @@ pub async fn registration(
     };
 
     let json_body = serde_json::to_string(&body).map_err(|err| err.to_string())?;
-    let response_text = client.post("/api/auth/register", json_body).await?;
-    let token : AuthorizationResponse = serde_json::from_str(&response_text).map_err(|err| err.to_string())?;
+    let response_text = client.post("/api/auth/register", &json_body).await?;
+    let token : TokenResponse = serde_json::from_str(&response_text).map_err(|err| err.to_string())?;
 
     Ok(token)
 }
