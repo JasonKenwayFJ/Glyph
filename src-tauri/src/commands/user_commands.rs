@@ -1,6 +1,6 @@
 use glyph_core::network::api_client::{ApiClient, ApiResponse};
 use glyph_core::network::authorization_service;
-use tauri::Emitter;
+
 
 #[tauri::command]
 pub async fn register(

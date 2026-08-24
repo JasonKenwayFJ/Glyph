@@ -14,13 +14,13 @@ enum Type {
 pub fn get_entities(
     entity_type: EntityType,
     api_state: tauri::State<'_, ApiClient>,
-    entity_state: tauri::State<'_, EntityManager>
+    entity_state: tauri::State<'_, EntityManager>,
 ) -> Result<Vec<Entity>, String> {
     Ok(entity_state.get_entities(entity_type))
 }
 
 #[tauri::command]
-pub async fn add_entity(
+pub async fn create_entity(
     api_state: tauri::State<'_, ApiClient>,
     entity_state: tauri::State<'_, EntityManager>,
     entity: Entity,
@@ -29,3 +29,25 @@ pub async fn add_entity(
     entity_state.add_entity_locally(&entity);
     Ok(())
 }
+
+#[tauri::command]
+pub async fn update_entity(
+    api_state: tauri::State<'_, ApiClient>,
+    entity_state: tauri::State<'_, EntityManager>,
+    entity: Entity,
+) -> Result<(), String> {
+    entity_state.update_entity_locally(&entity);
+    entity_service::update_entity::<ApiResponse<String>>(api_state.inner(), &entity).await;
+    Ok(())
+}
+#[tauri::command]
+pub async fn delete_entity(
+    api_state: tauri::State<'_, ApiClient>,
+    entity_state: tauri::State<'_, EntityManager>,
+    entity: Entity) -> Result<(), String> {
+    entity_state.delete_entity_locally(&entity);
+    entity_service::delete_entity::<ApiResponse<String>>(api_state.inner(), &entity).await;
+    Ok(())
+}
+
+

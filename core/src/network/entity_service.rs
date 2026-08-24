@@ -37,17 +37,8 @@ where
     client.post::<Entity,Res>(&url, entity).await.expect("TODO: panic message");
 }
 
-pub async fn delete_entity<Res>(entity: &Entity) {
+pub async fn delete_entity<Res>(client: &ApiClient, entity: &Entity) {
     let url = format!("{}delete/{}", define_path(&entity), entity.id);
 }
-pub async fn load_entities<Res>(client: &ApiClient, r#type: EntityType)
-where
-    Res: serde::de::DeserializeOwned,{
-    let url;
-    match r#type {
-        EntityType::Card => url = "api/card/",
-        EntityType::Document => url = "api/document/"
-    }
-    client.get::<Res>(url).await.expect("TODO: panic message");
-}
+
 
