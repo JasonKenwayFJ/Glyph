@@ -1,7 +1,5 @@
 use crate::entities::entity::{Entity, EntityType};
 use crate::network::api_client::ApiClient;
-use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 
 fn define_path(entity: &Entity) -> String {
     match entity.entity_type {

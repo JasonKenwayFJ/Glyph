@@ -12,7 +12,7 @@
 }
 
 .FilterItemContainer:hover {
-    background-color: var(--bg-main-dark);
+    background-color: var(--backgroundDark);
 }
 
 .FilterItem {
@@ -29,11 +29,11 @@
     gap: 8px;
     font-size: 16px;
     line-height: 1;
-    color: var(--text);
+    color: var(--textPrimary);
 }
 
 .FilterItemInfo.muted {
-    color: var(--text-disabled);
+    color: var(--textDisabled);
 }
 
 .FilterItemIcon {
@@ -59,7 +59,7 @@
 }
 
 #AddFilterItem {
-    border: 3px dotted var(--bg-main-light);
+    border: 3px dotted var(--backgroundLight);
     justify-content: start;
     display: flex;
     flex-direction: row;

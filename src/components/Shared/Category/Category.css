@@ -1,16 +1,16 @@
 .CategoryContainer{
-    background-color: var(--bg-accent);
+    background-color: var(--backgroundAccent);
     width: fit-content;
     padding: 0 7px;
     height: fit-content;
     border-radius: 15px;
     cursor: pointer;
-    border: 3px dotted var(--border-default);
+    border: 3px dotted var(--borderDefault);
     transition: background-color 0.2s, color 0.2s;
 }
 
 .SelectedCategoryContainer{
-    background-color: var(--accent-hover);
+    background-color: var(--accentHover);
     width: fit-content;
     padding: 5px 10px;
     height: fit-content;
@@ -25,8 +25,8 @@
 }
 
 .CategoryContainer:hover{
-    background-color: var(--accent-hover);
-    color: var(--text-reverse);
+    background-color: var(--accentHover);
+    color: var(--textInverse);
 }
 
 .CategoryContainer p{

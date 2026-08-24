@@ -1,30 +1,11 @@
-// import {invoke} from "@tauri-apps/api/core";
 import "./App.css";
-import SideBar from "./components/Shared/SideBar/SideBar.tsx";
-import AIChat from "./pages/Assist/AssistPage.tsx";
-import {router} from "./router/router.tsx";
-import { RouterProvider } from 'react-router-dom'
-import {useState} from "react";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./router/router";
 
 function App() {
-
-    const [isAssistOpen, setAssist] = useState<boolean>(false)
-
-    function toggleAssist(value: boolean) {
-        setAssist(value)
-    }
-
-
-
     return (
         <main className="App">
-                <div className="AppContent">
-                    <SideBar onInvokeAssistEvent={() => toggleAssist(!isAssistOpen)}/>
-                    <RouterProvider router={router}/>
-                    {isAssistOpen && <AIChat/>}
-                </div>
-
-
+            <RouterProvider router={router} />
         </main>
     );
 }

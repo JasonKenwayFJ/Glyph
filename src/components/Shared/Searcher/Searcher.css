@@ -2,9 +2,9 @@
 
 }
 .SearcherInput{
-    padding: 20px;
+    padding: 0.7rem;
     width: 30vw;
     border-radius: 10px;
     border: none;
-    background-color: var(--bg-main-light);
+    background-color: var(--backgroundLight);
 }

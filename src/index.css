@@ -1,0 +1,266 @@
+:root {
+    font: 18px/145% system-ui, 'Segoe UI', Roboto, sans-serif;
+    letter-spacing: 0.18px;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+    --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+    --mono: ui-monospace, Consolas, monospace;
+}
+
+:root,
+[data-theme="dark"] {
+    color-scheme: dark;
+
+    /* ===== BACKGROUNDS ===== */
+    --backgroundMain: #10161d;
+    --backgroundLight: #1a222c;
+    --backgroundDark: #0a0f14;
+    --backgroundAccent: #15202b;
+    --backgroundElevated: #1f2933;   /* модалки, всплывающие панели поверх остального */
+    --backgroundHover: #1c2530;      /* фон при наведении на строку/карточку */
+    --backgroundSelected: rgba(41, 121, 255, 0.12); /* выбранный элемент списка */
+
+    /* ===== TEXT ===== */
+    --textPrimary: #ffffff;
+    --textSecondary: #b3b8bf;        /* менее важный текст, но не "выключенный" */
+    --textDisabled: #6a6a6a;
+    --textInverse: #10161d;          /* текст поверх светлых/акцентных фонов */
+    --textLink: #5393ff;
+
+    /* ===== BORDERS ===== */
+    --borderDefault: #2a2a2a;
+    --borderHover: #3d3d3d;
+    --borderActive: #5393ff;
+    --borderAccent: #2979ff;
+    --borderFocus: rgba(41, 121, 255, 0.4); /* для box-shadow фокуса инпутов */
+
+    /* ===== BUTTONS: Primary (основное действие) ===== */
+    --buttonPrimaryBg: #2979ff;
+    --buttonPrimaryHover: #5393ff;
+    --buttonPrimaryActive: #1f5fd1;
+    --buttonPrimaryText: #ffffff;
+    --buttonPrimaryDisabled: #8c8c8c;
+
+    /* ===== BUTTONS: Secondary (второстепенное действие) ===== */
+    --buttonSecondaryBg: #1a222c;
+    --buttonSecondaryHover: #232d3a;
+    --buttonSecondaryActive: #151d26;
+    --buttonSecondaryText: #ffffff;
+    --buttonSecondaryBorder: #2a2a2a;
+
+    /* ===== BUTTONS: Ghost (прозрачная кнопка, текст/иконка) ===== */
+    --buttonGhostHover: rgba(255, 255, 255, 0.06);
+    --buttonGhostActive: rgba(255, 255, 255, 0.1);
+
+    /* ===== BUTTONS: Danger (удаление, разрушительное действие) ===== */
+    --buttonDangerBg: #f44336;
+    --buttonDangerHover: #ff5c4f;
+    --buttonDangerActive: #d32f2f;
+    --buttonDangerText: #ffffff;
+
+    /* ===== INPUTS ===== */
+    --inputBackground: #1a222c;
+    --inputBorder: #2a2a2a;
+    --inputBorderFocus: #2979ff;
+    --inputBorderError: #f44336;
+    --inputPlaceholder: #6a6a6a;
+    --inputText: #ffffff;
+
+    /* ===== ACCENT (фирменный цвет, разные насыщенности) ===== */
+    --accentPrimary: #2979ff;
+    --accentHover: #5393ff;
+    --accentActive: #1f5fd1;
+    --accentSubtle: rgba(41, 121, 255, 0.1);   /* лёгкая заливка фона, бейджи */
+    --accentBorder: rgba(41, 121, 255, 0.4);
+    --accentDisabled: #8c8c8c;
+
+    --accentSecondary: #00c853;
+    --accentSecondaryHover: #33d873;
+    --accentSecondarySubtle: rgba(0, 200, 83, 0.1);
+
+    /* ===== STATUS: Success ===== */
+    --successText: #4caf50;
+    --successBg: rgba(76, 175, 80, 0.12);
+    --successBorder: rgba(76, 175, 80, 0.4);
+
+    /* ===== STATUS: Warning ===== */
+    --warningText: #ffc107;
+    --warningBg: rgba(255, 193, 7, 0.12);
+    --warningBorder: rgba(255, 193, 7, 0.4);
+
+    /* ===== STATUS: Error ===== */
+    --errorText: #f44336;
+    --errorBg: rgba(244, 67, 54, 0.12);
+    --errorBorder: rgba(244, 67, 54, 0.4);
+
+    /* ===== STATUS: Info ===== */
+    --infoText: #29b6f6;
+    --infoBg: rgba(41, 182, 246, 0.12);
+    --infoBorder: rgba(41, 182, 246, 0.4);
+
+    /* ===== SHADOWS & OVERLAYS ===== */
+    --shadowLight: rgba(0, 0, 0, 0.2);
+    --shadowDark: rgba(0, 0, 0, 0.33);
+    --shadowElevated: rgba(0, 0, 0, 0.45); /* тень под модалками/дропдаунами */
+    --overlay: rgba(0, 0, 0, 0.2);
+
+    /* ===== SCROLLBAR ===== */
+    --scrollbarThumb: #2a2a2a;
+    --scrollbarThumbHover: #3d3d3d;
+    --scrollbarTrack: transparent;
+}
+
+[data-theme="light"] {
+    color-scheme: light;
+
+    /* ===== BACKGROUNDS ===== */
+    --backgroundMain: #f5f5f5;
+    --backgroundLight: #e0e0e0;
+    --backgroundDark: #ffffff;
+    --backgroundAccent: #f0f0f0;
+    --backgroundElevated: #ffffff;
+    --backgroundHover: #eaeaea;
+    --backgroundSelected: rgba(37, 99, 235, 0.08);
+
+    /* ===== TEXT ===== */
+    --textPrimary: #1b1b1b;
+    --textSecondary: #55565a;
+    --textDisabled: #a0a0a0;
+    --textInverse: #ffffff;
+    --textLink: #2563eb;
+
+    /* ===== BORDERS ===== */
+    --borderDefault: #cccccc;
+    --borderHover: #aaaaaa;
+    --borderActive: #2563eb;
+    --borderAccent: #2563eb;
+    --borderFocus: rgba(37, 99, 235, 0.35);
+
+    /* ===== BUTTONS: Primary ===== */
+    --buttonPrimaryBg: #2563eb;
+    --buttonPrimaryHover: #3b82f6;
+    --buttonPrimaryActive: #1d4fc0;
+    --buttonPrimaryText: #ffffff;
+    --buttonPrimaryDisabled: #999999;
+
+    /* ===== BUTTONS: Secondary ===== */
+    --buttonSecondaryBg: #ffffff;
+    --buttonSecondaryHover: #f0f0f0;
+    --buttonSecondaryActive: #e0e0e0;
+    --buttonSecondaryText: #1b1b1b;
+    --buttonSecondaryBorder: #cccccc;
+
+    /* ===== BUTTONS: Ghost ===== */
+    --buttonGhostHover: rgba(0, 0, 0, 0.05);
+    --buttonGhostActive: rgba(0, 0, 0, 0.08);
+
+    /* ===== BUTTONS: Danger ===== */
+    --buttonDangerBg: #dc2626;
+    --buttonDangerHover: #ef4444;
+    --buttonDangerActive: #b91c1c;
+    --buttonDangerText: #ffffff;
+
+    /* ===== INPUTS ===== */
+    --inputBackground: #ffffff;
+    --inputBorder: #cccccc;
+    --inputBorderFocus: #2563eb;
+    --inputBorderError: #dc2626;
+    --inputPlaceholder: #a0a0a0;
+    --inputText: #1b1b1b;
+
+    /* ===== ACCENT ===== */
+    --accentPrimary: #2563eb;
+    --accentHover: #3b82f6;
+    --accentActive: #1d4fc0;
+    --accentSubtle: rgba(37, 99, 235, 0.08);
+    --accentBorder: rgba(37, 99, 235, 0.35);
+    --accentDisabled: #999999;
+
+    --accentSecondary: #16a34a;
+    --accentSecondaryHover: #22c55e;
+    --accentSecondarySubtle: rgba(22, 163, 74, 0.08);
+
+    /* ===== STATUS: Success ===== */
+    --successText: #16a34a;
+    --successBg: rgba(22, 163, 74, 0.1);
+    --successBorder: rgba(22, 163, 74, 0.35);
+
+    /* ===== STATUS: Warning ===== */
+    --warningText: #b45309;
+    --warningBg: rgba(245, 158, 11, 0.1);
+    --warningBorder: rgba(245, 158, 11, 0.35);
+
+    /* ===== STATUS: Error ===== */
+    --errorText: #dc2626;
+    --errorBg: rgba(220, 38, 38, 0.1);
+    --errorBorder: rgba(220, 38, 38, 0.35);
+
+    /* ===== STATUS: Info ===== */
+    --infoText: #0284c7;
+    --infoBg: rgba(2, 132, 199, 0.1);
+    --infoBorder: rgba(2, 132, 199, 0.35);
+
+    /* ===== SHADOWS & OVERLAYS ===== */
+    --shadowLight: rgba(0, 0, 0, 0.08);
+    --shadowDark: rgba(0, 0, 0, 0.16);
+    --shadowElevated: rgba(0, 0, 0, 0.22);
+    --overlay: rgba(0, 0, 0, 0.4);
+
+    /* ===== SCROLLBAR ===== */
+    --scrollbarThumb: #cccccc;
+    --scrollbarThumbHover: #aaaaaa;
+    --scrollbarTrack: transparent;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--backgroundMain);
+    color: var(--textPrimary);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+button {
+    cursor: pointer;
+    background-color: var(--buttonPrimaryBg);
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    height: 35px;
+    width: 70px;
+    transition: background-color 0.25s, height 0.25s, width 0.25s;
+}
+button:hover { background-color: var(--buttonPrimaryHover); }
+button:active { background-color: var(--buttonPrimaryActive); }
+
+input{
+    background-color: var(--inputBackground);
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+}
+input:focus{
+    border: none;
+}
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1e1e1e;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--backgroundElevated);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accentActive);
+}

@@ -1,27 +1,30 @@
 
 .ButtonSideBarContent {
     display: flex;
-    flex-direction: colu;
+    flex-direction: row;
     align-items: center;
     gap: 10px;
     transition: color 0.3s, background-color 0.3s;
 }
 
 .ButtonSideBarContent:hover{
-    color: #0a0f14;
-    background-color: var(--accent-hover);
+    color: var(--textInverse);
+    background-color: var(--accentHover);
 }
 
 .ButtonSideBarContent span:hover{
-    color: #0a0f14;
-    background-color: var(--accent-hover);
+    color: var(--textInverse);
+    background-color: var(--accentHover);
 }
 
 .ButtonSideBarContent span {
     font-size: 16px;
 
 }
-
+.ButtonSideBar{
+    max-width: 230px;
+    width: 230px;
+}
 .ButtonSideBarIcon {
     display: flex;
     align-items: center;

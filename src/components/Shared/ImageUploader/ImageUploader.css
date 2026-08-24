@@ -12,17 +12,17 @@
     user-select: none;
     flex-shrink: 0;
 
-    background: var(--bg-main-light);
-    border: 1px dashed var(--border-default);
+    background: var(--borderDefault);
+    border: 1px dashed var(--borderDefault);
     border-radius: 10px;
 
-    color: var(--text-disabled);
+    color: var(--textDisabled);
     transition: .15s;
 }
 
 .ImageUploader:hover {
-    border-color: var(--accent-primary);
-    color: var(--accent-hover);
+    border-color: var(--accentPrimary);
+    color: var(--accentHover);
 }
 
 .ImageUploader img {

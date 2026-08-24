@@ -1,8 +1,9 @@
 .SideBarContainer{
     display: flex;
     flex-direction: row;
-    width: 300px;
-    min-width: 65px;
+    height: 100vh;
+    max-width: fit-content;
+    min-width: fit-content;
     transition: width 0.3s;
 }
 .SideBarContainer.collapsed{
@@ -10,9 +11,9 @@
 
 }
 .SidebarWindow{
-    background-color: var(--bg-main-dark);
+    background-color: var(--backgroundDark);
 
-    width: 300px;
+    width: 250px;
     min-width: 65px;
     transition: width 0.3s;
     overflow: auto;
@@ -28,8 +29,9 @@
 .ButtonList label{
     font-weight: lighter;
     font-size: 14px;
-    color: var(--text-disabled);
+    color: var(--textDisabled);
     margin-top: 20px;
+    margin-left: 20px;
     margin-bottom: 0;
 }
 .ButtonList button{
@@ -59,10 +61,10 @@
 }
 .ButtonList input {
     margin: 10px;
-    background-color: var(--bg-main-light);
+    background-color: var(--backgroundLight);
 }
 
 .SideBarDivider{
-    border: 3px solid var(--bg-main-light);
+    border: 3px solid var(--backgroundLight);
     border-radius: 10px;
 }

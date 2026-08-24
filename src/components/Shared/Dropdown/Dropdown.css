@@ -14,10 +14,10 @@
 
     padding: 8px 12px;
 
-    background: var(--bg-main);
-    color: var(--text);
+    background: var(--backgroundMain);
+    color: var(--textPrimary);
 
-    border: 1px solid var(--bg-accent);
+    border: 1px solid var(--backgroundAccent);
     border-radius: 8px;
 
     font-size: 14px;
@@ -31,12 +31,12 @@
 }
 
 .DropdownButton:hover {
-    background-color: var(--bg-main-dark);
+    background-color: var(--backgroundDark);
 }
 
 .DropdownButton:focus-visible {
     outline: none;
-    border-color: var(--accent-hover);
+    border-color: var(--accentHover);
 }
 
 .DropdownButton span:first-child {
@@ -63,9 +63,9 @@
 
     padding: 5px;
 
-    background: var(--bg-main);
+    background: var(--backgroundMain);
 
-    border: 1px solid var(--bg-accent);
+    border: 1px solid var(--backgroundAccent);
     border-radius: 8px;
 
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
@@ -82,7 +82,7 @@
 
     border-radius: 5px;
 
-    color: var(--text);
+    color: var(--textPrimary);
 
     font-size: 14px;
 
@@ -94,9 +94,9 @@
 }
 
 .DropdownItem:hover {
-    background-color: var(--bg-main-dark);
+    background-color: var(--backgroundDark);
 }
 
 .DropdownItem:active {
-    background-color: var(--bg-accent);
+    background-color: var(--backgroundAccent);
 }
