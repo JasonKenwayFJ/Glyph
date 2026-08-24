@@ -1,3 +1,11 @@
+#[derive(Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub struct ApiResponse<T>{
+    success: bool,
+    message: String,
+    status: HttpStatus,
+    data: Option<T>
+}
 pub struct ApiClient{
     base_url: String,
     client: reqwest::Client
@@ -11,24 +19,85 @@ impl ApiClient {
         }
     }
 
-    pub async fn post(&self, path: &str, json_body: String) -> Result<String,String>{
+    pub async fn post<Req, Res>(
+        &self,
+        path: &str,
+        obj: &Req
+    ) -> Result<ApiResponse<Res>, String> {
         let url = format!("{}/{}", self.base_url, path);
+
+        let body = serde_json::to_string(obj)
+            .map_err(|err| err.to_string())?;
 
         let response = self.client
             .post(&url)
             .header("Content-Type", "application/json")
-            .body(json_body)
+            .body(body)
             .send()
             .await
             .map_err(|err| err.to_string())?;
 
         let status = response.status();
-        let text = response.text().await.map_err(|err| err.to_string())?;
 
         if !status.is_success() {
-            return Err(format!("Сервер ответил ошибкой {}: {}", status, text));
+            let text = response
+                .text()
+                .await
+                .map_err(|err| err.to_string())?;
+
+            return Err(format!(
+                "Сервер ответил ошибкой {}: {}",
+                status,
+                text
+            ));
         }
 
-        Ok(text)
+        response
+            .json::<ApiResponse<Res>>()
+            .await
+            .map_err(|err| err.to_string())
+    }
+
+    pub async fn get<Res>(
+        &self,
+        path: &str
+    ) -> Result<ApiResponse<Res>, String> {
+        let url = format!("{}/{}", self.base_url, path);
+
+        let response = self.client
+            .get(&url)
+            .send()
+            .await
+            .map_err(|err| err.to_string())?;
+
+        let status = response.status();
+
+        if !status.is_success() {
+            let text = response
+                .text()
+                .await
+                .map_err(|err| err.to_string())?;
+
+            return Err(format!(
+                "Сервер ответил ошибкой {}: {}",
+                status,
+                text
+            ));
+        }
+
+        response
+            .json::<ApiResponse<Res>>()
+            .await
+            .map_err(|err| err.to_string())
+    }
+
+    pub async fn delete(
+        &self, path: &str
+    ) -> Result<ApiResponse<()>, String> {
+        let url = format!("{}/{}", self.base_url, path);
+
+    }
+    pub fn handle_response(&self){
+
     }
 }

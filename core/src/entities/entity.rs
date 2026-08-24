@@ -1,0 +1,79 @@
+use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
+use uuid::Uuid;
+#[derive(Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Entity {
+    id: Uuid,
+    project_id: Uuid,
+    title: String,
+    description: String,
+    content: String,
+    image_path: String,
+    created_at: DateTime<Utc>,
+    updated_at: DateTime<Utc>,
+    category: Vec<Characteristic>,
+    tags: Vec<Characteristic>,
+    extra_fields: Vec<ExtraField>,
+}
+
+impl Entity {
+    pub fn new(
+        project_id: Uuid,
+        title: &str,
+        description: &str,
+        content: &str,
+        image_path: &str,
+        created_at: DateTime<Utc>,
+        updated_at: DateTime<Utc>,
+        category: Vec<Characteristic>,
+        tags: Vec<Characteristic>,
+        extra_fields: Vec<ExtraField>,
+    ) -> Self{
+        let now = Utc::now();
+        Entity {
+            id: Uuid::new_v4(),
+            project_id,
+            title,
+            description,
+            content,
+            image_path,
+            created_at,
+            updated_at,
+            category,
+            tags,
+            extra_fields,
+        }
+    }
+}
+
+
+#[derive(Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Characteristic {
+    id: Uuid,
+    title: String,
+}
+impl Characteristic {
+    pub fn new(id: Uuid, title: &str) -> Self {
+        Characteristic {
+            id,
+            title: title.to_string(),
+        }
+    }
+}
+
+#[derive(Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ExtraField {
+    id: Uuid,
+    title: String,
+}
+impl ExtraField {
+    pub fn new(id: Uuid, title: &str) -> Self {
+        ExtraField {
+            id,
+            title: title.to_string(),
+        }
+    }
+}
