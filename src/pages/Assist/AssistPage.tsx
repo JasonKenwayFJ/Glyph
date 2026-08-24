@@ -2,7 +2,8 @@ import {useState, useRef, useEffect} from "react";
 import "./AIChat.css";
 import Message from "./Components/Message/Message.tsx";
 import {SendMessage} from "../../services/client.ts";
-import type {message} from "../../../types/ai/Message.ts";
+import {message} from "../../types/ai/Message.ts";
+
 
 
 const AIChat = () => {

@@ -8,8 +8,10 @@ import {useNavigate, useParams} from "react-router-dom";
 import {documentsService} from "../../services/entityServices/documentService.ts";
 import DocumentTemplate from "../../components/Document/Document.tsx"
 import FilterContainer from "./Filter/EntityCategories/FilterContainer.tsx";
-import {baseEntity} from "../../types/Entities.ts";
+
 import {invoke} from "@tauri-apps/api/core";
+import {Project} from "../../types/Project.ts";
+import {Entity} from "../../types/Entities.ts";
 
 const CreatorMode = {
     None: "none",
@@ -36,8 +38,8 @@ const EntityPage = () => {
     type EntityType = "cards" | "documents";
     const {type} = useParams<{ type: EntityType }>();
 
-    const [entities, setEntities] = useState<baseEntity[]>([]);
-    const [filteredEntities, setFilteredEntities] = useState<baseEntity[]>([]);
+    const [entities, setEntities] = useState<Entity[]>([]);
+    const [filteredEntities, setFilteredEntities] = useState<Entity[]>([]);
 
 
     const navigate = useNavigate()
@@ -46,7 +48,7 @@ const EntityPage = () => {
 
     type Mode = {
         mode: CreatorMode,
-        entity: baseEntity | undefined
+        entity: Entity | undefined
     }
     const [mode, setMode] = useState<Mode>({
         mode: CreatorMode.None,
@@ -92,7 +94,7 @@ const EntityPage = () => {
     }
 
 
-    function handleFilterChange(filtered: baseEntity[]) {
+    function handleFilterChange(filtered: Entity[]) {
         setFilteredEntities(filtered);
     }
 
@@ -108,7 +110,7 @@ const EntityPage = () => {
         }
     };
 
-    function invokeCreator(modeType: CreatorMode, entity?: baseEntity) {
+    function invokeCreator(modeType: CreatorMode, entity?: Entity) {
         setMode({
             mode: modeType,
             entity: entity

@@ -22,7 +22,8 @@ pub fn run() {
             get_entities,
             create_entity,
             update_entity,
-            delete_entity
+            delete_entity,
+            
 
         ])
         .run(tauri::generate_context!())

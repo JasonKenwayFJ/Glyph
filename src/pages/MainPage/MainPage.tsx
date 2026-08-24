@@ -6,7 +6,8 @@ import "./MainPage.css";
 import {documentsService} from "../../services/entityServices/documentService.ts";
 
 import {listen} from '@tauri-apps/api/event'
-import {baseEntity} from "../../types/Entities.ts";
+import {Project} from "../../types/Project.ts";
+import {Entity} from "../../types/Entities.ts";
 
 
 
@@ -36,7 +37,7 @@ const MainPage = () => {
 
 
     //Создаём различные состояния под работу окна при любом сценарии работы
-    const [document, setDocument] = useState<baseEntity | null>(null);
+    const [document, setDocument] = useState<Entity | null>(null);
     const [content, setContent] = useState<string>("");
     const [showCreator, setShowCreator] = useState(false);
     const [loading, setLoading] = useState(!!id);
@@ -92,7 +93,7 @@ const MainPage = () => {
         }
     }, []);
     //Функция создания, если документа нет
-    const handleCreated = (created: baseEntity) => {
+    const handleCreated = (created: Entity) => {
         //Сеттим ново-созданный документ в стейт
         setDocument(created);
         //Закрываем меню создания карточки

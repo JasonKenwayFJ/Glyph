@@ -1,34 +1,32 @@
-export type baseEntity = {
-    id: string,
-    projectId: string,
-    title: string,
-    description: string,
-    content: string,
-    imagePath: string,
-    category: baseCharacteristic[],
-    tags: baseCharacteristic[],
-    hasImage: boolean,
-    createdAt: string,
-    updatedAt: string,
-    extraFields: { title: string, value: string }[]
+export enum EntityType {
+    Card = "Card",
+    Document = "Document",
+    Project = "Project"
 }
 
-export type baseCharacteristic = {
-    id: string,
-    title: string
-}
-export type characteristicWithEntities = baseCharacteristic & {
-    cards?: baseEntity[],
-    documents?: baseEntity[]
+export interface Characteristic {
+    id: string;
+    title: string;
 }
 
-
-
-export type authForm = {
-    email: string,
-    password: string
+export interface ExtraField {
+    id: string;
+    title: string;
 }
-export type registrationForm = authForm & {
-    username: string,
+
+export interface Entity {
+    id: string;
+    projectId: string;
+    title: string;
+    description: string;
+    content: string;
+    imagePath: string;
+    entityType: EntityType;
+    createdAt: string;
+    updatedAt: string;
+    category: Characteristic[];
+    tags: Characteristic[];
+    extraFields: ExtraField[];
 }
+
 

@@ -17,8 +17,6 @@ pub async fn register(
         &password,
         &image_path,
     ).await?;
-
-
     Ok(token_response)
 }
 

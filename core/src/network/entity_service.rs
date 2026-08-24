@@ -39,6 +39,8 @@ where
 
 pub async fn delete_entity<Res>(client: &ApiClient, entity: &Entity) {
     let url = format!("{}delete/{}", define_path(&entity), entity.id);
+    let response = client.delete(&url).await;
+
 }
 
 

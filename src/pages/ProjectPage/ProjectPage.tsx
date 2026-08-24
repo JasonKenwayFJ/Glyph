@@ -5,6 +5,7 @@ import "./ProjectPage.css";
 import DataReceiver from "../../components/Shared/DataReceiver/DataReceiver.tsx";
 import {createProject} from "../../services/entityControllers/projectController.ts";
 import {invoke} from "@tauri-apps/api/core";
+import {Project} from "../../types/Project.ts";
 
 const ProjectPage = () => {
     const [projects, setProjects] = useState<Project[]>([]);
@@ -57,9 +58,11 @@ const ProjectPage = () => {
             id: crypto.randomUUID(),
             title,
             description,
-            createdAt: "", entities: [], tags: [], updatedAt: "",
-
-        }
+            imagePath: "",
+            createdAt: "",
+            updatedAt: "",
+            weight: 0,
+        };
         console.log(await createProject(project));
         setDataReceiver(false);
         setProjects(prev => [...prev, project]);
@@ -109,7 +112,7 @@ const ProjectPage = () => {
                             <h3>{project.title}</h3>
                             <p>{project.description}</p>
                             <div className="ProjectCardFooter">
-                                <span>{project.entities.length} сущностей</span>
+                                <span>{project.weight} сущностей</span>
                                 <span>{new Date(project.updatedAt).toLocaleDateString()}</span>
                             </div>
                         </div>
