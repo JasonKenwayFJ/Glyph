@@ -1,6 +1,6 @@
 use std::sync::Mutex;
 use crate::entities::entity::{Entity, EntityType};
-
+use crate::managers::file_manager::load_entities;
 
 
 pub struct EntityManager {
@@ -14,10 +14,23 @@ impl EntityManager {
         }
     }
 
+
+
     pub fn get_entities(&self, r#type: EntityType) -> Vec<Entity> {
-        let entities = self.entities
-            .lock().unwrap();
-        entities.iter().filter(|e| e.entity_type == r#type).cloned().collect()
+        let mut entities = self.entities.lock().unwrap();
+
+        if entities.is_empty() {
+            let local_entities =
+                load_entities().expect("Failed getting local entities");
+
+            entities.extend(local_entities);
+        }
+
+        entities
+            .iter()
+            .filter(|e| e.entity_type == r#type)
+            .cloned()
+            .collect()
     }
     pub fn add_entity_locally(&self, entity: &Entity){
         let mut entities = self.entities.lock().unwrap();
