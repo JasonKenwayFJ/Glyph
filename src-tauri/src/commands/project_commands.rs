@@ -16,7 +16,10 @@ pub fn open_project(
 pub fn get_project(state: tauri::State<ProjectManager>) -> Option<Project> {
     state.get_project()
 }
-
+#[tauri::command]
+pub fn get_projects(state: tauri::State<ProjectManager>) -> Option<Vec<Project>>{
+    state.get_projects()
+}
 #[tauri::command]
 pub async fn create_project(
     state: tauri::State<'_, ProjectManager>,

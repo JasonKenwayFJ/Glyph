@@ -1,5 +1,4 @@
 import {useEffect, useState} from "react";
-import {projectService} from "../../services/entityServices/projectService.ts";
 
 import "./ProjectPage.css";
 import DataReceiver from "../../components/Shared/DataReceiver/DataReceiver.tsx";
@@ -13,7 +12,7 @@ const ProjectPage = () => {
     const [dataReceiver, setDataReceiver] = useState<boolean>(false);
     useEffect(() => {
         async function load() {
-            const data = await projectService.getAllLocally();
+            const data = await invoke<Project[]>('get_projects')
             setProjects(data);
         }
 

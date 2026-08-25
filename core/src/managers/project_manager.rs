@@ -3,29 +3,39 @@ use uuid::Uuid;
 use crate::entities::project_entity::Project;
 
 pub struct ProjectManager {
-    project: Mutex<Option<Project>>
+    current_project: Mutex<Option<Project>>,
+    projects: Mutex<Option<Vec<Project>>>
 }
 
 impl ProjectManager {
     pub fn new() -> ProjectManager {
         ProjectManager {
-            project: Mutex::new(None)
+            current_project: Mutex::new(None),
+            projects: Mutex::new(None)
         }
     }
 
     pub fn get_project(&self) -> Option<Project> {
-        self.project.lock().unwrap().clone()
+        self.current_project.lock().unwrap().clone()
     }
-
-    pub fn get_project_id(&self) -> Option<Uuid> {
-        self.project.lock().unwrap().as_ref().map(|p| p.id)
+    pub fn get_projects(&self) -> Option<Vec<Project>> {
+        self.projects.lock().unwrap().clone()
+    }
+    pub fn get_project_id(&self, id: Uuid) -> Option<Project> {
+        self.projects
+            .lock()
+            .unwrap()
+            .as_ref()?
+            .iter()
+            .find(|project| project.id == id)
+            .cloned()
     }
     pub fn set_project(&self, project: Project) {
-        self.project.lock().unwrap().replace(project);
+        self.current_project.lock().unwrap().replace(project);
     }
 
     pub fn close_project(&self) {
-        let mut project = self.project.lock().unwrap();
+        let mut project = self.current_project.lock().unwrap();
         *project = None;
     }
 }
