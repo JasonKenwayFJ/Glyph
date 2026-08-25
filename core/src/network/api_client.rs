@@ -8,7 +8,7 @@ pub struct ApiResponse<T> {
     success: bool,
     message: String,
     status: u16,
-    data: Option<T>,
+    pub data: Option<T>,
 }
 
 pub struct ApiClient {

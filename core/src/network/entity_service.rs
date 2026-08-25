@@ -18,7 +18,7 @@ pub async fn get_entities<Res>(client:&ApiClient, entity_type: EntityType)
 where 
     Res:serde::de::DeserializeOwned,{
     let url = format!("{}getall", define_entity(entity_type));
-    client.get::<Res>(&url).await.expect("TODO: panic message");
+    client.get::<Entity>(&url).await.expect("TODO: panic message");
 }
 
 pub async fn create_entity<Res>(client: &ApiClient, entity: &Entity)

@@ -63,6 +63,8 @@ const ProjectPage = () => {
             updatedAt: "",
             weight: 0,
         };
+
+        await invoke('')
         console.log(await createProject(project));
         setDataReceiver(false);
         setProjects(prev => [...prev, project]);

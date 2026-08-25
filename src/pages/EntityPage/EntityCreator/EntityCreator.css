@@ -9,8 +9,8 @@
 }
 
 .EntityCreatorForm {
-    background: var(--bg-main);
-    border: 1px solid var(--border-default);
+    background: var(--backgroundMain);
+    border: 1px solid var(--borderDefault);
     border-radius: 12px;
     padding: 1.5rem;
     width: 35rem;
@@ -23,11 +23,11 @@
 
 .EntityCreatorForm input,
 .EntityCreatorForm textarea {
-    background: var(--bg-main-light);
-    border: 1px solid var(--border-default);
+    background: var(--backgroundLight);
+    border: 1px solid var(--borderDefault);
     border-radius: 7px;
     padding: 9px 11px;
-    color: var(--text);
+    color: var(--textPrimary);
     font: inherit;
     font-size: 14px;
     width: 100%;
@@ -38,7 +38,7 @@
 .EntityCreatorForm input:focus,
 .EntityCreatorForm textarea:focus {
     outline: none;
-    border-color: var(--accent-primary);
+    border-color: var(--accentPrimary);
 }
 
 /* ==== Header ==== */
@@ -52,7 +52,7 @@
     margin: 0;
     font-size: 17px;
     font-weight: 500;
-    color: var(--text);
+    color: var(--textPrimary);
 }
 
 .EntityCreatorTypeSelect {
@@ -60,16 +60,16 @@
     font-size: 11px;
     padding: 6px 12px;
     border-radius: 999px;
-    background: var(--bg-main-light);
-    border: 1px solid var(--border-default);
-    color: var(--text-disabled);
+    background: var(--backgroundLight);
+    border: 1px solid var(--borderDefault);
+    color: var(--textDisabled);
     cursor: pointer;
     transition: border-color 0.15s ease, color 0.15s ease;
 }
 
 .EntityCreatorTypeSelect:hover {
-    border-color: var(--accent-primary);
-    color: var(--accent-hover);
+    border-color: var(--accentPrimary);
+    color: var(--accentHover);
 }
 
 /* ==== Body ==== */
@@ -123,7 +123,7 @@
 .EntityCreatorField p {
     margin: 0;
     font-size: 12px;
-    color: var(--text-disabled);
+    color: var(--textDisabled);
 }
 
 /* ==== Extra fields ==== */
@@ -141,13 +141,13 @@
 
 .EntityCreatorExtraFieldsHeader span:first-child {
     font-size: 12px;
-    color: var(--text-disabled);
+    color: var(--textDisabled);
 }
 
 .EntityCreatorExtraFieldAdd {
     font-family: var(--mono);
     font-size: 11px;
-    color: var(--accent-hover);
+    color: var(--accentHover);
     display: flex;
     align-items: center;
     gap: 4px;
@@ -170,10 +170,10 @@
     width: 32px;
     height: 32px;
     flex-shrink: 0;
-    background: var(--bg-accent, var(--bg-main-light));
-    border: 1px solid var(--border-default);
+    background: var(--backgroundAccent, var(--backgroundLight));
+    border: 1px solid var(--borderDefault);
     border-radius: 6px;
-    color: var(--text-disabled);
+    color: var(--textDisabled);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -182,8 +182,8 @@
 }
 
 .EntityCreatorExtraFieldRemove:hover {
-    border-color: var(--error);
-    color: var(--error);
+    border-color: var(--errorBg);
+    color: var(--errorText);
 }
 
 /* ==== Buttons ==== */
@@ -191,7 +191,7 @@
     display: flex;
     justify-content: space-between;
     gap: 8px;
-    border-top: 1px solid var(--border-default);
+    border-top: 1px solid var(--borderDefault);
     padding-top: 16px;
 }
 .EntitySelectedCategories{
@@ -217,23 +217,23 @@
 }
 
 #EntityCreatorButton {
-    background: var(--accent-primary);
+    background: var(--accentPrimary);
     color: #fff;
 }
 
 #EntityCreatorButton:hover {
-    background: var(--accent-hover);
+    background: var(--accentHover);
 }
 
 .EntityCreatorCancelButton {
     background: transparent;
-    border: 1px solid var(--border-default) !important;
-    color: var(--text-disabled);
+    border: 1px solid var(--borderDefault) !important;
+    color: var(--textDisabled);
 }
 
 .EntityCreatorCancelButton:hover {
-    color: var(--text);
-    border-color: var(--border-hover) !important;
+    color: var(--textPrimary);
+    border-color: var(--borderHover) !important;
 }
 
 

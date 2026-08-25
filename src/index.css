@@ -233,9 +233,9 @@ button {
     background-color: var(--buttonPrimaryBg);
     border: none;
     border-radius: 10px;
-    padding: 10px;
-    height: 35px;
-    width: 70px;
+    padding: 5px 10px;
+    height: fit-content;
+    width: fit-content;
     transition: background-color 0.25s, height 0.25s, width 0.25s;
 }
 button:hover { background-color: var(--buttonPrimaryHover); }
