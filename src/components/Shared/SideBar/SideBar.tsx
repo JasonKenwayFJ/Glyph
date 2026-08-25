@@ -12,9 +12,10 @@ import Toolbar from "../Toolbar/Toolbar.tsx";
 import {useState} from "react";
 
 type Button = {
-    onInvokeAssistEvent: () => void;
+    onInvokeAssistEvent: () => void,
+    onInvokeAssist?: () => void
 }
-const SideBar = ({onInvokeAssistEvent} : Button) => {
+const SideBar = ({onInvokeAssistEvent}: Button) => {
     const [isCollapsed, setCollapsed] = useState(true);
 
     const toggleSideBar = () => {
@@ -56,6 +57,7 @@ const SideBar = ({onInvokeAssistEvent} : Button) => {
                         label={"Ассистент"}
                         icon={<IconMessageChatbotFilled/>}
                         onInvokeAssist={onInvokeAssistEvent}
+
                         isCollapsed={isCollapsed}/>
 
                     <div style={{display: "flex", flexDirection: "column"}}>

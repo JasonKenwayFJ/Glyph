@@ -67,7 +67,9 @@ const AIChat = () => {
 
                 {/* Messages */}
                 <div className="AIChatMessages" ref={listRef}>
+                    <Message/>
                     {messages.map((msg) => (
+
                         <Message
                             key={msg.id}
                             id={msg.id}

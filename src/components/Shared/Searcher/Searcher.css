@@ -8,3 +8,10 @@
     border: none;
     background-color: var(--backgroundLight);
 }
+
+@media (max-width: 450px) {
+    .SearcherInput{
+        width: 1vw;
+        border-radius: 1px;
+    }
+}

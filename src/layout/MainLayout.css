@@ -1,7 +1,17 @@
+.MainLayout{
+    display: flex;
+    height: 100vh;
+}
+@media (max-width: 600px) {
+    .content {
+        flex-direction: column;
+    }
+}
+
 .sBar{
     display: flex;
     flex-direction: column;
-    background-color: var(--bg-main-dark);
+    background-color: var(--backgroundDark);
     border-radius: 10px;
 
 }

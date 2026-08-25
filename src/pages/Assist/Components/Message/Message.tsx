@@ -1,5 +1,6 @@
 import "./Message.css";
-import type {message} from "../../../../../types/ai/Message.ts";
+import {message} from "../../../../types/ai/Message.ts";
+
 
 
 

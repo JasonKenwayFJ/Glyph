@@ -1,21 +1,22 @@
 import "./FilterContainer.css"
 import FilterItem from "../FilterItem.tsx";
 import {useEffect, useState} from "react";
-import type {baseCharacteristic, baseEntity, characteristicWithEntities} from "../../../../../types/Entities.ts";
+
 import {categoryService} from "../../../../services/entityServices/categoryService.ts";
 import {tagService} from "../../../../services/entityServices/tagService.ts";
 import {IconCategory2, IconTag} from "@tabler/icons-react";
+import {Characteristic, Entity} from "../../../../types/Entities.ts";
 
 type EntitiesProps = {
-    data: baseEntity[];
-    onFilter: (filtered: baseEntity[]) => void;
+    data: Entity[];
+    onFilter: (filtered: Entity[]) => void;
 };
 const FilterContainer = (
     {data, onFilter}: EntitiesProps
 ) => {
 
-    const [categories, setCategories] = useState<characteristicWithEntities[]>([]);
-    const [tags, setTags] = useState<characteristicWithEntities[]>([]);
+    const [categories, setCategories] = useState<Characteristic[]>([]);
+    const [tags, setTags] = useState<Characteristic[]>([]);
 
 
 
@@ -24,7 +25,7 @@ const FilterContainer = (
             const cats = await categoryService.getAllLocally();
 
             setCategories(
-                cats.map((cat: baseCharacteristic) => ({
+                cats.map((cat: Characteristic) => ({
                     id: cat.id,
                     title: cat.title,
                     isSelected: false

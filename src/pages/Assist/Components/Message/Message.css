@@ -4,12 +4,12 @@
     margin: 0 0 8px;
     max-width: 85%;
     width: fit-content;
-    background: var(--bg-accent); /* аналог SecondraryColor из XAML */
+    background: var(--backgroundAccent); /* аналог SecondraryColor из XAML */
 }
 
 /* Аналог DataTrigger IsFromUser=True */
 .MessageBubble.fromUser {
-    background: var(--accent-primary); /* аналог ButtonColors */
+    background: var(--accentPrimary); /* аналог ButtonColors */
     margin-left: auto; /* HorizontalAlignment="Right" */
 }
 
@@ -40,13 +40,13 @@
 .MessageUserName {
     font-weight: 600;
     font-size: 13px;
-    color: var(--text);
+    color: var(--textPrimary);
 }
 
 /* Разделитель */
 .MessageDivider {
     height: 1px;
-    background: var(--text);
+    background: var(--textPrimary);
     opacity: 0.2;
     margin: 5px 0;
 }
@@ -56,7 +56,7 @@
     margin: 0;
     font-weight: 700;
     font-size: 12px;
-    color: var(--text);
+    color: var(--textPrimary);
     white-space: pre-wrap;
     word-break: break-word;
 }
@@ -74,7 +74,7 @@
     align-items: center;
     gap: 5px;
     font-size: 11px;
-    color: var(--text);
+    color: var(--textPrimary);
     opacity: 0.7;
 }
 
@@ -84,7 +84,7 @@
 
 .MessageTime {
     font-size: 11px;
-    color: var(--text);
+    color: var(--textPrimary);
     opacity: 0.7;
     flex-shrink: 0;
 }
