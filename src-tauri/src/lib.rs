@@ -1,12 +1,15 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 mod commands;
-use glyph_core::{ProjectManager};
-use commands::project_commands::{open_project, get_project};
-use commands::user_commands::{register, login};
-use commands::entity_commands::{get_entities, create_entity, update_entity, delete_entity};
+pub mod file_manager;
+
+use commands::entity_commands::{create_entity, delete_entity, get_entities, update_entity};
+use commands::project_commands::{get_project, open_project};
+use commands::user_commands::{login, register};
+use file_manager::*;
 use glyph_core::managers::entity_manager::EntityManager;
 use glyph_core::managers::user_manager::UserManager;
 use glyph_core::network::api_client::ApiClient;
+use glyph_core::ProjectManager;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {

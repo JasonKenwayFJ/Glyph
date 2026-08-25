@@ -3,34 +3,43 @@ use glyph_core::managers::entity_manager;
 use glyph_core::managers::entity_manager::EntityManager;
 use glyph_core::network::api_client::{ApiClient, ApiResponse};
 use glyph_core::network::entity_service;
-use tauri::Emitter;
-
-
-
+use tauri::{Emitter, Manager};
+use crate::file_manager;
 #[tauri::command]
-pub async fn get_entities(
-    entity_type: EntityType,
-    api_state: tauri::State<'_, ApiClient>,
-    entity_state: tauri::State<'_, EntityManager>,
-) -> Result<ApiResponse<Vec<Entity>>, String> {
-    let local_entities = entity_state.get_entities(entity_type);
-
-    if !local_entities.is_empty() {
-        return Ok(ApiResponse {
-            success: true,
-            message: "Entities loaded from cache".to_string(),
-            status: 200,
-            data: Some(local_entities),
-        });
-    }
-
-    let response = entity_service::get_entities::<Vec<Entity>>(
-        api_state.inner(),
-        entity_type,
-    ).await?;
-
-    Ok(response)
+pub fn get_entities(
+    app: tauri::AppHandle,
+    entity_state: tauri::State<EntityManager>,
+    r#type: EntityType,
+) -> Vec<Entity> {
+    let app_data_dir = app.path().app_data_dir().expect("no app data dir");
+    let loaded = file_manager::load_entities(&app_data_dir).unwrap_or_default();
+    entity_state.hydrate(loaded);
+    entity_state.get_entities(r#type)
 }
+// #[tauri::command]
+// pub async fn get_entities(
+//     entity_type: EntityType,
+//     api_state: tauri::State<'_, ApiClient>,
+//     entity_state: tauri::State<'_, EntityManager>,
+// ) -> Result<ApiResponse<Vec<Entity>>, String> {
+//     let local_entities = entity_state.get_entities(entity_type);
+//
+//     if !local_entities.is_empty() {
+//         return Ok(ApiResponse {
+//             success: true,
+//             message: "Entities loaded from cache".to_string(),
+//             status: 200,
+//             data: Some(local_entities),
+//         });
+//     }
+//
+//     let response = entity_service::get_entities::<Vec<Entity>>(
+//         api_state.inner(),
+//         entity_type,
+//     ).await?;
+//
+//     Ok(response)
+// }
 
 #[tauri::command]
 pub async fn create_entity(
