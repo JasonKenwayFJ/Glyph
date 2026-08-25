@@ -1,13 +1,12 @@
-use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
 use serde::de::DeserializeOwned;
-
-#[derive(Deserialize)]
+use std::time::Duration;
+#[derive(Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub struct ApiResponse<T> {
-    success: bool,
-    message: String,
-    status: u16,
+    pub success: bool,
+    pub message: String,
+    pub status: u16,
     pub data: Option<T>,
 }
 
@@ -17,11 +16,13 @@ pub struct ApiClient {
 }
 
 impl ApiClient {
-    pub fn new(base_url: &str) -> ApiClient {
-        ApiClient {
+    pub fn new(base_url: &str) -> Result<ApiClient, reqwest::Error> {
+        Ok(ApiClient {
             base_url: base_url.to_string(),
-            client: reqwest::Client::new(),
-        }
+            client: reqwest::Client::builder()
+                .timeout(Duration::from_secs(10))
+                .build()?,
+        })
     }
 
     pub async fn post<Req, Res>(
@@ -136,7 +137,5 @@ impl ApiClient {
             .map_err(|err| err.to_string())
     }
 
-    pub fn handle_response(){
-
-    }
+    pub fn handle_response() {}
 }

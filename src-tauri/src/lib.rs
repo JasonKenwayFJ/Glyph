@@ -11,7 +11,7 @@ use glyph_core::network::api_client::ApiClient;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
-        .manage(ApiClient::new("https://glyphserver.onrender.com"))
+        .manage(ApiClient::new("https://glyphserver.onrender.com").expect("Не удалось создать HTTP-клиент"))
         .manage(ProjectManager::new())
         .manage(EntityManager::new())
         .manage(UserManager::new())
