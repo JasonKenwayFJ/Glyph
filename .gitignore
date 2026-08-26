@@ -6,7 +6,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
 /target
 /core/target
 /src-tauri/target
@@ -16,6 +15,7 @@ dist-ssr
 *.local
 
 # Editor directories and files
+clippy_output.txt
 .vscode/*
 !.vscode/extensions.json
 .idea

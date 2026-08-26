@@ -5,12 +5,14 @@ fn define_path(entity: &Entity) -> String {
     match entity.entity_type {
         EntityType::Card => "api/cards/".parse().unwrap(),
         EntityType::Document => "api/document/".parse().unwrap(),
+        EntityType::Project => "api/project/".parse().unwrap(),
     }
 }
 fn define_entity(entity_type: EntityType) -> String {
     match entity_type{
         EntityType::Document => "api/document/".parse().unwrap(),
         EntityType::Card => "api/cards/".parse().unwrap(),
+        EntityType::Project => "api/project/".parse().unwrap(),
     }
 }
 

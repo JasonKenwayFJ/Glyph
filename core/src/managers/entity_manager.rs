@@ -18,14 +18,16 @@ impl EntityManager {
             entities.extend(loaded_entities);
         }
     }
-    pub fn get_entities(&self, r#type: EntityType) -> Vec<Entity> {
+    pub fn get_entities(&self, r#type: EntityType) -> Result<Vec<Entity>, String> {
         let entities = self.entities.lock().unwrap();
 
-        entities
+        let result = entities
             .iter()
             .filter(|e| e.entity_type == r#type)
             .cloned()
-            .collect()
+            .collect();
+
+        Ok(result)
     }
     pub fn add_entity_locally(&self, entity: &Entity){
         let mut entities = self.entities.lock().unwrap();

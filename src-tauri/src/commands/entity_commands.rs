@@ -6,13 +6,13 @@ use glyph_core::network::entity_service;
 use tauri::{Emitter, Manager};
 use crate::file_manager;
 #[tauri::command]
-pub fn get_entities(
+pub async fn get_entities(
     app: tauri::AppHandle,
-    entity_state: tauri::State<EntityManager>,
+    entity_state: tauri::State<'_, EntityManager>,
     r#type: EntityType,
-) -> Vec<Entity> {
+) -> Result<Vec<Entity>, String> {
     let app_data_dir = app.path().app_data_dir().expect("no app data dir");
-    let loaded = file_manager::load_entities(&app_data_dir).unwrap_or_default();
+    let loaded = file_manager::load_entities(&app_data_dir).await.unwrap_or_default();
     entity_state.hydrate(loaded);
     entity_state.get_entities(r#type)
 }

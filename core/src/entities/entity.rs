@@ -1,10 +1,13 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use crate::traits::storable::Storable;
+
 #[derive(Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub enum EntityType{
     Card,
-    Document
+    Document,
+    Project
 }
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -51,7 +54,14 @@ impl Entity {
         }
     }
 }
-
+impl Storable for Entity{
+    fn storage_id(&self) -> Uuid{
+        self.id
+    }
+    fn entity_type(&self) -> EntityType{
+        self.entity_type
+    }
+}
 
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
