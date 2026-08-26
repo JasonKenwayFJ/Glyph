@@ -1,109 +1,175 @@
 use glyph_core::entities::entity::{Entity, EntityType};
 use glyph_core::traits::storable::Storable;
 
+use serde::de::DeserializeOwned;
 use serde::Serialize;
-use std::path::{PathBuf};
-
+use std::path::{Path, PathBuf};
+use std::sync::atomic::{AtomicU64, Ordering};
 use tokio::fs;
 use tokio::fs::File;
 use tokio::io::AsyncWriteExt;
 
-async fn collect_entities(entity_folder: &PathBuf) -> Result<Vec<Entity>, String> {
-    let mut entities = Vec::new();
+const ENTITIES_DIRECTORY: &str = "Entities";
+const PROJECTS_DIRECTORY: &str = "Projects";
+static TEMP_FILE_COUNTER: AtomicU64 = AtomicU64::new(0);
 
-    let mut dir = fs::read_dir(entity_folder)
-        .await
-        .map_err(|e| e.to_string())?;
+fn directory_for_type(storage_dir: &Path, entity_type: EntityType) -> PathBuf {
+    match entity_type {
+        EntityType::Card => storage_dir.join(ENTITIES_DIRECTORY).join("Card"),
+        EntityType::Document => storage_dir.join(ENTITIES_DIRECTORY).join("Document"),
+        EntityType::Note => storage_dir.join(ENTITIES_DIRECTORY).join("Note"),
+        EntityType::Audio => storage_dir.join(ENTITIES_DIRECTORY).join("Audio"),
+        EntityType::Video => storage_dir.join(ENTITIES_DIRECTORY).join("Video"),
+        EntityType::Graph => storage_dir.join(ENTITIES_DIRECTORY).join("Graph"),
+        EntityType::Table => storage_dir.join(ENTITIES_DIRECTORY).join("Table"),
+        EntityType::List => storage_dir.join(ENTITIES_DIRECTORY).join("List"),
+        EntityType::Task => storage_dir.join(ENTITIES_DIRECTORY).join("Task"),
+        EntityType::Project => storage_dir.join(PROJECTS_DIRECTORY),
+    }
+}
 
-    while let Some(entry) = dir.next_entry().await.map_err(|e| e.to_string())? {
-        let path = entry.path();
+async fn storage_directory<T: Storable>(storage_dir: &Path, item: &T) -> Result<PathBuf, String> {
+    let directory = directory_for_type(storage_dir, item.entity_type());
 
-        // Нашли папку: Card, Document, Project...
-        if path.is_dir() {
-            let mut files = fs::read_dir(&path).await.map_err(|e| e.to_string())?;
-
-            // Перебираем файлы внутри неё
-            while let Some(entry) = files.next_entry().await.map_err(|e| e.to_string())? {
-                let file_path = entry.path();
-
-                if !file_path.is_file() {
-                    continue;
-                }
-
-                let content = fs::read_to_string(&file_path)
-                    .await
-                    .map_err(|e| e.to_string())?;
-
-                let entity = serde_json::from_str::<Entity>(&content).map_err(|e| e.to_string())?;
-
-                entities.push(entity);
-            }
-        }
+    // ИЗМЕНЕНИЕ: ошибка проверки существования каталога теперь возвращается
+    // вызывающему коду, а не вызывает panic через `unwrap()`.
+    if !fs::try_exists(&directory).await.map_err(|error| {
+        format!(
+            "Не удалось проверить каталог {}: {error}",
+            directory.display()
+        )
+    })? {
+        fs::create_dir_all(&directory).await.map_err(|error| {
+            format!(
+                "Не удалось создать каталог {}: {error}",
+                directory.display()
+            )
+        })?;
     }
 
-    Ok(entities)
+    Ok(directory)
 }
-fn define_path<T: Storable>(storage_dir: &PathBuf, item: &T) -> PathBuf {
-    let folder_name = match item.entity_type() {
-        EntityType::Project => "Project",
-        EntityType::Card => "Card",
-        EntityType::Document => "Document",
-    };
 
-    storage_dir.join(folder_name)
-}
-pub async fn load_entities(storage_dir: &PathBuf) -> Result<Vec<Entity>, String> {
-    let entity_folder = storage_dir.join("Entities");
-
-    if !fs::try_exists(&entity_folder)
-        .await
-        .map_err(|e| e.to_string())?
-    {
-        fs::create_dir_all(&entity_folder)
-            .await
-            .map_err(|e| e.to_string())?;
+async fn load_json_files<T: DeserializeOwned>(directory: &Path) -> Result<Vec<T>, String> {
+    if !fs::try_exists(directory).await.map_err(|error| {
+        format!(
+            "Не удалось проверить каталог {}: {error}",
+            directory.display()
+        )
+    })? {
         return Ok(Vec::new());
     }
 
-    Ok(collect_entities(&entity_folder).await?)
+    let mut items = Vec::new();
+    let mut entries = fs::read_dir(directory).await.map_err(|error| {
+        format!(
+            "Не удалось открыть каталог {}: {error}",
+            directory.display()
+        )
+    })?;
+
+    while let Some(entry) = entries.next_entry().await.map_err(|error| {
+        format!(
+            "Не удалось прочитать каталог {}: {error}",
+            directory.display()
+        )
+    })? {
+        let path = entry.path();
+
+        if !path.is_file()
+            || path.extension().and_then(|extension| extension.to_str()) != Some("json")
+        {
+            continue;
+        }
+
+        let content = fs::read_to_string(&path)
+            .await
+            .map_err(|error| format!("Не удалось прочитать {}: {error}", path.display()))?;
+
+        let item = serde_json::from_str::<T>(&content)
+            .map_err(|error| format!("Некорректный JSON в {}: {error}", path.display()))?;
+
+        items.push(item);
+    }
+
+    Ok(items)
+}
+
+
+//TODO: Заменить "Result<Vec<Entity>" на Generic для расширения функционала в будущем
+pub async fn load_entities(storage_dir: &Path) -> Result<Vec<Entity>, String> {
+    let mut entities =
+        load_json_files::<Entity>(&directory_for_type(storage_dir, EntityType::Card)).await?;
+    entities.extend(
+        load_json_files::<Entity>(&directory_for_type(storage_dir, EntityType::Document)).await?,
+    );
+
+    Ok(entities)
 }
 
 pub async fn save_to_disk<T: Storable + Serialize>(
-    storage_dir: &PathBuf,
+    storage_dir: &Path,
     item: &T,
 ) -> Result<(), String> {
-    let entity_folder = define_path(storage_dir, item);
-    let entity = entity_folder.join(item.file_name());
+    let directory = storage_directory(storage_dir, item).await?;
+    let destination = directory.join(item.file_name());
+    let temporary_file = destination.with_extension(format!(
+        "json.{}.{}.tmp",
+        std::process::id(),
+        TEMP_FILE_COUNTER.fetch_add(1, Ordering::Relaxed),
+    ));
 
-    let mut file = File::create(&entity)
+    let json = serde_json::to_vec_pretty(item)
+        .map_err(|error| format!("Не удалось сериализовать данные: {error}"))?;
+
+
+    let mut file = File::create(&temporary_file)
         .await
-        .map_err(|e| e.to_string())?;
+        .map_err(|error| format!("Не удалось создать {}: {error}", temporary_file.display()))?;
 
-    let json = serde_json::to_string(item)
-        .map_err(|e| e.to_string())?;
-
-    file.write_all(json.as_bytes())
+    file.write_all(&json)
         .await
-        .map_err(|e| e.to_string())?;
+        .map_err(|error| format!("Не удалось записать {}: {error}", temporary_file.display()))?;
+
+    file.sync_all().await.map_err(|error| {
+        format!(
+            "Не удалось синхронизировать {}: {error}",
+            temporary_file.display()
+        )
+    })?;
+    drop(file);
+
+
+    fs::rename(&temporary_file, &destination)
+        .await
+        .map_err(|error| {
+            format!(
+                "Не удалось завершить сохранение {}: {error}",
+                destination.display()
+            )
+        })?;
 
     Ok(())
 }
 
 pub async fn update_on_disk<T: Storable + Serialize>(
-    storage_dir: &PathBuf,
+    storage_dir: &Path,
     item: &T,
 ) -> Result<(), String> {
-    Ok(save_to_disk(storage_dir, item).await?)
+    save_to_disk(storage_dir, item).await
 }
-pub async fn delete_from_disk<T: Storable + Serialize>(
-    storage_dir: &PathBuf,
-    item: &T,
-) -> Result<(), String> {
-    let entity_folder = define_path(storage_dir, item);
-    let entity: PathBuf = entity_folder.join(item.file_name());
 
-    if fs::try_exists(&entity).await.map_err(|e| e.to_string())? {
-        fs::remove_file(&entity).await.map_err(|e| e.to_string())?;
+pub async fn delete_from_disk<T: Storable>(storage_dir: &Path, item: &T) -> Result<(), String> {
+    let directory = storage_directory(storage_dir, item).await?;
+    let file = directory.join(item.file_name());
+
+    if fs::try_exists(&file)
+        .await
+        .map_err(|error| format!("Не удалось проверить {}: {error}", file.display()))?
+    {
+        fs::remove_file(&file)
+            .await
+            .map_err(|error| format!("Не удалось удалить {}: {error}", file.display()))?;
     }
 
     Ok(())

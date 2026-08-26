@@ -1,7 +1,6 @@
 use glyph_core::network::api_client::{ApiClient, ApiResponse};
 use glyph_core::network::authorization_service;
 
-
 #[tauri::command]
 pub async fn register(
     api_state: tauri::State<'_, ApiClient>,
@@ -16,7 +15,8 @@ pub async fn register(
         &email,
         &password,
         &image_path,
-    ).await?;
+    )
+    .await?;
     Ok(token_response)
 }
 
@@ -26,11 +26,8 @@ pub async fn login(
     email: String,
     password: String,
 ) -> Result<ApiResponse<String>, String> {
-    let token_response = authorization_service::authorization(
-        api_state.inner(),
-        &email,
-        &password,
-    ).await?;
+    let token_response =
+        authorization_service::authorization(api_state.inner(), &email, &password).await?;
 
     Ok(token_response)
 }

@@ -7,7 +7,14 @@ use crate::traits::storable::Storable;
 pub enum EntityType{
     Card,
     Document,
-    Project
+    Note,
+    Project,
+    Audio,
+    Video,
+    Graph,
+    Table,
+    List,
+    Task,
 }
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
