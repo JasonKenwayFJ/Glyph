@@ -1,7 +1,22 @@
 export enum EntityType {
+    None = "None",
     Card = "Card",
     Document = "Document",
-    Project = "Project"
+    Project = "Project",
+    Note = "Note",
+    Audio = "Audio",
+    Video = "Video",
+    Graph = "Graph",
+    Table = "Table",
+    List = "List",
+    Task = "Task",
+    Trash = "Trash"
+}
+
+export enum CreatorMode{
+    None,
+    Creating,
+    Editing,
 }
 
 export interface Characteristic {

@@ -1,14 +1,12 @@
 import {Outlet} from "react-router-dom";
-import Sidebar from "./../components/Shared/SideBar/SideBar.tsx";
 import "./MainLayout.css"
-import {IconChevronLeft, IconChevronRight} from '@tabler/icons-react';
-import {useState} from "react";
-import AIChat from "../pages/Assist/AssistPage.tsx";
 
+import {useState} from "react";
+import Sidebar from "../screens/components/../Panels//SideBar.tsx"
 export default function MainLayout() {
     const [isSideBarOpen, setSideBarState] = useState<boolean>(true)
     const [isAiChatOpen, setAiChat] = useState<boolean>(false)
-    let isSubsribed = true;
+
     function toggleSideBar(value: boolean) {
         setSideBarState(value)
     }
@@ -24,7 +22,7 @@ export default function MainLayout() {
             <main style={{flex: 1, overflow: "auto"}}>
                 <Outlet/>
             </main>
-            {isAiChatOpen && isSubsribed && <AIChat/>}
+            {/*{isAiChatOpen && isSubsribed && <AIChat/>}*/}
         </div>
     );
 }

@@ -1,0 +1,110 @@
+.CardContainer {
+  display: grid;
+  justify-self: center;
+  position: relative;
+
+  width: 10rem;
+  height: 15rem;
+  margin: 1rem;
+
+  overflow: hidden;
+  border-radius: 15px;
+  background: var(--bg-main-dark);
+  box-shadow: none;
+
+  transition:
+          background-color 0.1s,
+          box-shadow 0.1s,
+          height 0.1s,
+          width 0.1s;
+
+  h1 {
+    z-index: 2;
+    align-self: center;
+    font-size: 1rem;
+    text-shadow: #0a0f14 1px 1px 10px;
+  }
+
+  &:hover {
+    background: var(--accent-hover);
+    box-shadow:
+            0 25.6px 57.6px 0 rgb(0 0 0 / 22%),
+            0 4.8px 14.4px 0 var(--accent-primary);
+  }
+
+  &:active {
+    width: 10.5rem;
+    height: 15.5rem;
+  }
+
+  @media (max-width: 650px) {
+    width: 8rem;
+    height: 12rem;
+    margin: 0.5rem;
+
+    &:active {
+      width: 8.3rem;
+      height: 12.3rem;
+    }
+
+    h1 {
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.CardButtons {
+  display: flex;
+  justify-content: space-between;
+  z-index: 2;
+  padding: 10px;
+}
+
+.AddCardButtons {
+}
+
+.CardButton {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  background-color: var(--bg-main-light);
+
+  @media (max-width: 650px) {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+.CardAddImage {
+  justify-self: center;
+  align-self: flex-end;
+
+  width: 70%;
+  height: 50%;
+  margin-bottom: 15px;
+
+  z-index: 2;
+  border: none;
+  border-radius: 15px;
+  background-color: var(--bg-main-light);
+}
+
+.CardImage {
+  position: absolute;
+
+  width: 100%;
+  height: 100%;
+
+  z-index: 1;
+
+  padding-bottom: 500px;
+
+  object-fit: cover;
+  filter: blur(3px) brightness(70%);
+}
+
+.ButtonAddImageLabel {
+  font-size: clamp(0.3rem, 0.6vw, 1rem);
+  font-weight: normal;
+}

@@ -1,4 +1,4 @@
-import type {baseEntity} from "./Entities.ts";
-export type entityProp = {
-    data?: baseEntity;
+import type {Entity} from "./Entities.ts";
+export type EntityProp = {
+    data?: Entity;
 }

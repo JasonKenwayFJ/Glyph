@@ -1,0 +1,60 @@
+.ButtonSideBar {
+  width: 230px;
+  max-width: 230px;
+
+  @media (max-width: 650px) {
+    width: 50px;
+    max-width: 50px;
+  }
+}
+
+.ButtonSideBarContent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+
+  transition: color 0.3s, background-color 0.3s;
+
+  &:hover {
+    color: var(--textInverse);
+    background-color: var(--accentHover);
+  }
+
+  span {
+    font-size: 16px;
+  }
+
+  @media (max-width: 650px) {
+    justify-content: center;
+    gap: 0;
+
+    span {
+      display: none;
+    }
+  }
+}
+
+.ButtonSideBarIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 20px;
+  flex-shrink: 0;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.ButtonSideBarLabel {
+  transition: width 0.3s, opacity 0.3s;
+
+  &.collapsed {
+    width: 10px;
+    opacity: 10%;
+  }
+}

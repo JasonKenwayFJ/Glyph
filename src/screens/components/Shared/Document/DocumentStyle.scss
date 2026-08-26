@@ -1,0 +1,186 @@
+.DocumentItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 16px;
+
+  background: var(--backgroundMain);
+  border: 1px solid var(--borderDefault);
+  border-left: 2px solid transparent;
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  transition:
+          border-color 0.15s ease,
+          transform 0.15s ease,
+          background 0.15s ease;
+
+  &:hover {
+    border-color: var(--borderHover);
+    border-left-color: var(--accentPrimary);
+    background: var(--bg-accent);
+    transform: translateX(2px);
+  }
+
+  &Empty {
+    border-style: dashed;
+    align-items: center;
+
+    &:hover {
+      border-color: var(--accentPrimary);
+      border-left-color: transparent;
+      transform: none;
+    }
+  }
+
+  @media (max-width: 650px) {
+    gap: 10px;
+    padding: 12px;
+
+    .DocumentIcon {
+      width: 36px;
+      height: 36px;
+    }
+
+    .DocumentDate {
+      display: none;
+    }
+
+    .DocumentExcerpt {
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+  }
+}
+
+.DocumentIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+
+  border: 1px solid var(--borderDefault);
+  border-radius: 9px;
+
+  background: linear-gradient(
+          145deg,
+          var(--bgAccent),
+          var(--backgroundDark, var(--backgroundMain))
+  );
+
+  font-size: 18px;
+
+  &Empty {
+    border: 1px dashed var(--borderDefault);
+    background: transparent;
+    color: var(--textDisabled);
+    font-size: 20px;
+    font-weight: 300;
+  }
+}
+
+.DocumentBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.DocumentHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.DocumentTitle {
+  overflow: hidden;
+
+  margin: 0;
+
+  color: var(--textPrimary);
+  font-size: 14px;
+  font-weight: 500;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &Muted {
+    color: var(--textDisabled);
+    font-weight: 400;
+  }
+}
+
+.DocumentDate {
+  flex-shrink: 0;
+
+  color: var(--text-Disabled);
+  font-family: var(--mono);
+  font-size: 10.5px;
+}
+
+.DocumentExcerpt {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+
+  margin: 0 0 12px;
+
+  color: var(--text-Disabled);
+  font-size: 13px;
+  line-height: 150%;
+  text-overflow: ellipsis;
+}
+
+.DocumentFooter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.DocumentTag {
+  padding: 3px 9px;
+
+  border: 1px solid var(--accentBorder, var(--borderDefault));
+  border-radius: 999px;
+
+  background: rgba(41, 121, 255, 0.08);
+  color: var(--accentHover, var(--accentPrimary));
+
+  font-family: var(--mono);
+  font-size: 10px;
+}
+
+.DocumentTagMore {
+  padding: 3px 6px;
+
+  color: var(--textDisabled);
+  font-family: var(--mono);
+  font-size: 10px;
+}
+
+.DocumentMeta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  color: var(--textDisabled);
+  font-family: var(--mono);
+  font-size: 10.5px;
+}
+
+.DocumentMetaIcon {
+  opacity: 0.8;
+  font-size: 11px;
+}
+
+.DocumentMetaRight {
+  margin-left: auto;
+}

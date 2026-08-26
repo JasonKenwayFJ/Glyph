@@ -1,0 +1,141 @@
+.SideBarContainer {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  max-width: fit-content;
+  min-width: fit-content;
+  transition: width 0.3s;
+
+  &.collapsed {
+    width: 65px;
+  }
+}
+
+.SidebarWindow {
+  width: 250px;
+  min-width: 65px;
+  overflow: auto;
+  background-color: var(--backgroundDark);
+  transition: width 0.3s;
+
+  &.collapsed {
+    width: 65px;
+  }
+}
+
+.ButtonList {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    margin: 20px 0 0 20px;
+    font-size: 14px;
+    font-weight: lighter;
+    color: var(--textDisabled);
+  }
+
+  button {
+    height: 40px;
+    margin: 1px 12px;
+    padding: 10px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19),
+    0 6px 6px rgba(0, 0, 0, 0.23);
+    text-align: start;
+    font-size: 18px;
+    transition: height 0.3s;
+  }
+
+  input {
+    margin: 10px;
+    background-color: var(--backgroundLight);
+  }
+}
+.NavButtons{
+
+}
+.SidebarWindowCloser {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 5px;
+  transition: translate 0.3s;
+
+  &.collapsed {
+    translate: 20%;
+  }
+
+  button {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 20px;
+  }
+}
+
+.SideBarDivider {
+  border: 3px solid var(--backgroundLight);
+  border-radius: 10px;
+}
+
+
+// ─────────────────────────────────────────────
+// MOBILE
+// ─────────────────────────────────────────────
+
+@media (max-width: 650px) {
+  .SideBarContainer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    width: 100%;
+    height: 65px;
+    max-width: none;
+    min-width: 0;
+    flex-direction: row;
+  }
+
+  .SidebarWindow {
+    width: 100%;
+    min-width: 0;
+    height: 65px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+
+    &.collapsed {
+      width: 100%;
+      height: 65px;
+    }
+  }
+
+  .SidebarWindowCloser {
+    display: none;
+  }
+
+  .ButtonList {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    height: fit-content;
+
+    label,
+    input {
+      display: none;
+    }
+
+    button {
+      width: 45px;
+      height: 45px;
+      margin: 0;
+      padding: 5px;
+
+      font-size: 0;
+    }
+  }
+
+  .SideBarDivider {
+    display: none;
+  }
+}

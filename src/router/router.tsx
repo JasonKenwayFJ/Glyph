@@ -1,13 +1,12 @@
 import { createHashRouter } from "react-router-dom";
 
 import MainLayout from "../layout/MainLayout";
-import MainPage from "../pages/MainPage/MainPage.tsx";
-import EntityPage from "../pages/EntityPage/EntityPage.tsx";
-import Login from "../pages/Login/Login.tsx";
-import ProjectPage from "../pages/ProjectPage/ProjectPage.tsx";
-import Account from "../pages/Account/Account.tsx";
-import GraphPage from "../pages/Graphs/GraphPage.tsx";
-import TaskPage from "../pages/Tasks/TaskPage.tsx";
+import ProjectPage from "../screens/ProjectPage.tsx"
+import MainPage from "../screens/MainPage.tsx";
+import EntityPage from "../screens/EntityPage.tsx";
+import {LoginPage} from "../screens/LoginPage.tsx";
+import {AccountPage} from "../screens/AccountPage.tsx";
+
 
 export const router = createHashRouter([
     {
@@ -27,28 +26,20 @@ export const router = createHashRouter([
                 element: <MainPage />,
             },
             {
-                path: "entity/:type",
+                path: "entityPage/:type",
                 element: <EntityPage />,
             },
             {
                 path: "login",
-                element: <Login />,
+                element: <LoginPage />,
             },
             {
                 path: "account",
-                element: <Account />,
+                element: <AccountPage />,
             },
             {
                 path: "projectPage",
                 element: <ProjectPage />,
-            },
-            {
-                path: "graphPage",
-                element: <GraphPage />,
-            },
-            {
-                path: "taskPage",
-                element: <TaskPage />,
             },
         ],
     },
