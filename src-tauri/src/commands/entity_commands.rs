@@ -1,10 +1,9 @@
 use crate::file_manager;
 use glyph_core::entities::entity::{Entity, EntityType};
-use glyph_core::managers::entity_manager;
 use glyph_core::managers::entity_manager::EntityManager;
 use glyph_core::network::api_client::{ApiClient, ApiResponse};
 use glyph_core::network::entity_service;
-use tauri::{Emitter, Manager};
+use tauri::{Manager};
 #[tauri::command]
 pub async fn get_entities(
     app: tauri::AppHandle,
@@ -18,6 +17,8 @@ pub async fn get_entities(
     entity_state.hydrate(loaded);
     entity_state.get_entities(r#type)
 }
+
+
 // #[tauri::command]
 // pub async fn get_entities(
 //     entity_type: EntityType,
