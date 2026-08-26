@@ -1,75 +1,52 @@
-# Glyph
+<div align="center">
 
-> **A visual project hub for game developers, creators, writers, and anyone who works with ideas, data, and complex projects.**
+# 🔮 Glyph
 
-Glyph is a cross-platform workspace designed primarily for **game development**, combining documentation, worldbuilding, planning, structured data, relationships, and project organization into a single flexible environment.
+**A visual project hub for game developers, worldbuilders, writers — and anyone who works with ideas, data, and complex projects.**
 
-The goal is simple:
+*Think. Connect. Create.*
 
-**Instead of scattering your project across dozens of applications, Glyph gives you one place where everything can exist — and, more importantly, everything can be connected.**
+[![Status](https://img.shields.io/badge/status-in%20development-orange)]()
+[![Built with Rust](https://img.shields.io/badge/core-Rust-DE4C36?logo=rust&logoColor=white)]()
+[![Built with Tauri](https://img.shields.io/badge/app-Tauri-24C8DB?logo=tauri&logoColor=white)]()
+[![Cross-platform](https://img.shields.io/badge/platform-Desktop%20%7C%20Mobile%20%7C%20Web-blueviolet)]()
 
----
-
-## ✨ What is Glyph?
-
-Game development produces an absurd amount of information.
-
-You have:
-
-* 📖 Game Design Documents
-* 🧙 Characters
-* ⚔️ Gameplay mechanics
-* 🌍 Locations
-* 📜 Stories and scenarios
-* 🧩 Quests
-* 🎮 Systems
-* 💰 Economy calculations
-* 📝 Notes
-* 🗂️ References
-* 🔗 Relationships between objects
-* 📊 Tables
-* 📁 Files and assets
-* 💡 Random ideas that may eventually become something important
-
-Usually, all of this ends up distributed across different applications.
-
-One application for notes.
-
-Another for spreadsheets.
-
-Another for diagrams.
-
-Another for project files.
-
-Another for task management.
-
-Another for documentation.
-
-Another for writing.
-
-**Glyph aims to bring these things together.**
+</div>
 
 ---
 
-# 🧠 Everything is an object
+Game development produces an absurd amount of information — design documents, characters, mechanics, locations, quests, economy sheets, notes, references, files, and a hundred half-formed ideas that might one day matter.
 
-One of Glyph's core ideas is that information shouldn't exist only as isolated documents.
+Normally, all of that ends up scattered: one app for notes, another for spreadsheets, another for diagrams, another for docs, another for tasks.
 
-A character can be an object.
+**Glyph exists to close that gap.** One workspace, where everything can live — and, more importantly, everything can *connect*.
 
-A mechanic can be an object.
+## Table of Contents
 
-A location can be an object.
+- [Everything is an object](#-everything-is-an-object)
+- [From idea to structured information](#️-from-idea-to-structured-information)
+- [Designed around game development](#-designed-around-game-development)
+- [Relationships](#️-relationships)
+- [Multiple representations](#️-multiple-representations)
+- [A powerful editor](#-a-powerful-editor)
+- [References & anchors](#-references--anchors)
+- [Tags & filtering](#️-tags--filtering)
+- [Structured data](#-structured-data)
+- [Project files](#-project-files)
+- [Modular workspace](#-modular-workspace)
+- [Core philosophy](#-core-philosophy)
+- [Technology](#️-technology)
+- [Roadmap](#️-roadmap)
+- [Long-term vision](#-the-long-term-vision)
+- [Contributing](#-contributing)
 
-A quest can be an object.
+---
 
-A note can be an object.
+## 🧠 Everything is an object
 
-And these objects can be **connected to each other**.
+Information in Glyph doesn't have to live as isolated documents. A character, a mechanic, a location, a quest, a note — each can exist as an **object**, and objects can connect to one another.
 
-For example:
-
-```text
+```
                     ┌──────────────┐
                     │   Character  │
                     │   "Arthur"   │
@@ -83,23 +60,17 @@ For example:
           └──────────┘ └────────┘ └──────────┘
 ```
 
-This allows Glyph to represent not only **what information exists**, but also **how that information relates to everything else**.
+This lets Glyph represent not just *what* information exists, but *how it relates* to everything else in the project.
 
----
+## ✍️ From idea to structured information
 
-# ✍️ From idea → structured information
-
-Imagine you're writing a scenario.
-
-You introduce a character:
+You're writing a scenario:
 
 > *"Arthur enters the room and notices the strange symbol carved into the wall..."*
 
-You realize that **Arthur** is going to become an important character.
+Arthur is clearly becoming important. Instead of switching apps and building a character sheet by hand, select his name and turn it into a project object right there:
 
-Instead of manually switching applications and creating a character document, you can select his name and turn it into a project object.
-
-```text
+```
 Scenario
    │
    └── Arthur
@@ -107,113 +78,42 @@ Scenario
         └── Create → Character
 ```
 
-Glyph creates a character entry that can later contain:
+Glyph creates a character entry — name, description, personality, background, relationships, factions, appearances, images, custom fields — and keeps it linked back to the moment he was first mentioned.
 
-* Name
-* Description
-* Personality
-* Background
-* Relationships
-* Factions
-* Locations
-* Appearances
-* Notes
-* Images
-* References
-* Custom fields
+## 🎮 Designed around game development
 
-And the original mention of Arthur can remain connected to that object.
+A project structure might look like:
 
----
-
-# 🎮 Designed around game development
-
-Glyph is especially suited for building games and other creative projects.
-
-Possible project structures include:
-
-```text
+```
 My Game
-│
-├── 📖 Documentation
-│   ├── Game Design Document
-│   ├── Combat System
-│   ├── Progression
-│   └── Economy
-│
-├── 🧙 Characters
-│   ├── Arthur
-│   ├── Elizabeth
-│   └── The Merchant
-│
-├── 🌍 World
-│   ├── Locations
-│   ├── Factions
-│   └── History
-│
-├── ⚔️ Gameplay
-│   ├── Mechanics
-│   ├── Weapons
-│   └── Abilities
-│
-├── 📜 Narrative
-│   ├── Main Story
-│   ├── Quests
-│   └── Dialogues
-│
-├── 📊 Data
-│   ├── Items
-│   ├── Enemies
-│   └── Economy
-│
-└── 📁 Files
-    ├── Concept Art
-    ├── References
-    └── Audio
+├── 📖 Documentation   (GDD, Combat System, Progression, Economy)
+├── 🧙 Characters       (Arthur, Elizabeth, The Merchant)
+├── 🌍 World            (Locations, Factions, History)
+├── ⚔️ Gameplay         (Mechanics, Weapons, Abilities)
+├── 📜 Narrative        (Main Story, Quests, Dialogues)
+├── 📊 Data             (Items, Enemies, Economy)
+└── 📁 Files            (Concept Art, References, Audio)
 ```
 
-The important part is that this structure isn't necessarily fixed.
+This structure isn't fixed — **the user builds their own workspace.**
 
-**The user should be able to build their own workspace.**
+## 🕸️ Relationships
 
----
+Complex projects are relationships all the way down: a character belongs to a faction, a faction controls a location, a quest involves several characters, a mechanic depends on another mechanic. Glyph treats these connections as first-class project data.
 
-# 🕸️ Relationships
-
-Complex projects contain relationships everywhere.
-
-A character belongs to a faction.
-
-A faction controls a location.
-
-A quest involves several characters.
-
-A weapon belongs to a category.
-
-A mechanic depends on another mechanic.
-
-A story event changes the state of the world.
-
-Glyph aims to make these relationships first-class project data.
-
-For example:
-
-```text
+```
 Arthur
- ├── member of → Knights
- ├── lives in → Eldoria
+ ├── member of   → Knights
+ ├── lives in    → Eldoria
  ├── involved in → The Broken Crown
- ├── knows → Elizabeth
- └── uses → Royal Sword
+ ├── knows       → Elizabeth
+ └── uses        → Royal Sword
 ```
 
-These relationships can then be represented through different visualizations.
+The same relationships, as a graph:
 
-### Graph
-
-```text
+```
              Elizabeth
-                 │
                  │ knows
                  ▼
 Arthur ────────► Knights
@@ -223,169 +123,66 @@ Arthur ────────► Knights
 Eldoria ◄────── Castle
 ```
 
-### List
+## 🗺️ Multiple representations
 
-```text
-Arthur
-├── Faction: Knights
-├── Location: Eldoria
-├── Quest: The Broken Crown
-├── Relationship: Elizabeth
-└── Weapon: Royal Sword
+The same data, seen differently depending on what you're trying to understand:
+
+| Representation | Best for |
+|---|---|
+| 🌳 Tree | Project hierarchy |
+| 🕸️ Graph | Relationship networks |
+| 📝 Document | Narrative, lore |
+| 🧱 Blocks | Flexible composition |
+| 📊 Table | Economy, balancing |
+| 🃏 Cards | Character databases |
+| 📋 List | Quick reference |
+| ⏱️ Timeline | Story pacing, audio |
+
+## 📝 A powerful editor
+
+At its core, Glyph is also a serious writing environment — documentation, scenarios, notes, design docs, nested lists, headings, anchors, and inline references to project objects. The goal is a document editor with the flexibility of prose and the structure of a database.
+
+## 🔗 References & anchors
+
+Instead of retyping the same facts everywhere, documents can reference existing objects directly:
+
 ```
-
-### Cards
-
-Each object can also have its own visual representation.
-
-**One piece of data — multiple ways to see it.**
-
----
-
-# 🗺️ Multiple representations
-
-Glyph isn't meant to force everything into one format.
-
-The same project information can potentially be represented as:
-
-* 🌳 Trees
-* 🕸️ Relationship graphs
-* 📝 Documents
-* 🧱 Blocks
-* 📊 Tables
-* 🃏 Cards
-* 📋 Lists
-* 🗂️ Collections
-* 🗺️ Visual maps
-* ⏱️ Timelines
-
-The representation should depend on **what you're trying to understand**.
-
-A character database works well as cards.
-
-An economy works well as a table.
-
-A relationship network works well as a graph.
-
-A story works well as a document.
-
-A project hierarchy works well as a tree.
-
----
-
-# 📝 A powerful editor
-
-At its core, Glyph can also function as a flexible writing environment.
-
-Write documentation.
-
-Write scenarios.
-
-Create notes.
-
-Build design documents.
-
-Create nested lists.
-
-Use headings and anchors.
-
-Embed references to project objects.
-
-Organize large documents into meaningful structures.
-
-The goal is to combine the flexibility of a modern document editor with the structure of a database.
-
----
-
-# 🔗 References and anchors
-
-Instead of repeatedly writing the same information, Glyph can allow documents to reference existing objects.
-
-For example:
-
-```text
 The player meets Arthur in Eldoria.
-
                 ↓
-
 The player meets [Arthur] in [Eldoria].
 ```
 
-Those references can point directly to the corresponding project objects.
+Those brackets aren't decoration — they point straight to the underlying objects, so documentation is never disconnected from the data it describes.
 
-This creates a project where documentation isn't disconnected from the data it describes.
+## 🏷️ Tags & filtering
 
----
-
-# 🏷️ Tags & filtering
-
-Projects can contain thousands of objects.
-
-Glyph therefore aims to provide powerful organization tools:
-
-```text
-Tags:
-#main-character
-#enemy
-#boss
-#quest
-#unfinished
-#important
-#lore
 ```
+Tags: #main-character #enemy #boss #quest #unfinished #important #lore
 
-Combined with filtering:
-
-```text
 Characters
 WHERE faction = "Knights"
 AND status = "alive"
 AND tag = "#main-character"
 ```
 
-The exact implementation may evolve, but the principle remains:
+The exact query syntax may evolve — the principle won't: **you organize it your way.**
 
-**The user should be able to organize information however they want.**
+## 📊 Structured data
 
----
+Not everything belongs in prose. Item databases, enemy stats, character attributes, economy, progression, crafting — Glyph provides real tables for real numbers.
 
-# 📊 Structured data
+| Item | Damage | Price | Weight |
+|---|--:|--:|--:|
+| Iron Sword | 25 | 120 | 3.2 |
+| Steel Sword | 40 | 350 | 4.1 |
+| Royal Sword | 75 | 1200 | 5.0 |
 
-Not everything belongs in a text document.
+## 📁 Project files
 
-Games contain enormous amounts of numerical and structured information.
+Projects eventually need real assets, not just data:
 
-For example:
-
-| Item        | Damage | Price | Weight |
-| ----------- | -----: | ----: | -----: |
-| Iron Sword  |     25 |   120 |    3.2 |
-| Steel Sword |     40 |   350 |    4.1 |
-| Royal Sword |     75 |  1200 |    5.0 |
-
-Glyph can provide structured tables for things such as:
-
-* Item databases
-* Enemy statistics
-* Character attributes
-* Economy
-* Balancing
-* Progression
-* Crafting
-* Resources
-* Game parameters
-
----
-
-# 📁 Project Files
-
-Glyph can also evolve beyond documentation and structured information.
-
-Projects may contain actual files:
-
-```text
+```
 Project
-│
 ├── Documents
 ├── Characters
 ├── Locations
@@ -397,290 +194,96 @@ Project
     └── prototype.zip
 ```
 
-The idea is to eventually provide a project-level file workspace where users can keep the assets and references necessary for their work.
+A project-level file workspace is planned, so assets live next to the objects that reference them — including more advanced workflows down the line, like arranging audio resources on a timeline.
 
----
+## 🧩 Modular workspace
 
-# 🎬 Beyond documentation
+Different creators need different tools:
 
-One possible direction for Glyph is treating files and objects as resources that can participate in more advanced workflows.
+| Role | Might need |
+|---|---|
+| Game designer | Characters, Locations, Quests, Mechanics, Economy |
+| Writer | Characters, Chapters, Scenes, Timeline, Notes |
+| Programmer | Documentation, Specs, Architecture, Tasks |
+| Filmmaker | Characters, Scenes, Scripts, Assets, Timeline |
 
-Imagine importing several audio files into a project:
+Glyph aims to be **modular** — enable the views and tools you actually need, ignore the rest.
 
-```text
-Assets
-│
-├── Explosion.wav
-├── Footstep.wav
-├── Ambient.wav
-└── Music.wav
-```
+## 🧱 Core philosophy
 
-And later using those resources in another visual workspace:
+- **Everything should be connected** — no isolated silos.
+- **One object, multiple views** — document, card, table, or graph, same underlying data.
+- **Structure without rigidity** — your organizational system, not ours.
+- **Visual organization** — large projects are easier to hold in your head when you can see them.
+- **One workspace** — fewer apps, more clarity.
+- **Extensibility** — game dev first, but not game dev only.
 
-```text
-0s       5s       10s      15s
-│────────│────────│────────│
+## 🚧 Current Status
 
-Music    ████████████████████
+Glyph is under active development. Architecture and scope are still evolving — several sections above describe the **long-term direction**, not finished features yet.
 
-Ambient       ███████████████
+## 🛠️ Technology
 
-Explosion             ██
+**Core** — 🦀 Rust · ⚡ Tokio · file-based project storage · JSON serialization · generic `Storable` abstraction
 
-Footstep         ██       ██
-```
+**Application** — 🖥️ Tauri · 🌐 web-based frontend · 📱 cross-platform (desktop, mobile, web)
 
-This opens the door to workflows that go far beyond simple documentation.
+Core project logic is kept independent from the interface, so the same engine can drive different frontends across platforms.
 
----
+## 🗺️ Roadmap
 
-# 🧩 Modular Workspace
+**Foundation**
+- [x] Basic project structure
+- [x] Entity storage
+- [x] Serialization
+- [x] Generic `Storable` abstraction
+- [ ] Project management
+- [ ] Robust persistence layer
 
-Glyph shouldn't necessarily dictate what the application must be.
+**Editor** — Rich text · Markdown · nested blocks · anchors · internal references · drag & drop · embeds
 
-Different people need different tools.
+**Project Objects** — Custom types · custom properties · tags · collections · templates · references · relationships
 
-A game designer may need:
+**Visualization** — Tree · Graph · Card · Table · Timeline · Visual canvas
 
-```text
-Characters
-Locations
-Quests
-Mechanics
-World
-Economy
-```
+**Search** — Global search · filtering · tag-based search · cross-document search
 
-A writer might need:
+**Files** — Project explorer · asset management · previews · resource references
 
-```text
-Characters
-Chapters
-Scenes
-Timeline
-Notes
-```
+**Future** — Modular workspace · plugins/extensions · collaboration · cloud sync · version history
 
-A programmer might need:
+## 🌌 The Long-Term Vision
 
-```text
-Documentation
-Specifications
-Architecture
-Tasks
-References
-```
-
-A filmmaker might need:
-
-```text
-Characters
-Scenes
-Locations
-Scripts
-Assets
-Timeline
-```
-
-Therefore, Glyph aims toward a **modular workspace** where users can enable the tools and views they actually need.
-
----
-
-# 🧱 Core Philosophy
-
-Glyph is built around several principles.
-
-### Everything should be connected
-
-Information shouldn't live in isolated silos.
-
-### One object, multiple views
-
-The same information should be usable as a document, card, table, graph, or another representation.
-
-### Structure without rigidity
-
-Users should be able to create their own organizational systems.
-
-### Visual organization
-
-Large amounts of information become easier to understand when they can be represented visually.
-
-### One workspace
-
-The fewer applications required to manage a project, the better.
-
-### Extensibility
-
-Glyph shouldn't be limited to game development.
-
----
-
-# 🚧 Current Status
-
-Glyph is currently in development.
-
-The architecture and feature set are still evolving.
-
-Some ideas described in this README represent the **long-term direction of the project rather than fully implemented features**.
-
-The goal is to gradually transform Glyph from a project documentation tool into a complete **creative project hub**.
-
----
-
-# 🛠️ Technology
-
-Glyph is being built with a focus on cross-platform development.
-
-### Core
-
-* 🦀 **Rust**
-* ⚡ **Tokio**
-* 🗃️ File-based project storage
-* 📦 JSON serialization
-* 🧩 Generic storage abstractions
-
-### Application
-
-* 🖥️ **Tauri**
-* 🌐 Web-based frontend
-* 📱 Cross-platform architecture
-
-The architecture is designed so that the core project logic can remain independent from the user interface.
-
----
-
-# 🗺️ Roadmap
-
-The roadmap is intentionally flexible because Glyph is still being shaped.
-
-### Foundation
-
-* [x] Basic project structure
-* [x] Entity storage
-* [x] Serialization
-* [x] Generic `Storable` abstraction
-* [ ] Project management
-* [ ] Robust persistence layer
-
-### Editor
-
-* [ ] Rich text editor
-* [ ] Markdown support
-* [ ] Nested blocks
-* [ ] Anchors
-* [ ] Internal references
-* [ ] Drag & drop
-* [ ] Embeds
-
-### Project Objects
-
-* [ ] Custom object types
-* [ ] Custom properties
-* [ ] Tags
-* [ ] Collections
-* [ ] Object templates
-* [ ] Object references
-* [ ] Object relationships
-
-### Visualization
-
-* [ ] Tree view
-* [ ] Graph view
-* [ ] Card view
-* [ ] Table view
-* [ ] Timeline
-* [ ] Visual canvas
-
-### Search
-
-* [ ] Global project search
-* [ ] Filtering
-* [ ] Tag-based search
-* [ ] Search across documents and objects
-
-### Files
-
-* [ ] Project file explorer
-* [ ] Asset management
-* [ ] File previews
-* [ ] Resource references
-
-### Future
-
-* [ ] Modular workspace
-* [ ] Custom modules
-* [ ] Plugins/extensions
-* [ ] Collaboration
-* [ ] Cloud synchronization
-* [ ] Version history
-* [ ] More specialized views
-
----
-
-# 🌌 The Long-Term Vision
-
-Glyph isn't trying to become simply another notes application.
-
-The long-term goal is something closer to:
+Not another notes app. The goal is closer to:
 
 > **A visual operating system for creative projects.**
 
-A place where you can start with a single idea:
+Starting from a single idea —
 
-```text
+```
 "I want to make a game about..."
 ```
 
-and gradually turn that idea into:
+— and growing it into a fully connected structure:
 
-```text
+```
 Idea
- │
- ├── World
- │    ├── Locations
- │    ├── Factions
- │    └── History
- │
- ├── Characters
- │    ├── Protagonist
- │    ├── Companions
- │    └── Enemies
- │
- ├── Gameplay
- │    ├── Combat
- │    ├── Progression
- │    └── Economy
- │
- ├── Story
- │    ├── Acts
- │    ├── Quests
- │    └── Dialogues
- │
- └── Assets
-      ├── Art
-      ├── Audio
-      └── References
+├── World       (Locations, Factions, History)
+├── Characters  (Protagonist, Companions, Enemies)
+├── Gameplay    (Combat, Progression, Economy)
+├── Story       (Acts, Quests, Dialogues)
+└── Assets      (Art, Audio, References)
 ```
 
-And every piece of that structure can reference and interact with every other piece.
+Every piece able to reference and interact with every other piece.
 
 **One project. One workspace. One connected system.**
 
----
+## 🤝 Contributing
 
-# 🤝 Contributing
+Glyph's architecture is still taking shape. Ideas, issues, and architectural discussion are welcome — for larger features, opening a discussion first is the best way to align on direction before diving into code.
 
-Glyph is an experimental project and its architecture is still evolving.
-
-Contributions, ideas, feature proposals, bug reports, and architectural discussions are welcome.
-
-Before implementing large features, opening an issue or discussion is recommended so the direction can be discussed first.
-
----
-
-# 📜 License
+## 📜 License
 
 License information will be added as the project matures.
 
@@ -688,10 +291,6 @@ License information will be added as the project matures.
 
 <div align="center">
 
-### **Glyph**
-
-**Think. Connect. Create.**
-
-*A workspace for turning ideas into worlds.*
+**Glyph** — *A workspace for turning ideas into worlds.*
 
 </div>
