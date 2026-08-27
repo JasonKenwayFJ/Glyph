@@ -1,5 +1,4 @@
 use serde::Serialize;
-
 use crate::network::api_client::{ApiClient, ApiResponse};
 
 #[derive(Serialize)]
@@ -28,9 +27,16 @@ pub async fn authorization(
         password: password.to_string(),
     };
 
-    client
-        .post::<_, String>("/api/auth/login", &body)
+    let response = client
+        .post::<AuthorizationRequest, String>("/api/auth/login", &body)
         .await
+        .map_err(|e| e.to_string())?;
+    if !response.success {
+        println!("Error while authorization");
+        return Err(response.message);
+    }
+    println!("Authorized {}", response.status);
+    Ok(response)
 }
 
 pub async fn registration(
@@ -47,7 +53,14 @@ pub async fn registration(
         image_path: image_path.to_string(),
     };
 
-    client
-        .post::<_, String>("/api/auth/register", &body)
+    let response = client
+        .post::<RegistrationRequest, String>("/api/auth/register", &body)
         .await
+        .map_err(|e| e.to_string())?;
+    if !response.success {
+        println!("Error while authorization");
+        return Err(response.message);
+    }
+    println!("Authorized {}", response.status);
+    Ok(response)
 }

@@ -4,6 +4,8 @@ import {invoke} from "@tauri-apps/api/core";
 import {Searcher} from "./components/Shared/Searcher.tsx";
 import "./MainStyles/ProjectPageStyle.scss"
 import {ProjectCreator} from "./Creators/ProjectCreator.tsx";
+import {EntityType} from "../types/Entities.ts";
+
 const ProjectPage = () => {
     const [projects, setProjects] = useState<Project[]>([]);
     const [search, setSearch] = useState("");
@@ -43,18 +45,24 @@ const ProjectPage = () => {
         setCreator(value)
     }
     async function submitProjectCreation(title: string, description: string) {
-
+        const now = new Date().toISOString();
         const project: Project = {
             id: crypto.randomUUID(),
             title,
+            entityType: EntityType.Project,
             description,
             imagePath: "",
-            createdAt: "",
-            updatedAt: "",
+            createdAt: now,
+            updatedAt: now,
             weight: 0,
         };
 
-        await invoke('create_project', {project})
+        try{
+            await invoke('create_project', {project})
+        }catch (e) {
+            console.error(e)
+            console.error(project)
+        }
 
         setCreator(false);
         setProjects(prev => [...prev, project]);
@@ -64,7 +72,7 @@ const ProjectPage = () => {
 
     return (
         <div className={"ProjectPageContainer"}>
-            {isCreator && <ProjectCreator onCreate={(title, description) => submitProjectCreation(title, description)}
+            {isCreator && <ProjectCreator onCreate={async (title, description) => await submitProjectCreation(title, description)}
                                         onClose={() => toggleCreator(!isCreator)}/>}
             <div className={"ProjectSelectHeader"}>
                 <div>

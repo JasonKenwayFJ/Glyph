@@ -7,8 +7,8 @@
 
 .ProjectSelectHeader {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
   gap: 20px;
   animation: fadeSlideDown 0.5s ease both;
   margin-bottom: 1rem;
@@ -198,7 +198,7 @@
 
 .ProjectCardNew {
   min-height: 186px;
-
+margin: 0 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;

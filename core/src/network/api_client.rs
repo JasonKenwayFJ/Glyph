@@ -31,8 +31,7 @@ impl ApiClient {
         obj: &Req,
     ) -> Result<ApiResponse<Res>, String>
     where
-        Req: Serialize,
-        Res: DeserializeOwned,
+        Req: Serialize, Res:DeserializeOwned
     {
         let url = format!("{}/{}", self.base_url, path);
 
@@ -70,7 +69,7 @@ impl ApiClient {
 
     pub async fn get<Res>(
         &self,
-        path: &str,
+        path: String,
     ) -> Result<ApiResponse<Res>, String>
     where
         Res: DeserializeOwned,
@@ -106,7 +105,7 @@ impl ApiClient {
 
     pub async fn delete(
         &self,
-        path: &str,
+        path: String,
     ) -> Result<ApiResponse<()>, String> {
         let url = format!("{}/{}", self.base_url, path);
 

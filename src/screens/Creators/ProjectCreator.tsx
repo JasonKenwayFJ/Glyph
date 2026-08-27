@@ -4,6 +4,7 @@ type DataReceiverProps = {
     onCreate: (title: string, description: string) => void;
 }
 export const ProjectCreator = ({ onClose, onCreate }: DataReceiverProps) => {
+
     return(
         <div className="DataReceiverOverlay" onClick={onClose}>
             <form

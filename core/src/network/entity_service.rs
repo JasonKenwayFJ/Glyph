@@ -22,32 +22,32 @@ where
     Res:serde::de::DeserializeOwned,{
     let url = format!("{}getAll", define_path(entity_type));
     let response = client
-        .get::<Res>(&url)
+        .get::<Res>(url)
         .await
         .map_err(|e| e.to_string())?;
     Ok(response)
 }
 
-pub async fn create_entity<Res>(client: &ApiClient, entity: &Entity) -> Result<ApiResponse<Res>, String>
+pub async fn create_entity<Res>(client: &ApiClient, entity: &Entity) -> Result<ApiResponse<()>, String>
 where
     Res: serde::de::DeserializeOwned,{
     let url = format!("{}create", define_path(entity.entity_type));
     let response =
         client
-            .post::<Entity, Res>(&url, entity)
+            .post::<Entity, ()>(&url, entity)
             .await
             .map_err(|e| e.to_string())?;
     Ok(response)
 }
 
 pub async fn update_entity<Res>(client: &ApiClient, entity: &Entity)
-    -> Result<ApiResponse<Res>, String>
+    -> Result<ApiResponse<()>, String>
 where
     Res: serde::de::DeserializeOwned,{
 
     let url = format!("{}update", define_path(entity.entity_type));
     let response = client
-        .post::<Entity, Res>(&url, entity)
+        .post::<Entity, ()>(&url, entity)
         .await
         .map_err(|e| e.to_string())?;
     Ok(response)
@@ -56,7 +56,7 @@ where
 pub async fn delete_entity<Res>(client: &ApiClient, entity: &Entity) -> Result<ApiResponse<()>, String> {
     let url = format!("{}delete/{}", define_path(entity.entity_type), entity.id);
     let response = client
-        .delete(&url)
+        .delete(url)
         .await
         .map_err(|e| e.to_string())?;
     Ok(response)
