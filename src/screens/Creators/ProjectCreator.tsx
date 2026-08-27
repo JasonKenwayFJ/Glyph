@@ -1,12 +1,10 @@
-import "./DataReceiver.css"
-
+import "./../MainStyles/Panels/ProjectCreator.scss"
 type DataReceiverProps = {
     onClose: () => void;
     onCreate: (title: string, description: string) => void;
 }
-
-const DataReceiver = ({ onClose, onCreate }: DataReceiverProps) => {
-    return (
+export const ProjectCreator = ({ onClose, onCreate }: DataReceiverProps) => {
+    return(
         <div className="DataReceiverOverlay" onClick={onClose}>
             <form
                 className="DataReceiverContainer"
@@ -57,4 +55,3 @@ const DataReceiver = ({ onClose, onCreate }: DataReceiverProps) => {
         </div>
     )
 }
-export default DataReceiver

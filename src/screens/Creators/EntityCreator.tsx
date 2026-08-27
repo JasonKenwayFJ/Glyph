@@ -9,27 +9,15 @@ import ImageUploader from "../../components/Shared/ImageUploader/ImageUploader.t
 
 
 import {
-    Characteristic, CreatorMode,
+    CreatorMode,
     Entity,
     EntityType,
-    ExtraField,
 } from "../../types/Entities.ts";
 
 import { invoke } from "@tauri-apps/api/core";
 import { Project } from "../../types/Project.ts";
+import {EntityDTO} from "../../types/DTO/EntityDTO.ts";
 
-
-type EntityForm = {
-    projectId: string;
-    entityType: EntityType;
-    title: string;
-    description: string;
-    content: string;
-    imagePath: string;
-    category: Characteristic[];
-    tags: Characteristic[];
-    extraFields: ExtraField[];
-};
 
 
 type CharacteristicItem = {
@@ -73,24 +61,18 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
      * =========================
      */
 
-    const [form, setForm] = useState<EntityForm>(() => ({
+    const [form, setForm] = useState<EntityDTO>({
         projectId: props.data?.projectId ?? "",
         entityType: props.data?.entityType ?? EntityType.Card,
         title: props.data?.title ?? "",
         description: props.data?.description ?? "",
         content: props.data?.content ?? props.prefillContent ?? "",
         imagePath: props.data?.imagePath ?? "",
-        category: props.data?.category ?? [],
+        categories: props.data?.categories ?? [],
         tags: props.data?.tags ?? [],
         extraFields: props.data?.extraFields ?? [],
-    }));
+    });
 
-
-    /*
-     * project загружается ПОСЛЕ первого render,
-     * поэтому projectId нельзя один раз получить
-     * внутри useState.
-     */
 
     useEffect(() => {
         if (!project) {
@@ -103,12 +85,6 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
         }));
     }, [project]);
 
-
-    /*
-     * =========================
-     * CATEGORIES / TAGS
-     * =========================
-     */
 
     const [selectedCategories, setSelectedCategories] =
         useState<CharacteristicItem[]>([]);
@@ -126,20 +102,6 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
         useState<string | null>(null);
 
 
-    /*
-     * =========================
-     * LOAD CATEGORIES / TAGS
-     * =========================
-     */
-
-
-
-    /*
-     * =========================
-     * IMAGE
-     * =========================
-     */
-
     function imageHandler(value: File | undefined) {
         if (!value) {
             return;
@@ -152,13 +114,6 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
 
         setPreviewUrl(URL.createObjectURL(value));
     }
-
-
-    /*
-     * =========================
-     * ENTITY TYPE
-     * =========================
-     */
 
     function typeHandler(value: string | undefined) {
         if (!value) {
@@ -176,13 +131,6 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
         }));
     }
 
-
-    /*
-     * =========================
-     * CATEGORY
-     * =========================
-     */
-
     function addCategoryHandler(category: CharacteristicItem) {
         setCategories(prev =>
             prev.filter(cat => cat.id !== category.id)
@@ -193,8 +141,6 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
             category,
         ]);
     }
-
-
     function removeCategoryHandler(category: CharacteristicItem) {
         setCategories(prev => [
             ...prev,
@@ -205,14 +151,6 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
             prev.filter(cat => cat.id !== category.id)
         );
     }
-
-
-    /*
-     * =========================
-     * TAG
-     * =========================
-     */
-
     function addTagHandler(tag: CharacteristicItem) {
         setTags(prev =>
             prev.filter(t => t.id !== tag.id)
@@ -223,8 +161,6 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
             tag,
         ]);
     }
-
-
     function removeTagHandler(tag: CharacteristicItem) {
         setTags(prev => [
             ...prev,
@@ -237,6 +173,15 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
     }
 
 
+    async function processEntity(){
+        let entity = form;
+        if (!project){
+            console.error("Project is null");
+            return;
+        }
+        entity.projectId = project.id;
+        await invoke('create_entity', {entity})
+    }
 
     return (
         <div
@@ -246,8 +191,7 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
             <form
                 className="EntityCreatorForm"
                 onClick={e => e.stopPropagation()}
-                onSubmit={() => {}}
-            >
+                onSubmit={async (event) => { event.preventDefault(); await processEntity(); }}            >
 
                 <div className="EntityCreatorHeader">
 

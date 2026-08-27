@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
 import {Project} from "../types/Project.ts";
 import {invoke} from "@tauri-apps/api/core";
-import DataReceiver from "../components/Shared/DataReceiver/DataReceiver.tsx";
 import {Searcher} from "./components/Shared/Searcher.tsx";
 import "./MainStyles/ProjectPageStyle.scss"
+import {ProjectCreator} from "./Creators/ProjectCreator.tsx";
 const ProjectPage = () => {
     const [projects, setProjects] = useState<Project[]>([]);
     const [search, setSearch] = useState("");
@@ -54,7 +54,7 @@ const ProjectPage = () => {
             weight: 0,
         };
 
-        await invoke('')
+        await invoke('create_project', {project})
 
         setCreator(false);
         setProjects(prev => [...prev, project]);
@@ -64,15 +64,20 @@ const ProjectPage = () => {
 
     return (
         <div className={"ProjectPageContainer"}>
-            {isCreator && <DataReceiver onCreate={(title, description) => submitProjectCreation(title, description)}
+            {isCreator && <ProjectCreator onCreate={(title, description) => submitProjectCreation(title, description)}
                                         onClose={() => toggleCreator(!isCreator)}/>}
             <div className={"ProjectSelectHeader"}>
                 <div>
                     <h1>Твои проекты</h1>
                     <p>Выбери проект, чтобы продолжить работу</p>
                 </div>
-                <button className="ProjectCreateButton">
-                    <span>+</span> Новый проект
+                <button
+                    className="ProjectCreateButton"
+                    type="button"
+                    onClick={() => toggleCreator(true)}
+                >
+                    <span aria-hidden="true">+</span>
+                    Новый проект
                 </button>
             </div>
 

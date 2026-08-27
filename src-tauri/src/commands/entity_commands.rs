@@ -4,6 +4,8 @@ use glyph_core::managers::entity_manager::EntityManager;
 use glyph_core::network::api_client::{ApiClient, ApiResponse};
 use glyph_core::network::entity_service;
 use tauri::{Manager};
+use glyph_core::dto_entities::entity_dto::EntityDto;
+
 #[tauri::command]
 pub async fn get_entities(
     app: tauri::AppHandle,
@@ -11,9 +13,9 @@ pub async fn get_entities(
     r#type: EntityType,
 ) -> Result<Vec<Entity>, String> {
     let app_data_dir = app.path().app_data_dir().expect("no app data dir");
+    println!("App data dir: {}", app_data_dir.display());
     let loaded = file_manager::load_entities(&app_data_dir)
-        .await
-        .unwrap_or_default();
+        .await?;
     entity_state.hydrate(loaded);
     entity_state.get_entities(r#type)
 }
@@ -46,12 +48,39 @@ pub async fn get_entities(
 
 #[tauri::command]
 pub async fn create_entity(
+    app: tauri::AppHandle,
     api_state: tauri::State<'_, ApiClient>,
     entity_state: tauri::State<'_, EntityManager>,
-    entity: Entity,
+    entity: EntityDto,
 ) -> Result<ApiResponse<()>, String> {
-    let response = entity_service::create_entity::<()>(api_state.inner(), &entity).await?;
-    entity_state.add_entity_locally(&entity);
+    let app_data_dir = app
+        .path()
+        .app_data_dir()
+        .map_err(|error| error.to_string())?;
+    println!("App data dir: {}", app_data_dir.display());
+    let final_entity = entity.get_entity();
+
+    let response =
+        entity_service::create_entity::<()>(api_state.inner(), &final_entity).await?;
+    if !response.success { return Err(response.message); }
+    println!(
+        "Success: {}, Status Code: {}, message: {}",
+        response.success,
+        response.status,
+        response.message
+    );
+    // 1. Сохраняем на диск
+    file_manager::save_to_disk(&app_data_dir, &final_entity).await?;
+
+    println!("Сущность успешно сохранена на диск");
+
+    // 2. Отправляем на сервер
+
+    // 3. Добавляем локально
+    entity_state.add_entity_locally(&final_entity);
+
+    println!("Сущность успешно добавлена локально");
+
     Ok(response)
 }
 

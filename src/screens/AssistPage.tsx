@@ -1,7 +1,6 @@
 import {useState, useRef, useEffect} from "react";
 import "../pages/MainStyles/AIChat.css";
 import Message from "../components/AIChat/Message/Message.tsx";
-import {SendMessage} from "../services/client.ts";
 import {message} from "../types/ai/Message.ts";
 
 
@@ -20,6 +19,10 @@ const AIChat = () => {
 
         listRef.current?.scrollTo({top: listRef.current.scrollHeight, behavior: "smooth"});
     }, [messages]);
+
+    async function SendMessage(userMsg: message) {
+        
+    }
 
     async function sendRequest() {
         if (!textInput.trim() || isSending) return;
@@ -67,7 +70,14 @@ const AIChat = () => {
 
                 {/* Messages */}
                 <div className="AIChatMessages" ref={listRef}>
-                    <Message/>
+                    <Message
+                        id={crypto.randomUUID()}
+                        messageText={"Привет, чем могу помочь?"}
+                        userName={"Sofia"}
+                        isFromUser={false}
+                        time={Date.now().toString()}
+                        status={"Прочитано"}
+                    />
                     {messages.map((msg) => (
 
                         <Message

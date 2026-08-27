@@ -14,8 +14,15 @@ impl EntityManager {
 
     pub fn hydrate(&self, loaded_entities: Vec<Entity>) {
         let mut entities = self.entities.lock().unwrap();
-        if entities.is_empty() {
-            entities.extend(loaded_entities);
+
+        for loaded_entity in loaded_entities {
+            let already_exists = entities
+                .iter()
+                .any(|entity| entity.id == loaded_entity.id);
+
+            if !already_exists {
+                entities.push(loaded_entity);
+            }
         }
     }
     pub fn get_entities(&self, r#type: EntityType) -> Result<Vec<Entity>, String> {

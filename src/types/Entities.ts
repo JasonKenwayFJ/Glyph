@@ -29,7 +29,7 @@ export interface ExtraField {
     title: string;
 }
 
-export interface Entity {
+export type Entity = {
     id: string;
     projectId: string;
     title: string;
@@ -39,7 +39,7 @@ export interface Entity {
     entityType: EntityType;
     createdAt: string;
     updatedAt: string;
-    category: Characteristic[];
+    categories: Characteristic[];
     tags: Characteristic[];
     extraFields: ExtraField[];
 }

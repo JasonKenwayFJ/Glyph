@@ -28,7 +28,7 @@ pub struct Entity {
     pub entity_type: EntityType,
     created_at: DateTime<Utc>,
     updated_at: DateTime<Utc>,
-    category: Vec<Characteristic>,
+    categories: Vec<Characteristic>,
     tags: Vec<Characteristic>,
     extra_fields: Vec<ExtraField>,
 }
@@ -40,7 +40,7 @@ impl Entity {
         content: &str,
         image_path: &str,
         entity_type: EntityType,
-        category: Vec<Characteristic>,
+        categories: Vec<Characteristic>,
         tags: Vec<Characteristic>,
         extra_fields: Vec<ExtraField>,
     ) -> Self{
@@ -55,7 +55,7 @@ impl Entity {
             entity_type,
             created_at: now,
             updated_at: now,
-            category,
+            categories,
             tags,
             extra_fields,
         }
