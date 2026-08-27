@@ -1,0 +1,26 @@
+.SideBar {
+  display: flex;
+
+  .DesktopSideBar {
+    display: flex;
+  }
+
+  .MobileSideBar {
+    display: none;
+  }
+
+}
+
+
+@media (max-width: 650px) {
+  .SideBar {
+    overflow: auto;
+    .DesktopSideBar {
+      display: none;
+    }
+
+    .MobileSideBar {
+      display: flex;
+    }
+  }
+}

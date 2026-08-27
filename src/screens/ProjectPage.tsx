@@ -71,14 +71,6 @@ const ProjectPage = () => {
                     <h1>Твои проекты</h1>
                     <p>Выбери проект, чтобы продолжить работу</p>
                 </div>
-                <button
-                    className="ProjectCreateButton"
-                    type="button"
-                    onClick={() => toggleCreator(true)}
-                >
-                    <span aria-hidden="true">+</span>
-                    Новый проект
-                </button>
             </div>
 
             <Searcher

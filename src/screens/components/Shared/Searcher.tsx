@@ -7,7 +7,7 @@ type SearcherProp = {
 
 export const Searcher = (props: SearcherProp) => {
     return (
-        <div>
+        <div style={{margin:"1rem"}}>
             <input
                 className="SearcherInput"
                 placeholder={props.placeholder}

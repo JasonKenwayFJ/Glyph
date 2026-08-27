@@ -1,15 +1,14 @@
 .CardContainer {
   display: grid;
-  justify-self: center;
+  justify-self: start;
   position: relative;
 
   width: 10rem;
   height: 15rem;
-  margin: 1rem;
 
   overflow: hidden;
   border-radius: 15px;
-  background: var(--bg-main-dark);
+  background: var(--backgroundDark);
   box-shadow: none;
 
   transition:
@@ -26,10 +25,10 @@
   }
 
   &:hover {
-    background: var(--accent-hover);
+    background: var(--accentHover);
     box-shadow:
             0 25.6px 57.6px 0 rgb(0 0 0 / 22%),
-            0 4.8px 14.4px 0 var(--accent-primary);
+            0 4.8px 14.4px 0 var(--accentPrimary);
   }
 
   &:active {
@@ -38,10 +37,10 @@
   }
 
   @media (max-width: 650px) {
-    width: 8rem;
     height: 12rem;
-    margin: 0.5rem;
-
+    margin: 1rem;
+    width: 90%;
+    justify-self: center;
     &:active {
       width: 8.3rem;
       height: 12.3rem;
@@ -68,7 +67,7 @@
   height: 40px;
   border: none;
   border-radius: 10px;
-  background-color: var(--bg-main-light);
+  background-color: var(--backgroundLight);
 
   @media (max-width: 650px) {
     width: 32px;
@@ -87,7 +86,7 @@
   z-index: 2;
   border: none;
   border-radius: 15px;
-  background-color: var(--bg-main-light);
+  background-color: var(--backgroundLight);
 }
 
 .CardImage {
@@ -108,3 +107,4 @@
   font-size: clamp(0.3rem, 0.6vw, 1rem);
   font-weight: normal;
 }
+

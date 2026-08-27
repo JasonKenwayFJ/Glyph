@@ -15,38 +15,54 @@ import {useEffect, useState} from "react";
 import EntityCreator from "./Creators/EntityCreator.tsx";
 
 import {invoke} from "@tauri-apps/api/core";
+import {listen} from "@tauri-apps/api/event";
 
 
 export const EntityPage = () => {
-    const { type } = useParams<{ type: EntityType }>();
+    const {type} = useParams<{ type: EntityType }>();
     const [entities, setEntities] = useState<Entity[]>([]);
     const [isCreator, setCreator] = useState<boolean>(false);
     const [filteredEntities, setFilteredEntities] = useState<Entity[]>([]);
+
+    useEffect(() => {
+        const onCreating = listen<Entity>('OnEntityCreated', (event) => {
+            setEntities(prev => [...prev, event.payload])
+        });
+        const onDeleting = listen<Entity>('OnEntityDeleted', (event) => {
+            setEntities(prev => prev.filter(e => e.id !== event.payload.id));
+        });
+        return () => {
+            onCreating.then(fn => fn());
+            onDeleting.then(fn => fn())
+        };
+    }, []);
+
     useEffect(() => {
         const getEntities = async () => {
-            const ents : Entity[] = await invoke('get_entities')
+            setEntities(await invoke('get_entities'))
+            setFilteredEntities(entities)
         }
-
+        getEntities()
     }, []);
 
 
     const [entity, setEntity] = useState<Entity | undefined>(undefined);
     const [mode, setMode] = useState<CreatorMode>(CreatorMode.None)
 
-    function openCreator(mode: CreatorMode, entity?: Entity){
+    function toggleCreator(mode: CreatorMode, entity?: Entity) {
         setCreator(true);
         setEntity(entity);
         setMode(mode);
     }
 
-    function onSave(){
+    function onSave() {
 
     }
 
 
-    return(
+    return (
         <div className={"EntityPageContainer"}>
-            {isCreator && <EntityCreator onClick={onSave} mode={mode} data={entity}/>}
+            {isCreator && <EntityCreator onSaved={onSave} onClose={() => setCreator(false)} mode={mode} data={entity}/>}
             <div className={"SearcherContainer"}>
                 <Searcher placeholder={"Что ищем?"} value={""} setSearch={() => {
                 }}/>
@@ -56,31 +72,31 @@ export const EntityPage = () => {
             </div>
             <div>
                 {type === EntityType.Card && <CardContent
-                    invokeCreator={openCreator}
+                    invokeCreator={toggleCreator}
                     entities={entities} filteredEntities={filteredEntities}/>}
                 {type === EntityType.Document && <DocumentContent
-                    invokeCreator={openCreator}
+                    invokeCreator={toggleCreator}
                     entities={entities} filteredEntities={filteredEntities}/>}
                 {type === EntityType.Note && <NoteContent
-                    invokeCreator={openCreator}
+                    invokeCreator={toggleCreator}
                     entities={entities} filteredEntities={filteredEntities}/>}
                 {type === EntityType.Audio && <AudioContent
-                    invokeCreator={openCreator}
+                    invokeCreator={toggleCreator}
                     entities={entities} filteredEntities={filteredEntities}/>}
                 {type === EntityType.Video && <VideoContent
-                    invokeCreator={openCreator}
+                    invokeCreator={toggleCreator}
                     entities={entities} filteredEntities={filteredEntities}/>}
                 {type === EntityType.Graph && <GraphContent
-                    invokeCreator={openCreator}
+                    invokeCreator={toggleCreator}
                     entities={entities} filteredEntities={filteredEntities}/>}
                 {type === EntityType.Table && <TableContent
-                    invokeCreator={openCreator}
+                    invokeCreator={toggleCreator}
                     entities={entities} filteredEntities={filteredEntities}/>}
                 {type === EntityType.Task && <TaskContent
-                    invokeCreator={openCreator}
+                    invokeCreator={toggleCreator}
                     entities={entities} filteredEntities={filteredEntities}/>}
                 {type === EntityType.Trash && <TrashContent
-                    invokeCreator={openCreator}
+                    invokeCreator={toggleCreator}
                     entities={entities} filteredEntities={filteredEntities}/>}
 
             </div>

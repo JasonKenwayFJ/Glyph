@@ -44,11 +44,11 @@ export const ProjectCreator = ({ onClose, onCreate }: DataReceiverProps) => {
                 </div>
 
                 <div className="DataReceiverButtonContainer">
-                    <button type="button" className="DataReceiverCancel" onClick={onClose}>
-                        Отмена
-                    </button>
                     <button type="submit" className="DataReceiverSubmit">
                         <span>Создать</span>
+                    </button>
+                    <button type="button" className="DataReceiverCancel" onClick={onClose}>
+                        Отмена
                     </button>
                 </div>
             </form>

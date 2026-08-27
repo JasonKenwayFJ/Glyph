@@ -3,7 +3,7 @@ use glyph_core::entities::entity::{Entity, EntityType};
 use glyph_core::managers::entity_manager::EntityManager;
 use glyph_core::network::api_client::{ApiClient, ApiResponse};
 use glyph_core::network::entity_service;
-use tauri::{Manager};
+use tauri::{Emitter, Manager};
 use glyph_core::dto_entities::entity_dto::EntityDto;
 
 #[tauri::command]
@@ -81,26 +81,32 @@ pub async fn create_entity(
 
     println!("Сущность успешно добавлена локально");
 
+    app.emit("OnEntityCreated", &final_entity).map_err(|e| e.to_string())?;
     Ok(response)
 }
 
 #[tauri::command]
 pub async fn update_entity(
+    app: tauri::AppHandle,
     api_state: tauri::State<'_, ApiClient>,
     entity_state: tauri::State<'_, EntityManager>,
     entity: Entity,
 ) -> Result<ApiResponse<()>, String> {
     let response = entity_service::update_entity::<()>(api_state.inner(), &entity).await?;
     entity_state.update_entity_locally(&entity);
+
+    app.emit("OnEntityUpdated", &entity).map_err(|e| e.to_string())?;
     Ok(response)
 }
 #[tauri::command]
 pub async fn delete_entity(
+    app: tauri::AppHandle,
     api_state: tauri::State<'_, ApiClient>,
     entity_state: tauri::State<'_, EntityManager>,
     entity: Entity,
 ) -> Result<ApiResponse<()>, String> {
     let response = entity_service::delete_entity::<()>(api_state.inner(), &entity).await?;
     entity_state.delete_entity_locally(&entity);
+    app.emit("OnEntityDeleted", &entity).map_err(|e| e.to_string())?;
     Ok(response)
 }

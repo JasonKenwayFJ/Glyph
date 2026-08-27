@@ -1,30 +1,25 @@
 .MainLayout{
     display: flex;
+    flex-direction: row;
     height: 100vh;
-}
-@media (max-width: 600px) {
-    .content {
+    .sBar{
+        display: flex;
         flex-direction: column;
+        background-color: var(--backgroundDark);
+        border-radius: 10px;
+    }
+}
+@media (max-width: 650px) {
+    .MainLayout{
+        display: flex;
+        flex-direction: column-reverse;
+        height: 100vh;
+        .sBar{
+            display: flex;
+            flex-direction: column;
+            background-color: var(--backgroundDark);
+            border-radius: 10px;
+        }
     }
 }
 
-.sBar{
-    display: flex;
-    flex-direction: column;
-    background-color: var(--backgroundDark);
-    border-radius: 10px;
-
-}
-.sBarButton {
-    width: 32px;
-    height: 32px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 0;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-}

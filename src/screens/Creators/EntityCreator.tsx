@@ -1,4 +1,4 @@
-import "./../MainStyles/Panels/EntityCreator.scss"
+import "./../MainStyles/Panels/EntityCreator.scss";
 import { useEffect, useState } from "react";
 import "../../index.scss";
 
@@ -7,18 +7,10 @@ import Tag from "../../components/Shared/Tag/Tag.tsx";
 import Dropdown from "../../components/Shared/Dropdown/Dropdown.tsx";
 import ImageUploader from "../../components/Shared/ImageUploader/ImageUploader.tsx";
 
-
-import {
-    CreatorMode,
-    Entity,
-    EntityType,
-} from "../../types/Entities.ts";
-
+import { CreatorMode, Entity, EntityType } from "../../types/Entities.ts";
 import { invoke } from "@tauri-apps/api/core";
 import { Project } from "../../types/Project.ts";
-import {EntityDTO} from "../../types/DTO/EntityDTO.ts";
-
-
+import { EntityDTO } from "../../types/DTO/EntityDTO.ts";
 
 type CharacteristicItem = {
     id: string;
@@ -26,20 +18,28 @@ type CharacteristicItem = {
     isSelected: boolean;
 };
 
-
 type EntityCreatorProp<T> = {
-    onClick: () => void;
+    onClose: () => void;
     data?: T;
     mode?: CreatorMode;
-    entityType?: EntityType
+    entityType?: EntityType;
     onSaved?: (entity: Entity) => void;
     prefillContent?: string;
 };
 
-
 const EntityCreator = (props: EntityCreatorProp<Entity>) => {
-
     const [project, setProject] = useState<Project | null>(null);
+    const [form, setForm] = useState<EntityDTO>({
+        projectId: props.data?.projectId ?? "",
+        entityType: props.data?.entityType ?? EntityType.Card,
+        title: props.data?.title ?? "",
+        description: props.data?.description ?? "",
+        content: props.data?.content ?? props.prefillContent ?? "",
+        imagePath: props.data?.imagePath ?? "",
+        categories: props.data?.categories ?? [],
+        tags: props.data?.tags ?? [],
+        extraFields: props.data?.extraFields ?? [],
+    });
 
     useEffect(() => {
         const getProject = async () => {
@@ -53,31 +53,8 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
 
         getProject();
     }, []);
-
-
-    /*
-     * =========================
-     * FORM
-     * =========================
-     */
-
-    const [form, setForm] = useState<EntityDTO>({
-        projectId: props.data?.projectId ?? "",
-        entityType: props.data?.entityType ?? EntityType.Card,
-        title: props.data?.title ?? "",
-        description: props.data?.description ?? "",
-        content: props.data?.content ?? props.prefillContent ?? "",
-        imagePath: props.data?.imagePath ?? "",
-        categories: props.data?.categories ?? [],
-        tags: props.data?.tags ?? [],
-        extraFields: props.data?.extraFields ?? [],
-    });
-
-
     useEffect(() => {
-        if (!project) {
-            return;
-        }
+        if (!project) return;
 
         setForm(prev => ({
             ...prev,
@@ -86,26 +63,13 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
     }, [project]);
 
 
-    const [selectedCategories, setSelectedCategories] =
-        useState<CharacteristicItem[]>([]);
-
-    const [categories, setCategories] =
-        useState<CharacteristicItem[]>([]);
-
-    const [selectedTags, setSelectedTags] =
-        useState<CharacteristicItem[]>([]);
-
-    const [tags, setTags] =
-        useState<CharacteristicItem[]>([]);
-
-    const [previewUrl, setPreviewUrl] =
-        useState<string | null>(null);
-
-
+    const [selectedCategories, setSelectedCategories] = useState<CharacteristicItem[]>([]);
+    const [categories, setCategories] = useState<CharacteristicItem[]>([]);
+    const [selectedTags, setSelectedTags] = useState<CharacteristicItem[]>([]);
+    const [tags, setTags] = useState<CharacteristicItem[]>([]);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     function imageHandler(value: File | undefined) {
-        if (!value) {
-            return;
-        }
+        if (!value) return;
 
         setForm(prev => ({
             ...prev,
@@ -114,281 +78,186 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
 
         setPreviewUrl(URL.createObjectURL(value));
     }
-
     function typeHandler(value: string | undefined) {
-        if (!value) {
-            return;
-        }
+        if (!value) return;
 
-        const entityType =
-            value === "Документ"
-                ? EntityType.Document
-                : EntityType.Card;
+        const entityType = value === "Документ"
+            ? EntityType.Document
+            : EntityType.Card;
 
         setForm(prev => ({
             ...prev,
             entityType,
         }));
     }
-
     function addCategoryHandler(category: CharacteristicItem) {
-        setCategories(prev =>
-            prev.filter(cat => cat.id !== category.id)
-        );
-
-        setSelectedCategories(prev => [
-            ...prev,
-            category,
-        ]);
+        setCategories(prev => prev.filter(cat => cat.id !== category.id));
+        setSelectedCategories(prev => [...prev, category]);
     }
     function removeCategoryHandler(category: CharacteristicItem) {
-        setCategories(prev => [
-            ...prev,
-            category,
-        ]);
-
-        setSelectedCategories(prev =>
-            prev.filter(cat => cat.id !== category.id)
-        );
+        setCategories(prev => [...prev, category]);
+        setSelectedCategories(prev => prev.filter(cat => cat.id !== category.id));
     }
     function addTagHandler(tag: CharacteristicItem) {
-        setTags(prev =>
-            prev.filter(t => t.id !== tag.id)
-        );
-
-        setSelectedTags(prev => [
-            ...prev,
-            tag,
-        ]);
+        setTags(prev => prev.filter(t => t.id !== tag.id));
+        setSelectedTags(prev => [...prev, tag]);
     }
     function removeTagHandler(tag: CharacteristicItem) {
-        setTags(prev => [
-            ...prev,
-            tag,
-        ]);
-
-        setSelectedTags(prev =>
-            prev.filter(t => t.id !== tag.id)
-        );
+        setTags(prev => [...prev, tag]);
+        setSelectedTags(prev => prev.filter(t => t.id !== tag.id));
     }
 
-
-    async function processEntity(){
-        let entity = form;
-        if (!project){
+    async function processEntity() {
+        if (!project) {
             console.error("Project is null");
             return;
         }
-        entity.projectId = project.id;
-        await invoke('create_entity', {entity})
+
+        const entity = {
+            ...form,
+            projectId: project.id,
+        };
+
+        await invoke("create_entity", { entity });
+        props.onClose()
     }
 
     return (
-        <div
-            className="EntityCreatorOverlay"
-            onClick={props.onClick}
-        >
+        <div className="EntityCreatorOverlay" onClick={props.onClose}>
             <form
                 className="EntityCreatorForm"
                 onClick={e => e.stopPropagation()}
-                onSubmit={async (event) => { event.preventDefault(); await processEntity(); }}            >
-
+                onSubmit={async event => {
+                    event.preventDefault();
+                    await processEntity();
+                }}
+            >
                 <div className="EntityCreatorHeader">
-
-                    {
-                        props.data
-                            ? <h2>Редактирование сущности</h2>
-                            : <h2>Создание сущности</h2>
-                    }
+                    {props.data ? <h2>Редактирование сущности</h2> : <h2>Создание сущности</h2>}
 
                     <div className="dropdown">
-
                         <Dropdown
                             getLabel="Тип: выбрать"
-                            items={[
-                                "Карточка",
-                                "Документ",
-                            ]}
+                            items={["Карточка", "Документ"]}
                             onSelect={typeHandler}
                         />
-
                     </div>
-
                 </div>
 
-
                 <div className="EntityCreatorBody">
-
                     <div className="EntityCreatorBodyFooter">
-
-                        <ImageUploader
-                            imagePath={previewUrl}
-                            onUpload={imageHandler}
-                        />
+                        <ImageUploader imagePath={previewUrl} onUpload={imageHandler} />
 
                         <div className="EntityCreatorInputContainer">
-
                             <input
                                 className="EntityCreatorInputTitle"
                                 type="text"
                                 placeholder="Название сущности"
                                 value={form.title}
-                                onChange={e =>
-                                    setForm(prev => ({
-                                        ...prev,
-                                        title: e.target.value,
-                                    }))
-                                }
+                                onChange={e => setForm(prev => ({
+                                    ...prev,
+                                    title: e.target.value,
+                                }))}
                             />
 
                             <div className="TagHandler">
-
                                 {selectedTags.map(tag => (
                                     <Tag
                                         key={tag.id}
                                         id={tag.id}
                                         title={tag.title}
-                                        onRemove={() =>
-                                            removeTagHandler(tag)
-                                        }
+                                        onRemove={() => removeTagHandler(tag)}
                                         isSelected={true}
                                     />
                                 ))}
-
                             </div>
-
                         </div>
-
                     </div>
 
-
                     <div className="EntityCreatorField">
-
                         <p>Краткое описание</p>
-
                         <input
                             type="text"
                             placeholder="Пара строк для превью и карточки..."
                             value={form.description}
-                            onChange={e =>
-                                setForm(prev => ({
-                                    ...prev,
-                                    description: e.target.value,
-                                }))
-                            }
+                            onChange={e => setForm(prev => ({
+                                ...prev,
+                                description: e.target.value,
+                            }))}
                         />
-
                     </div>
 
-
                     <div className="EntityCreatorField">
-
                         <p>Содержание</p>
-
                         <textarea
                             placeholder="Основной текст: Механика, лор, сценарий - Что угодно..."
                             value={form.content}
-                            onChange={e =>
-                                setForm(prev => ({
-                                    ...prev,
-                                    content: e.target.value,
-                                }))
-                            }
+                            onChange={e => setForm(prev => ({
+                                ...prev,
+                                content: e.target.value,
+                            }))}
                         />
-
                     </div>
 
-
                     <div className="EntityCreatorField">
-
                         <p>Выберите категории</p>
-
                         <div className="EntityCreatorCategories">
-
                             {categories.map(category => (
                                 <Category
                                     key={category.id}
                                     id={category.id}
                                     title={category.title}
-                                    onAdd={() =>
-                                        addCategoryHandler(category)
-                                    }
+                                    onAdd={() => addCategoryHandler(category)}
                                     isSelected={false}
                                 />
                             ))}
-
                         </div>
-
                     </div>
 
-
                     <div className="EntityCreatorField">
-
                         <p>Выберите тег</p>
-
                         <div className="EntityCreatorCategories">
-
                             {tags.map(tag => (
                                 <Tag
                                     key={tag.id}
                                     id={tag.id}
                                     title={tag.title}
-                                    onAdd={() =>
-                                        addTagHandler(tag)
-                                    }
+                                    onAdd={() => addTagHandler(tag)}
                                     isSelected={false}
                                 />
                             ))}
-
                         </div>
-
                     </div>
 
-
                     <div className="EntityCreatorExtraFields">
-
                         <div className="EntityCreatorExtraFieldsHeader">
-
-                            <span>
-                                Дополнительные поля
-                            </span>
+                            <span>Дополнительные поля</span>
 
                             <button
                                 type="button"
                                 className="EntityCreatorExtraFieldAdd"
-                                onClick={() =>
-                                    setForm(prev => ({
-                                        ...prev,
-                                        extraFields: [
-                                            ...prev.extraFields,
-                                            {
-                                                id: crypto.randomUUID(),
-                                                title: "",
-                                            },
-                                        ],
-                                    }))
-                                }
+                                onClick={() => setForm(prev => ({
+                                    ...prev,
+                                    extraFields: [
+                                        ...prev.extraFields,
+                                        {
+                                            id: crypto.randomUUID(),
+                                            title: "",
+                                        },
+                                    ],
+                                }))}
                             >
                                 + Добавить поле
                             </button>
-
                         </div>
 
-
                         {form.extraFields.map((field, index) => (
-
-                            <div
-                                className="EntityCreatorExtraFieldRow"
-                                key={field.id}
-                            >
-
+                            <div className="EntityCreatorExtraFieldRow" key={field.id}>
                                 <input
                                     placeholder="Название поля"
                                     value={field.title}
                                     onChange={e => {
-
-                                        const updated =
-                                            [...form.extraFields];
+                                        const updated = [...form.extraFields];
 
                                         updated[index] = {
                                             ...updated[index],
@@ -399,81 +268,53 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
                                             ...prev,
                                             extraFields: updated,
                                         }));
-
                                     }}
                                 />
-
 
                                 <button
                                     type="button"
                                     className="EntityCreatorExtraFieldRemove"
-                                    onClick={() =>
-                                        setForm(prev => ({
-                                            ...prev,
-                                            extraFields:
-                                                prev.extraFields.filter(
-                                                    (_, idx) =>
-                                                        idx !== index
-                                                ),
-                                        }))
-                                    }
+                                    onClick={() => setForm(prev => ({
+                                        ...prev,
+                                        extraFields: prev.extraFields.filter(
+                                            (_, idx) => idx !== index
+                                        ),
+                                    }))}
                                 >
                                     ✕
                                 </button>
-
                             </div>
-
                         ))}
-
                     </div>
 
-
                     <div className="EntityCreatorButtonHandler">
-
                         <div className="EntitySelectedCategories">
-
                             {selectedCategories.map(category => (
-
                                 <Category
                                     key={category.id}
                                     id={category.id}
                                     title={category.title}
-                                    onRemove={() =>
-                                        removeCategoryHandler(category)
-                                    }
+                                    onRemove={() => removeCategoryHandler(category)}
                                     isSelected={true}
                                 />
-
                             ))}
-
                         </div>
 
-
                         <div>
-
-                            <button
-                                id="EntityCreatorButton"
-                                type="submit"
-                            >
-                                {props.data
-                                    ? "Сохранить"
-                                    : "Создать"}
+                            <button id="EntityCreatorButton" type="submit">
+                                {props.data ? "Сохранить" : "Создать"}
                             </button>
 
                             <button
                                 className="EntityCreatorCancelButton"
                                 type="button"
-                                onClick={props.onClick}
+                                onClick={props.onClose}
                             >
                                 Отмена
                             </button>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </form>
         </div>
     );

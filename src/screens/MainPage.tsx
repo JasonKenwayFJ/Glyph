@@ -2,25 +2,13 @@ import Editor from "../components/Shared/Editor/Editor.tsx";
 import EntityCreator from "./Creators/EntityCreator.tsx";
 import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {Project} from "../types/Project.ts";
-import {listen} from "@tauri-apps/api/event";
 import {Entity, EntityType} from "../types/Entities.ts";
+import {invoke} from "@tauri-apps/api/core";
 // import {invoke} from "@tauri-apps/api/core";
 
 const MainPage = () => {
     const {id} = useParams()
-    const [project, setProject] = useState<Project>();
     const navigate = useNavigate();
-    useEffect(() => {
-        const unlisten = listen<Project>('OnProjectChanged', (event) => {
-            setProject(event.payload);
-        });
-
-        return () => {
-            unlisten.then(fn => fn())
-        }
-
-    }, []);
 
     useEffect(() => {
         const handleKeyDown = async (event: KeyboardEvent) => {
@@ -44,23 +32,17 @@ const MainPage = () => {
 
     const handleSave = async () => {
         if (document) {
+            document.id = id!;
             document.content = content;
-
-
-
-            //Fixme Ошибка с типами при invoke
-            // await invoke('UpdateDocument', document);
+            await invoke('UpdateDocument', document);
         } else {
             setShowCreator(true);
         }
     };
 
     const handleCreated = (created: Entity) => {
-        //Сеттим ново-созданный документ в стейт
         setDocument(created);
-        //Закрываем меню создания карточки
         setShowCreator(false);
-        //Перенаправляем юзера на эту же страницу, но со входным параметром (айдишником)
         navigate(`/mainPage/${created.id}`, {replace: true}); //Хз что за реплейс, предположу, что это замена документа, но свойства replace ниде нет
     };
 
@@ -76,7 +58,7 @@ const MainPage = () => {
 
                 {showCreator && (
                     <EntityCreator
-                        onClick={() => setShowCreator(false)}
+                        onClose={() => setShowCreator(false)}
                         onSaved={handleCreated}
                         entityType={EntityType.Document}
                         prefillContent={content}
