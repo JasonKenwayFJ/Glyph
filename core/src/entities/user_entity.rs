@@ -1,11 +1,14 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use crate::entities::entity::EntityType;
+
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct User {
     pub id: Uuid,
     pub token: String,
+    pub entity_type: EntityType,
     pub username: String,
     pub email: String,
     pub image_path: String,
@@ -17,6 +20,7 @@ pub struct User {
 }
 
 impl User {
+    
     pub fn new(
         id: Option<Uuid>,
         token: Option<String>,
@@ -28,6 +32,7 @@ impl User {
         User {
             id : id.unwrap_or_else(|| Uuid::new_v4()),
             token: token.unwrap_or_else(|| String::new()),
+            entity_type: EntityType::User,
             username,
             email,
             image_path : image_path.unwrap_or_else(|| String::new()),

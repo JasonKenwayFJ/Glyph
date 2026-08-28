@@ -8,8 +8,8 @@ use glyph_core::network::authorization_service;
 #[tauri::command]
 pub fn get_user(
     manager: tauri::State<'_, UserManager>
-) -> User {
-    manager.get_user().unwrap()
+) -> Option<User> {
+    manager.get_user()
 }
 #[tauri::command]
 pub async fn register(
@@ -38,9 +38,9 @@ pub async fn login(
     api_state: tauri::State<'_, ApiClient>,
     email: String,
     password: String,
-) -> Result<ApiResponse<String>, String> {
-    let token_response =
+) -> Result<ApiResponse<User>, String> {
+    let response =
         authorization_service::authorization(api_state.inner(), &email, &password).await?;
 
-    Ok(token_response)
+    Ok(response)
 }

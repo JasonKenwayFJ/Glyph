@@ -3,6 +3,8 @@ use glyph_core::network::api_client::ApiClient;
 use glyph_core::network::project_service;
 use glyph_core::{Project, ProjectManager};
 use tauri::{Emitter, Manager};
+use glyph_core::managers::user_manager::UserManager;
+
 #[tauri::command]
 pub fn open_project(
     app: tauri::AppHandle,
@@ -27,12 +29,17 @@ pub fn get_projects(
 pub async fn create_project(
     app: tauri::AppHandle,
     state: tauri::State<'_, ProjectManager>,
+    user_state: tauri::State<'_, UserManager>,
     api_state: tauri::State<'_, ApiClient>,
-    project: Project,
+    mut project: Project,
 ) -> Result<Project, String> {
 
     println!("=== CREATE PROJECT ===");
     println!("Project: {}", project.title);
+
+    project.user_id = user_state.get_user().unwrap().id;
+
+    println!("Project: {}", project.user_id);
 
     let app_data_dir = match app.path().app_data_dir() {
         Ok(path) => {
@@ -60,7 +67,7 @@ pub async fn create_project(
     //         return Err(error);
     //     }
     // };
-
+    //
     // if !response.success {
     //     println!("ERROR: Server rejected project: {}", response.message);
     //     return Err(response.message);

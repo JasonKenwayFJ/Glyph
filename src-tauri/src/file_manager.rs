@@ -60,7 +60,7 @@ pub async fn load_user(storage_dir: &Path) -> Result<User, String> {
 }
 fn directory_for_type(storage_dir: &Path, entity_type: EntityType) -> PathBuf {
     match entity_type {
-        EntityType::User => storage_dir.join(ENTITIES_DIRECTORY),
+        EntityType::User => storage_dir.join(ENTITIES_DIRECTORY).join(ENTITIES_DIRECTORY),
         EntityType::Card => storage_dir.join(ENTITIES_DIRECTORY).join("Card"),
         EntityType::Document => storage_dir.join(ENTITIES_DIRECTORY).join("Document"),
         EntityType::Note => storage_dir.join(ENTITIES_DIRECTORY).join("Note"),

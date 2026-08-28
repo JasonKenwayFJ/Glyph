@@ -4,7 +4,7 @@ import {invoke} from "@tauri-apps/api/core";
 import {Searcher} from "./components/Shared/Searcher.tsx";
 import "./MainStyles/ProjectPageStyle.scss"
 import {ProjectCreator} from "./Creators/ProjectCreator.tsx";
-import {EntityType} from "../types/Entities.ts";
+import {EntityType, User} from "../types/Entities.ts";
 
 const ProjectPage = () => {
     const [projects, setProjects] = useState<Project[]>([]);
@@ -15,7 +15,7 @@ const ProjectPage = () => {
     useEffect(() => {
         async function load() {
             const data = await invoke<Project[]>('get_projects')
-            setProjects(data);
+            setProjects(data ?? []);
         }
         load();
     }, []);
@@ -51,9 +51,11 @@ const ProjectPage = () => {
 
     async function submitProjectCreation(title: string, description: string) {
         const now = new Date().toISOString();
+        const user : Promise<User> = invoke('get_user');
+        console.log(user);
         const project: Project = {
             id: crypto.randomUUID(),
-            userId: await invoke('get_user'),
+            userId: (await user).id,
             title,
             entityType: EntityType.Project,
             description,

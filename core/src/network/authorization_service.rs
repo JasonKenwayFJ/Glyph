@@ -22,14 +22,14 @@ pub async fn authorization(
     client: &ApiClient,
     email: &str,
     password: &str,
-) -> Result<ApiResponse<String>, String> {
+) -> Result<ApiResponse<User>, String> {
     let body = AuthorizationRequest {
         email: email.to_string(),
         password: password.to_string(),
     };
 
     let response = client
-        .post::<AuthorizationRequest, String>("/api/auth/login", &body)
+        .post::<AuthorizationRequest, User>("/api/auth/login", &body)
         .await
         .map_err(|e| e.to_string())?;
     if !response.success {
