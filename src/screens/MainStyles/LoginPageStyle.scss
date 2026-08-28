@@ -4,7 +4,6 @@
   justify-content: center;
   background-color: var(--backgroundMain);
   width: 100%;
-  height: 100%;
   border-radius: 20px;
   padding: 1rem;
 
@@ -62,6 +61,7 @@
 @media (max-width: 650px) {
   .AuthorizationContainer {
     display: flex;
+
     flex-direction: column;
     justify-content: start;
     min-width: 100vw;

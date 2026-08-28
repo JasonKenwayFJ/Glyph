@@ -178,6 +178,7 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
                         <p>Краткое описание</p>
                         <input
                             type="text"
+                            required={true}
                             placeholder="Пара строк для превью и карточки..."
                             value={form.description}
                             onChange={e => setForm(prev => ({
@@ -192,6 +193,7 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
                         <textarea
                             placeholder="Основной текст: Механика, лор, сценарий - Что угодно..."
                             value={form.content}
+                            required={true}
                             onChange={e => setForm(prev => ({
                                 ...prev,
                                 content: e.target.value,
@@ -254,6 +256,7 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
                         {form.extraFields.map((field, index) => (
                             <div className="EntityCreatorExtraFieldRow" key={field.id}>
                                 <input
+                                    required={true}
                                     placeholder="Название поля"
                                     value={field.title}
                                     onChange={e => {

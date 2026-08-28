@@ -9,6 +9,7 @@ export const Searcher = (props: SearcherProp) => {
     return (
         <div style={{margin:"1rem"}}>
             <input
+                type={"search"}
                 className="SearcherInput"
                 placeholder={props.placeholder}
                 value={props.value}

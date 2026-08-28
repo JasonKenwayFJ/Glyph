@@ -5,11 +5,11 @@ export const RegistrationContent = () => {
     return(
         <div className={"AuthorizationContent"}>
             <p>Username</p>
-            <input type={"text"} placeholder={"Jabbo"}/>
+            <input type={"text"} required={true} placeholder={"Jabbo"}/>
             <p>Email</p>
-            <input type={"email"} placeholder={"example@gmail.com"}/>
+            <input type={"email"} required={true} placeholder={"example@gmail.com"}/>
             <p>Password</p>
-            <input type={"password"} placeholder={"********"}/>
+            <input type={"password"} required={true} placeholder={"********"}/>
             <button>Регистрация</button>
             <p id={"extraInfo"}>
                 Продолжая, вы соглашаетесь с условиями использования

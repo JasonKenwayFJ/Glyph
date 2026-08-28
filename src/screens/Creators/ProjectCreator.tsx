@@ -22,6 +22,7 @@ export const ProjectCreator = ({ onClose, onCreate }: DataReceiverProps) => {
 
                 <div className="FloatField">
                     <input
+
                         id="title"
                         name="title"
                         placeholder=" "
