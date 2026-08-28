@@ -5,6 +5,8 @@ import {RegistrationContent} from "./components/LoginPage/RegistrationContent.ts
 import {IconUserScan} from "@tabler/icons-react";
 
 import {router} from "../router/router.tsx";
+import {ApiResponse} from "../types/ApiResponse.ts";
+import {invoke} from "@tauri-apps/api/core";
 
 export enum LoginPageMode {
     authorization = "Authorization",
@@ -15,6 +17,10 @@ export type loginPageProp = {
     onChangeMode: (type: LoginPageMode) => void,
     mode: LoginPageMode
 }
+export type loginRequested = {
+    onSend: (email: string, password: string) => void
+}
+
 const LoginPage = () => {
     const {mode} = useParams<{ mode: string }>();
 
@@ -22,8 +28,18 @@ const LoginPage = () => {
         router.navigate(`/loginPage/${mode}`);
     };
 
+    async function logIn(email: string, password: string) {
+        e.preventDefault();
+        let response: ApiResponse<string> = await invoke('login', {email, password})
+        console.log(`Получен ответ: ${response.status}: UserId: ${response.data}`)
+    }
+
+    async function signUp(username: string, email: string, password: string) {
+
+    }
+
     return (
-        <form className="AuthorizationContainer">
+        <form className="AuthorizationContainer" onSubmit={e => e.preventDefault()}>
 
             <header>
                 <IconUserScan
@@ -57,7 +73,7 @@ const LoginPage = () => {
                 </button>
             </section>
             <footer>
-                {mode === LoginPageMode.authorization && <AuthorizationContent/>}
+                {mode === LoginPageMode.authorization && <AuthorizationContent onSend={logIn}/>}
                 {mode === LoginPageMode.registration && <RegistrationContent/>}
 
             </footer>

@@ -3,7 +3,7 @@ mod commands;
 pub mod file_manager;
 
 use commands::entity_commands::{create_entity, delete_entity, get_entities, update_entity};
-use commands::project_commands::{get_project, open_project, create_project};
+use commands::project_commands::{get_project, get_projects, open_project, create_project};
 use commands::user_commands::{login, register, get_user};
 use glyph_core::managers::entity_manager::EntityManager;
 use glyph_core::managers::user_manager::UserManager;
@@ -62,6 +62,7 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            get_projects,
             create_project,
             open_project,
             get_project,

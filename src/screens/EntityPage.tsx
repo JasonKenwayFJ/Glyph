@@ -21,8 +21,8 @@ import {listen} from "@tauri-apps/api/event";
 export const EntityPage = () => {
     const {type} = useParams<{ type: EntityType }>();
     const [entities, setEntities] = useState<Entity[]>([]);
-    const [isCreator, setCreator] = useState<boolean>(false);
     const [filteredEntities, setFilteredEntities] = useState<Entity[]>([]);
+    const [isCreator, setCreator] = useState<boolean>(false);
 
     useEffect(() => {
         const onCreating = listen<Entity>('OnEntityCreated', (event) => {

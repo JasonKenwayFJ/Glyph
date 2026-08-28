@@ -11,10 +11,10 @@ export const CardContent = (props : EntityPageContentProp) => {
                 <Card onClick={() => props.invokeCreator(CreatorMode.Creating)} />
                 {props.filteredEntities.length === 0
                     ? props.entities.map((card) => (
-                        <Card key={card.id} data={card} onClick={() => props.invokeCreator(CreatorMode.Creating)} />
+                        <Card key={crypto.randomUUID()} data={card} onClick={() => props.invokeCreator(CreatorMode.Creating)} />
                     ))
                     : props.filteredEntities.map((card) => (
-                        <Card key={card.id} data={card} onClick={() => props.invokeCreator(CreatorMode.Creating)} />
+                        <Card key={crypto.randomUUID()} data={card} onClick={() => props.invokeCreator(CreatorMode.Creating)} />
                     ))}
             </main>
         </div>

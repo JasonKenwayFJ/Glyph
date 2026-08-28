@@ -18,15 +18,15 @@ const ProjectPage = () => {
         load();
     }, []);
 
-    const filtered = projects.filter((p) =>
-        p.title.toLowerCase().includes(search.toLowerCase())
-    );
     async function openProject(project: Project) {
         await invoke('open_project', {
             project: project
         })
         setProjects(prev => [...prev, project]);
     }
+    const filtered = projects.filter((p) =>
+        p.title.toLowerCase().includes(search.toLowerCase())
+    );
 
     function handleTilt(e: React.MouseEvent<HTMLDivElement>) {
         const card = e.currentTarget;
@@ -93,6 +93,7 @@ const ProjectPage = () => {
                     <p>Создать проект</p>
                 </div>
 
+                //FIXME filtered is null
                 {filtered.map((project, i) => (
                     <div
                         key={project.id}
