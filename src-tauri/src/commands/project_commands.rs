@@ -17,7 +17,10 @@ pub fn get_project(state: tauri::State<ProjectManager>) -> Option<Project> {
     state.get_project()
 }
 #[tauri::command]
-pub fn get_projects(state: tauri::State<ProjectManager>) -> Option<Vec<Project>> {
+pub fn get_projects(
+    state: tauri::State<ProjectManager>) -> Option<Vec<Project>> {
+
+
     state.get_projects()
 }
 #[tauri::command]
@@ -44,24 +47,24 @@ pub async fn create_project(
 
     println!("Sending project to server...");
 
-    let response = match project_service::create_project(api_state.inner(), &project).await {
-        Ok(response) => {
-            println!("Server response received");
-            println!("Success: {}", response.success);
-            println!("Status: {}", response.status);
-            println!("Message: {}", response.message);
-            response
-        }
-        Err(error) => {
-            println!("ERROR: Server request failed: {}", error);
-            return Err(error);
-        }
-    };
+    // let response = match project_service::create_project(api_state.inner(), &project).await {
+    //     Ok(response) => {
+    //         println!("Server response received");
+    //         println!("Success: {}", response.success);
+    //         println!("Status: {}", response.status);
+    //         println!("Message: {}", response.message);
+    //         response
+    //     }
+    //     Err(error) => {
+    //         println!("ERROR: Server request failed: {}", error);
+    //         return Err(error);
+    //     }
+    // };
 
-    if !response.success {
-        println!("ERROR: Server rejected project: {}", response.message);
-        return Err(response.message);
-    }
+    // if !response.success {
+    //     println!("ERROR: Server rejected project: {}", response.message);
+    //     return Err(response.message);
+    // }
 
     println!("Saving project to disk...");
 
@@ -72,16 +75,16 @@ pub async fn create_project(
 
     println!("Project successfully saved to disk");
 
-    let created_project = match response.data {
-        Some(project) => {
-            println!("Server returned created project");
-            project
-        }
-        None => {
-            println!("ERROR: Server did not return created project");
-            return Err("Сервер не вернул созданный проект".to_string());
-        }
-    };
+    // let created_project = match response.data {
+    //     Some(project) => {
+    //         println!("Server returned created project");
+    //         project
+    //     }
+    //     None => {
+    //         println!("ERROR: Server did not return created project");
+    //         return Err("Сервер не вернул созданный проект".to_string());
+    //     }
+    // };
 
     println!("Updating ProjectManager state...");
 
@@ -89,7 +92,7 @@ pub async fn create_project(
 
     println!("Emitting OnProjectCreated event...");
 
-    if let Err(error) = app.emit("OnProjectCreated", &created_project) {
+    if let Err(error) = app.emit("OnProjectCreated", &project) {
         println!("ERROR: Failed to emit event: {}", error);
         return Err(error.to_string());
     }

@@ -2,13 +2,14 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use crate::traits::storable::Storable;
-
+//TODO: Добавить User в TS Enum, и перетащить Project на index[1]
 #[derive(Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub enum EntityType{
+    User,
+    Project,
     Card,
     Document,
     Note,
-    Project,
     Audio,
     Video,
     Graph,

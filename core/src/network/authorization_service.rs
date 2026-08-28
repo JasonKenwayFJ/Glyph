@@ -1,4 +1,5 @@
 use serde::Serialize;
+use crate::entities::user_entity::User;
 use crate::network::api_client::{ApiClient, ApiResponse};
 
 #[derive(Serialize)]
@@ -45,7 +46,7 @@ pub async fn registration(
     email: &str,
     password: &str,
     image_path: &str,
-) -> Result<ApiResponse<String>, String> {
+) -> Result<ApiResponse<User>, String> {
     let body = RegistrationRequest {
         username: username.to_string(),
         email: email.to_string(),
@@ -54,7 +55,7 @@ pub async fn registration(
     };
 
     let response = client
-        .post::<RegistrationRequest, String>("/api/auth/register", &body)
+        .post::<RegistrationRequest, User>("/api/auth/register", &body)
         .await
         .map_err(|e| e.to_string())?;
     if !response.success {

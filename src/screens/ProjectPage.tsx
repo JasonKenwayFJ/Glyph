@@ -8,8 +8,10 @@ import {EntityType} from "../types/Entities.ts";
 
 const ProjectPage = () => {
     const [projects, setProjects] = useState<Project[]>([]);
-    const [search, setSearch] = useState("");
+    const [filtered, setFiltered] = useState<Project[]>([]);
     const [isCreator, setCreator] = useState<boolean>(false);
+
+
     useEffect(() => {
         async function load() {
             const data = await invoke<Project[]>('get_projects')
@@ -24,9 +26,8 @@ const ProjectPage = () => {
         })
         setProjects(prev => [...prev, project]);
     }
-    const filtered = projects.filter((p) =>
-        p.title.toLowerCase().includes(search.toLowerCase())
-    );
+
+
 
     function handleTilt(e: React.MouseEvent<HTMLDivElement>) {
         const card = e.currentTarget;
@@ -44,6 +45,10 @@ const ProjectPage = () => {
     function toggleCreator(value: boolean) {
         setCreator(value)
     }
+    function setFilter(value: string){
+        setFiltered(projects.filter(x => x.title == value))
+    }
+
     async function submitProjectCreation(title: string, description: string) {
         const now = new Date().toISOString();
         const project: Project = {
@@ -84,8 +89,9 @@ const ProjectPage = () => {
 
             <Searcher
                 placeholder={"Поиск проекта..."}
-                value={search}
-                setSearch={setSearch}/>
+                value={""}
+                setSearch={setFilter}
+                />
 
             <div className="ProjectGrid">
                 <div className="ProjectCardNew" onClick={() => toggleCreator(!isCreator)}>
@@ -93,7 +99,7 @@ const ProjectPage = () => {
                     <p>Создать проект</p>
                 </div>
 
-                //FIXME filtered is null
+
                 {filtered.map((project, i) => (
                     <div
                         key={project.id}

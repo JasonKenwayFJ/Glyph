@@ -1,3 +1,4 @@
+use glyph_core::entities::user_entity::User;
 use glyph_core::managers::user_manager::UserManager;
 use glyph_core::network::api_client::{ApiClient, ApiResponse};
 use glyph_core::network::authorization_service;
@@ -7,7 +8,7 @@ use glyph_core::network::authorization_service;
 #[tauri::command]
 pub fn get_user(
     manager: tauri::State<'_, UserManager>
-) -> String {
+) -> User {
     manager.get_user().unwrap()
 }
 #[tauri::command]
@@ -18,7 +19,7 @@ pub async fn register(
     email: String,
     password: String,
     image_path: String,
-) -> Result<String, String> {
+) -> Result<User, String> {
     let response = authorization_service::registration(
         api_state.inner(),
         &username,
@@ -27,8 +28,8 @@ pub async fn register(
         &image_path,
     )
     .await?;
-    let token = response.data.ok_or_else(|| "Couldnt registrate")?.to_string();
-    manager.set_user(&token);
+    let token = response.data.ok_or_else(|| "Couldnt registrate")?;
+    manager.set_user(token.clone());
     Ok(token)
 }
 

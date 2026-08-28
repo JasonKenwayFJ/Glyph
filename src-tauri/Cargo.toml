@@ -26,3 +26,4 @@ glyph_core = { path = "../core" }
 tokio = "1.53.1"
 log = "0.4.34"
 tauri-plugin-log = "2"
+uuid = { version = "1.25.0", features = ["v4"] }

@@ -4,6 +4,7 @@ use crate::network::api_client::{ApiClient, ApiResponse};
 
 fn define_path(entity_type: EntityType) -> String {
     match entity_type{
+        EntityType::User => "api/user/".parse().unwrap(),
         EntityType::Card => "api/cards/".parse().unwrap(),
         EntityType::Document => "api/document/".parse().unwrap(),
         EntityType::Project => "api/project/".parse().unwrap(),

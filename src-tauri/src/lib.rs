@@ -3,8 +3,8 @@ mod commands;
 pub mod file_manager;
 
 use commands::entity_commands::{create_entity, delete_entity, get_entities, update_entity};
-use commands::project_commands::{get_project, get_projects, open_project, create_project};
-use commands::user_commands::{login, register, get_user};
+use commands::project_commands::{create_project, get_project, get_projects, open_project};
+use commands::user_commands::{get_user, login, register};
 use glyph_core::managers::entity_manager::EntityManager;
 use glyph_core::managers::user_manager::UserManager;
 use glyph_core::network::api_client::ApiClient;
@@ -31,23 +31,29 @@ pub fn run() {
             }
 
             // ===== Загрузка данных с диска при старте =====
-
-            // Клонируем "ручку" на приложение — она нужна внутри
-            // async-блока, который переживёт саму функцию setup
             let app_handle = app.handle().clone();
 
             // Запускаем асинхронную задачу в фоне, не блокируя открытие окна
             tauri::async_runtime::spawn(async move {
                 // Путь к папке данных приложения (свой на каждой платформе)
-                let storage_dir = app_handle
-                    .path()
-                    .app_data_dir()
-                    .expect("no app data dir");
+                let storage_dir = app_handle.path().app_data_dir().expect("no app data dir");
+
+                println!("{}", storage_dir.display());
 
                 // Достаём тот самый EntityManager, что зарегистрировали через .manage()
+                let user_manager = app_handle.state::<UserManager>();
                 let entity_manager = app_handle.state::<EntityManager>();
-
                 // Пытаемся загрузить сущности с диска
+                match file_manager::load_user(&storage_dir).await {
+                    Ok(loaded) => {
+                        user_manager.set_user(loaded);
+                        println!("loaded user");
+                    }
+                    Err(e) => {
+                        eprintln!("Не получилось загрузить данные юзера: {e}")
+                    }
+                }
+
                 match file_manager::load_entities(&storage_dir).await {
                     Ok(loaded) => {
                         entity_manager.hydrate(loaded);

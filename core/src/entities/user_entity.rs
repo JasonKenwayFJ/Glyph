@@ -18,18 +18,19 @@ pub struct User {
 
 impl User {
     pub fn new(
-        id: Uuid,
-        token: String,
+        id: Option<Uuid>,
+        token: Option<String>,
         username: String,
         email: String,
-        image_path: String,
+        image_path: Option<String>,
     ) -> Self {
+
         User {
-            id,
-            token,
+            id : id.unwrap_or_else(|| Uuid::new_v4()),
+            token: token.unwrap_or_else(|| String::new()),
             username,
             email,
-            image_path,
+            image_path : image_path.unwrap_or_else(|| String::new()),
             created_at: Utc::now(),
             user_config: String::new(),
             is_verified: false,
