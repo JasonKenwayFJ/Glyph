@@ -2,8 +2,7 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  max-width: fit-content;
-  min-width: fit-content;
+
   transition: width 0.3s;
 
   &.collapsed {
@@ -55,23 +54,7 @@
   display: flex;
   flex-direction: column;
 }
-.SidebarWindowCloser {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 5px;
-  transition: translate 0.3s;
 
-  &.collapsed {
-    translate: 20%;
-  }
-
-  button {
-    width: 40px;
-    height: 40px;
-    margin-bottom: 20px;
-  }
-}
 
 .SideBarDivider {
   border: 3px solid var(--backgroundLight);

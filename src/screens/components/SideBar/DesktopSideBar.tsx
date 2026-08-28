@@ -1,4 +1,3 @@
-import Toolbar from "./Toolbar/Toolbar.tsx";
 import "./../../MainStyles/Panels/SideBarStyles/DesktopSideBarStyle.scss"
 import {
     IconArrowAutofitWidthFilled,
@@ -10,7 +9,8 @@ import {
 } from "@tabler/icons-react";
 import ButtonSideBar from "./ButtonSideBar/ButtonSideBar.tsx";
 import {useState} from "react";
-import {Button} from "../../Panels/SideBar.tsx";
+import {Button} from "./Toolbar/SideBar.tsx";
+import {Toolbar} from "./Toolbar/Toolbar.tsx";
 
 export const DesktopSideBar = ({onInvokeAssistEvent}: Button) => {
     const [isCollapsed, setCollapsed] = useState(true);
@@ -18,7 +18,7 @@ export const DesktopSideBar = ({onInvokeAssistEvent}: Button) => {
         setCollapsed(prev => !prev);
     };
 
-    return(
+    return (
         <div className={`SideBarContainer ${!isCollapsed ? "collapsed" : ""}`}>
 
             <div className={`SidebarWindow ${!isCollapsed ? "collapsed" : ""}`}>
@@ -28,7 +28,7 @@ export const DesktopSideBar = ({onInvokeAssistEvent}: Button) => {
                     {isCollapsed && <Toolbar isCollapsed={isCollapsed}/>}
 
 
-                    <div style={{display: "flex", flexDirection: "row"}}>
+                    <div className={"MainSideButtons"}>
 
                         {isCollapsed && <button>
                                                 <span className="SidebarChevron">

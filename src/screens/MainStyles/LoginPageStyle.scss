@@ -1,0 +1,122 @@
+.AuthorizationContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--backgroundMain);
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  padding: 1rem;
+
+  header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    p {
+      margin-top: 0;
+    }
+  }
+
+  section {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+
+    button {
+      max-width: 50%;
+      height: 50px;
+      background-color: var(--backgroundMain);
+
+      &:hover {
+        background-color: var(--accentHover);
+      }
+    }
+
+    .AuthButton {
+      background-color: var(--accentHover);
+
+      &.selected {
+        background-color: var(--accentPrimary);
+      }
+    }
+
+    .RegButton {
+      &.selected {
+        background-color: var(--accentPrimary);
+      }
+    }
+  }
+
+
+  footer {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    align-items: center;
+    min-width: 100%;
+
+  }
+}
+
+@media (max-width: 650px) {
+  .AuthorizationContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    min-width: 100vw;
+    width: 100%;
+    max-width: 100%;
+    min-height: 100vh;
+    height: 100vh;
+    background-color: var(--backgroundMain);
+    border-radius: 20px;
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      p {
+        margin-top: 0;
+      }
+    }
+
+    section {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+
+      button {
+        width: 100%;
+        height: 70px;
+        background-color: var(--backgroundLight);
+
+        &:hover {
+          background-color: var(--accentHover);
+        }
+      }
+
+      .AuthButton {
+        &.selected {
+          background-color: var(--backgroundDark);
+        }
+      }
+
+      .RegButton {
+        &.selected {
+          background-color: var(--backgroundDark);
+        }
+      }
+    }
+
+
+    footer {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+
+    }
+  }
+
+}

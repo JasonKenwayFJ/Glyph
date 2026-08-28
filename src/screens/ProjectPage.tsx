@@ -48,6 +48,7 @@ const ProjectPage = () => {
         const now = new Date().toISOString();
         const project: Project = {
             id: crypto.randomUUID(),
+            userId: await invoke('get_user'),
             title,
             entityType: EntityType.Project,
             description,

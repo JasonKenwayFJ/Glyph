@@ -1,0 +1,62 @@
+.AuthorizationContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+
+  background-color: var(--backgroundMain);
+  height: 100%;
+  width: 50%;
+
+
+  p {
+    color: var(--textDisabled);
+    margin: 10px 10px 10px 5px;
+  }
+
+  input {
+    width: 100%;
+    background-color: var(--backgroundDark);
+  }
+
+  button {
+    margin-top: 20px;
+    width: 100%;
+    height: 50px;
+  }
+}
+
+@media (max-width: 650px){
+  .AuthorizationContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: var(--backgroundMain);
+    height: fit-content;
+    width: 100%;
+    padding-top: 5%;
+    align-items: start;
+    p {
+      text-align: start;
+      color: var(--infoText);
+    }
+
+    input {
+      width: 100%;
+      height: 4rem;
+      background-color: var(--backgroundDark);
+    }
+
+    button {
+      align-self: center;
+      margin-top: 2rem;
+      width: 100%;
+      height: 50px;
+    }
+    #extraInfo{
+      margin-top: 2rem;
+      align-self: center;
+    }
+  }
+}
+

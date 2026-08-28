@@ -1,6 +1,5 @@
 
-import { router } from "../../../../router/router.tsx";
-import { clearToken } from "../../../services/client.ts";
+import { router } from "../router/router.tsx";
 type DropbarItem = {
     itemTitle: string;
     onPick: () => void;
@@ -32,13 +31,12 @@ export const file: DropbarItems = {
         {
             itemTitle: "Выйти из аккаунта",
             onPick: async () => {
-                await clearToken();
                 router.navigate("/");
             },
         },
         {
             itemTitle: "Выйти",
-            onPick: () => window.electron.closeWindow(),
+            onPick: () => {},
         },
         // "Импорт проекта" / "Экспорт проекта" — пока нет реализации, оставь как есть
     ],

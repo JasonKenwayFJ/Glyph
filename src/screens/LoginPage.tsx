@@ -1,266 +1,70 @@
-import {IconAd, IconLock, IconMail, IconUser} from "@tabler/icons-react";
-import ButtonLoginSwitcher from "../pages/Login/ButtonLoginSwitcher/ButtonLoginSwitcher.tsx";
-import AuthInput from "../pages/Login/AuthInput/AuthInput.tsx";
-import {registrationForm} from "../types/Forms.ts";
-import {useEffect, useState} from "react";
-import {Project} from "../types/Project.ts";
-import {useNavigate} from "react-router-dom";
-import {invoke} from "@tauri-apps/api/core";
+import "./MainStyles/LoginPageStyle.scss"
+import {useParams} from "react-router-dom";
+import {AuthorizationContent} from "./components/LoginPage/AuthorizationContent.tsx";
+import {RegistrationContent} from "./components/LoginPage/RegistrationContent.tsx";
+import {IconUserScan} from "@tabler/icons-react";
 
-class AuthForm {
+import {router} from "../router/router.tsx";
+
+export enum LoginPageMode {
+    authorization = "Authorization",
+    registration = "Registration"
 }
 
-export const LoginPage = () => {
+export type loginPageProp = {
+    onChangeMode: (type: LoginPageMode) => void,
+    mode: LoginPageMode
+}
+const LoginPage = () => {
+    const {mode} = useParams<{ mode: string }>();
 
-
-    const rForm: registrationForm = {
-        username: "",
-        email: "",
-        password: ""
+    const toggleMode = (mode: LoginPageMode) => {
+        router.navigate(`/loginPage/${mode}`);
     };
-    const aForm: AuthForm = {
-        email: "",
-        password: "",
-    }
-
-    const [authForm, setAuth] = useState(aForm);
-    const [regForm, setReg] = useState(rForm)
-    const [project, setProject] = useState<Project | null>(null)
-    const [isLoading, setLoading] = useState(false);
-    const [login, setLogin] = useState(true);
-
-    const navigate = useNavigate();
-
-
-
-    useEffect(() => {
-        const getProject = async () => {
-            setProject(await invoke<Project>("get_project"))
-        }
-        getProject();
-    }, []);
-
-    function setAuthData(
-        field: string,
-        value: string
-    ) {
-        setAuth(prev => ({
-            ...prev,
-            [field]: value
-        }));
-    }
-
-    function setRegData(
-        field: keyof typeof rForm,
-        value: string
-    ) {
-        setReg(prev => ({
-            ...prev,
-            [field]: value
-        }));
-    }
-
-    function ToggleLoginRegister(isLoginMode: boolean) {
-        setAuth(aForm)
-        setLogin(isLoginMode);
-
-    }
-
-
-    async function registration(payload: registrationForm){
-
-    }
-
-    if (isLoading) {
-        return <h1>Загрузка</h1>
-    }
 
     return (
-        <div className="LoginPage">
-            {login ?
+        <form className="AuthorizationContainer">
 
-                <div className="LoginContainer">
-                    <form className="LoginForm"
-                          onSubmit={async (e) => {
-                              e.preventDefault();
-                              setLoading(true)
+            <header>
+                <IconUserScan
+                    stroke={2}
+                    size={200}
+                    className="Zalupa"
+                />
+                <h1>Glyph</h1>
+                <p>Рабочее пространство для твоих проектов</p>
+            </header>
 
-                              // const payload: authForm = {
-                              //     email: authForm.email,
-                              //     password: authForm.password
-                              // };
+            <section>
+                <button
+                    type="button"
+                    className={`AuthButton ${
+                        mode === LoginPageMode.authorization ? "selected" : ""
+                    }`}
+                    onClick={() => toggleMode(LoginPageMode.authorization)}
+                >
+                    Авторизация
+                </button>
 
-                              try {
+                <button
+                    type="button"
+                    className={`RegButton ${
+                        mode === LoginPageMode.registration ? "selected" : ""
+                    }`}
+                    onClick={() => toggleMode(LoginPageMode.registration)}
+                >
+                    Регистрация
+                </button>
+            </section>
+            <footer>
+                {mode === LoginPageMode.authorization && <AuthorizationContent/>}
+                {mode === LoginPageMode.registration && <RegistrationContent/>}
 
-
-                                  if (!project)
-                                      navigate("/");
-                                  else
-                                      navigate("/projectPage")
-                              } catch (e) {
-                                  console.error(e)
-                                  setLoading(false)
-                                  return;
-                              }
-
-                              setLoading(false)
-                          }}
-                    >
-
-                        <section className="LoginHeader">
-                            <IconUser stroke={2} size={100}/>
-                            <h1>Glyph</h1>
-                            <p className="LoginSubtitle">
-                                Хаб для разработки твоего проекта
-                            </p>
-                        </section>
-                        <div className="LoginSwitcher">
-                            <ButtonLoginSwitcher
-                                isSelected={!login}
-                                text="Авторизация"
-                                onClick={() => ToggleLoginRegister(true)}/>
-                            <ButtonLoginSwitcher
-                                isSelected={login}
-                                text="Регистрация"
-                                onClick={() => ToggleLoginRegister(false)}/>
-                        </div>
+            </footer>
 
 
-                        <AuthInput
-                            icon={<IconMail size={16}/>
-                            }
-                            type="email"
-                            placeholder="you@example.com"
+        </form>
 
-                            onChange={
-                                (value) => setAuthData("email", value)
-                            }
-                        />
-
-                        <AuthInput
-                            icon={<IconLock size={16}/>}
-                            type="password"
-                            placeholder="••••••••"
-                            onChange={(value) => setAuthData("password", value)}
-                        />
-
-                        <div className="ForgotPassword">
-                            <a href="#">Forgot your password?</a>
-                        </div>
-                        <button
-                            type="submit"
-                            onClick={() => {
-                            }}
-                            disabled={isLoading}
-
-                        >
-                            {isLoading ? "Loading..." : "Login"}
-                        </button>
-                        <div className="SimpleDivider">
-
-                            <div className="hr-text">или</div>
-                        </div>
-                        <div className="AuthViaServices">
-                            <button>Google</button>
-                            <button>Я</button>
-                        </div>
-                    </form>
-                </div>
-
-
-                :
-
-
-                <div className="LoginContainer">
-                    <form className="LoginForm" onSubmit={async (e) => {
-                        e.preventDefault();
-                        const payload: registrationForm = {
-                            username: regForm.username,
-                            email: regForm.email,
-                            password: regForm.password
-                        };
-
-                        try {
-                            const response = await registration(payload)
-                            console.log(response)
-                            navigate("/");
-                        } catch (e) {
-                            console.error(e)
-                            return;
-                        }
-                    }
-                    }>
-                        <section className="LoginHeader">
-                            <IconUser stroke={2} size={100}/>
-                            <h1>Glyph</h1>
-                            <p className="LoginSubtitle">
-                                Хаб для разработки твоего проекта
-                            </p>
-                        </section>
-                        <div className="LoginSwitcher">
-                            <ButtonLoginSwitcher
-                                isSelected={!login}
-                                text="Авторизация"
-                                onClick={() => ToggleLoginRegister(true)}/>
-                            <ButtonLoginSwitcher
-                                isSelected={login}
-                                text="Регистрация"
-                                onClick={() => ToggleLoginRegister(false)}/>
-                        </div>
-
-
-                        <AuthInput
-                            icon={<IconAd size={16}/>}
-                            type="text"
-                            placeholder="username"
-                            onChange={(value) => setRegData("username", value)}
-                        />
-                        <AuthInput
-                            icon={<IconMail size={16}/>}
-                            type="email"
-                            placeholder="you@example.com"
-                            onChange={(value) => setRegData("email", value)}
-                        />
-
-                        <AuthInput
-                            icon={<IconLock size={16}/>}
-                            type="password"
-                            placeholder="••••••••"
-                            onChange={(value) => setRegData("password", value)}
-                        />
-
-                        <div className="ForgotPassword">
-                            <a href="#">Forgot your password?</a>
-                        </div>
-
-
-                        <button
-                            type="submit"
-                            onClick={() => {
-                            }}
-                            disabled={isLoading}>
-                            {isLoading ? "Loading..." : "Создать аккаунт"}
-                        </button>
-
-
-                        <div className="SimpleDivider">
-
-                            <div className="hr-text">или</div>
-                        </div>
-                        <div className="AuthViaServices">
-                            <button>Google</button>
-                            <button>Я</button>
-                        </div>
-
-                    </form>
-
-
-                </div>
-
-
-            }
-
-
-        </div>
-    )
-}
+    );
+};
+export default LoginPage

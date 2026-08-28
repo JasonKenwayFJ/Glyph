@@ -2,7 +2,7 @@ import {Outlet} from "react-router-dom";
 import "./MainLayout.css"
 
 import {useState} from "react";
-import Sidebar from "../screens/components/../Panels//SideBar.tsx"
+import Sidebar from "../screens/components/SideBar/Toolbar/SideBar.tsx"
 export default function MainLayout() {
     const [isSideBarOpen, setSideBarState] = useState<boolean>(true)
     const [isAiChatOpen, setAiChat] = useState<boolean>(false)

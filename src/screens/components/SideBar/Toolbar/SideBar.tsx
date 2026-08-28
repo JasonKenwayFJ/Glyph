@@ -1,6 +1,6 @@
-import {DesktopSideBar} from "../components/SideBar/DesktopSideBar.tsx";
-import {MobileSideBar} from "../components/SideBar/MobileSideBar.tsx";
-import "../MainStyles/Panels/SideBarStyle.scss"
+import {DesktopSideBar} from "../DesktopSideBar.tsx";
+import {MobileSideBar} from "../MobileSideBar.tsx";
+import "../../../MainStyles/Panels/SideBarStyle.scss"
 export type Button = {
     onInvokeAssistEvent: () => void,
     onInvokeAssist?: () => void
@@ -13,7 +13,7 @@ const SideBar = ({onInvokeAssistEvent, onInvokeAssist}: Button) => {
                 <DesktopSideBar onInvokeAssistEvent={onInvokeAssistEvent} onInvokeAssist={onInvokeAssist}/>
             </div>
             <div className={"MobileSideBar"}>
-                <MobileSideBar/>
+                <MobileSideBar />
             </div>
         </div>
     );

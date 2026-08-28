@@ -4,7 +4,7 @@ import MainLayout from "../layout/MainLayout";
 import ProjectPage from "../screens/ProjectPage.tsx"
 import MainPage from "../screens/MainPage.tsx";
 import EntityPage from "../screens/EntityPage.tsx";
-import {LoginPage} from "../screens/LoginPage.tsx";
+import LoginPage from "../screens/LoginPage.tsx";
 import {AccountPage} from "../screens/AccountPage.tsx";
 
 
@@ -30,11 +30,11 @@ export const router = createHashRouter([
                 element: <EntityPage />,
             },
             {
-                path: "login",
+                path: "loginPage/:mode",
                 element: <LoginPage />,
             },
             {
-                path: "account",
+                path: "accountPage",
                 element: <AccountPage />,
             },
             {
