@@ -20,7 +20,7 @@ pub enum EntityType{
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Entity {
-    pub(crate) id: Uuid,
+    pub id: Uuid,
     project_id: Uuid,
     title: String,
     description: String,

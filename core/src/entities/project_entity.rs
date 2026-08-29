@@ -3,7 +3,6 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use crate::entities::entity::EntityType;
 use crate::traits::storable::Storable;
-use crate::managers::user_manager::UserManager;
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Project {
@@ -19,7 +18,6 @@ pub struct Project {
 }
 
 impl Project {
-
     pub fn new(user_id: Uuid, title: &str, description: &str, image_path: &str) -> Self {
         let now = Utc::now();
         Project {

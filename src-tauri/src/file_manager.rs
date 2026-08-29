@@ -1,8 +1,8 @@
 use glyph_core::entities::entity::{Entity, EntityType};
 use glyph_core::traits::storable::Storable;
-use std::fmt::format;
 
 use glyph_core::entities::user_entity::User;
+use glyph_core::Project;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 use std::path::{Path, PathBuf};
@@ -10,12 +10,40 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use tokio::fs;
 use tokio::fs::File;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
-use uuid::Uuid;
 
 const USERS_DIRECTORY: &str = "Users";
 const ENTITIES_DIRECTORY: &str = "Entities";
 const PROJECTS_DIRECTORY: &str = "Projects";
 static TEMP_FILE_COUNTER: AtomicU64 = AtomicU64::new(0);
+pub async fn load_projects(storage_dir: &Path) -> Result<Vec<Project>, String> {
+    let path = directory_for_type(storage_dir, EntityType::Project);
+    let mut project_list = Vec::new();
+    let mut entries = fs::read_dir(&path).await.map_err(|e| e.to_string())?;
+
+    while let Some(entry) = entries
+        .next_entry()
+        .await
+        .map_err(|error| format!("Не удалось прочитать каталог {}: {error}", &path.display()))?
+    {
+        let path = entry.path();
+
+        if !path.is_file()
+            || path.extension().and_then(|extension| extension.to_str()) != Some("json")
+        {
+            continue;
+        }
+
+        let content = fs::read_to_string(&path)
+            .await
+            .map_err(|error| format!("Не удалось прочитать {}: {error}", path.display()))?;
+
+        let item = serde_json::from_str::<Project>(&content)
+            .map_err(|error| format!("Некорректный JSON в {}: {error}", path.display()))?;
+
+        project_list.push(item);
+    }
+    Ok(project_list)
+}
 pub async fn load_user(storage_dir: &Path) -> Result<User, String> {
     let path = directory_for_type(storage_dir, EntityType::User);
     let user_path = path.join("user.json");
@@ -36,8 +64,7 @@ pub async fn load_user(storage_dir: &Path) -> Result<User, String> {
             None,
         );
 
-        let json = serde_json::to_string_pretty(&user)
-            .map_err(|error| error.to_string())?;
+        let json = serde_json::to_string_pretty(&user).map_err(|error| error.to_string())?;
 
         fs::write(&user_path, &json)
             .await
@@ -45,9 +72,7 @@ pub async fn load_user(storage_dir: &Path) -> Result<User, String> {
         return Ok(user);
     }
 
-    let mut file = File::open(user_path)
-        .await
-        .map_err(|e| e.to_string())?;
+    let mut file = File::open(user_path).await.map_err(|e| e.to_string())?;
 
     let mut buffer = String::new();
 
@@ -60,7 +85,10 @@ pub async fn load_user(storage_dir: &Path) -> Result<User, String> {
 }
 fn directory_for_type(storage_dir: &Path, entity_type: EntityType) -> PathBuf {
     match entity_type {
-        EntityType::User => storage_dir.join(ENTITIES_DIRECTORY).join(ENTITIES_DIRECTORY),
+        EntityType::User => storage_dir.join(ENTITIES_DIRECTORY).join(USERS_DIRECTORY),
+        EntityType::Project => storage_dir
+            .join(ENTITIES_DIRECTORY)
+            .join(PROJECTS_DIRECTORY),
         EntityType::Card => storage_dir.join(ENTITIES_DIRECTORY).join("Card"),
         EntityType::Document => storage_dir.join(ENTITIES_DIRECTORY).join("Document"),
         EntityType::Note => storage_dir.join(ENTITIES_DIRECTORY).join("Note"),
@@ -70,15 +98,11 @@ fn directory_for_type(storage_dir: &Path, entity_type: EntityType) -> PathBuf {
         EntityType::Table => storage_dir.join(ENTITIES_DIRECTORY).join("Table"),
         EntityType::List => storage_dir.join(ENTITIES_DIRECTORY).join("List"),
         EntityType::Task => storage_dir.join(ENTITIES_DIRECTORY).join("Task"),
-        EntityType::Project => storage_dir.join(PROJECTS_DIRECTORY),
     }
 }
-
 async fn storage_directory<T: Storable>(storage_dir: &Path, item: &T) -> Result<PathBuf, String> {
     let directory = directory_for_type(storage_dir, item.entity_type());
 
-    // ИЗМЕНЕНИЕ: ошибка проверки существования каталога теперь возвращается
-    // вызывающему коду, а не вызывает panic через `unwrap()`.
     if !fs::try_exists(&directory).await.map_err(|error| {
         format!(
             "Не удалось проверить каталог {}: {error}",
@@ -95,7 +119,6 @@ async fn storage_directory<T: Storable>(storage_dir: &Path, item: &T) -> Result<
 
     Ok(directory)
 }
-
 async fn load_json_files<T: DeserializeOwned>(directory: &Path) -> Result<Vec<T>, String> {
     if !fs::try_exists(directory).await.map_err(|error| {
         format!(
@@ -216,4 +239,60 @@ pub async fn delete_from_disk<T: Storable>(storage_dir: &Path, item: &T) -> Resu
     }
 
     Ok(())
+}
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use glyph_core::entities::project_entity::Project;
+    use tempfile::tempdir;
+    use uuid::Uuid;
+
+    #[tokio::test]
+    async fn save_and_load_roundup() {
+        let dir = tempdir().unwrap(); // временная папка, удаляется сама в конце теста
+        let storage_dir = dir.path().to_path_buf();
+
+        let entity = Entity::new(
+            Uuid::new_v4(),
+            "Test",
+            "",
+            "",
+            "",
+            EntityType::Card,
+            vec![],
+            vec![],
+            vec![],
+        );
+
+        save_to_disk(&storage_dir, &entity).await.unwrap();
+        let loaded = load_entities(&storage_dir).await.unwrap();
+
+        assert_eq!(loaded.len(), 1);
+        assert_eq!(loaded[0].id, entity.id);
+    }
+
+    #[tokio::test]
+    async fn load_projects() {
+        let dir = tempdir().unwrap(); // временная папка, удаляется сама в конце теста
+        let storage_dir = dir.path().to_path_buf();
+
+        let project = Project::new(
+            Uuid::new_v4(),
+            "Test project",
+            "Test project for testing",
+            "",
+        );
+
+        let result = save_to_disk(&storage_dir, &project).await;
+
+        assert!(result.is_ok());
+
+        let loaded = load_projects(&storage_dir).await.unwrap();
+
+        assert_eq!(loaded.len(), 1);
+        assert_eq!(loaded[0].id, project.id);
+        assert_eq!(loaded[0].title, "Test project");
+    }
+
+
 }
