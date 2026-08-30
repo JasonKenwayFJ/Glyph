@@ -21,17 +21,17 @@ pub enum EntityType{
 #[serde(rename_all = "camelCase")]
 pub struct Entity {
     pub id: Uuid,
-    project_id: Uuid,
-    title: String,
-    description: String,
-    content: String,
-    image_path: String,
+    pub project_id: Uuid,
+    pub title: String,
+    pub description: String,
+    pub content: String,
+    pub image_path: String,
     pub entity_type: EntityType,
-    created_at: DateTime<Utc>,
-    updated_at: DateTime<Utc>,
-    categories: Vec<Characteristic>,
-    tags: Vec<Characteristic>,
-    extra_fields: Vec<ExtraField>,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+    pub categories: Vec<Characteristic>,
+    pub tags: Vec<Characteristic>,
+    pub extra_fields: Vec<ExtraField>,
 }
 impl Entity {
     pub fn new(

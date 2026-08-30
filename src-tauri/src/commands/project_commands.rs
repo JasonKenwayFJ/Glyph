@@ -2,6 +2,7 @@ use crate::file_manager;
 use glyph_core::network::api_client::ApiClient;
 use glyph_core::{Project, ProjectManager};
 use tauri::{Emitter, Manager};
+use glyph_core::entities::user_entity::User;
 use glyph_core::managers::user_manager::UserManager;
 use glyph_core::network::project_service;
 #[tauri::command]
@@ -31,7 +32,12 @@ pub async fn get_projects(
     let projects = manager.get_projects();
 
     if projects.unwrap().is_empty() {
-        let user = user_manager.get_user();
+
+
+        let user = user_manager
+            .get_user()
+            .ok_or("User not found".to_string())?;
+
         let local_response = file_manager::load_projects(&app_data_dir).await?;
         if local_response.is_empty() {
             let response = project_service::get_projects(_api_state.inner(), &user.id).await.map_err(|error|
@@ -46,6 +52,8 @@ pub async fn get_projects(
     }
     Ok(Vec::new())
 }
+
+
 #[tauri::command]
 pub async fn create_project(
     app: tauri::AppHandle,
@@ -57,36 +65,32 @@ pub async fn create_project(
     println!("=== CREATE PROJECT ===");
     println!("Project: {}", project.title);
 
-    project.user_id = user_state.get_user().unwrap().id;
+
+    let user: User =
+        user_state.get_user()
+            .ok_or("Cannot get he user: Create_project::Command"
+                .to_string())?;
+
+    project.user_id = user.id;
 
     println!("Project: {}", project.user_id);
 
-    let app_data_dir = match app.path().app_data_dir() {
-        Ok(path) => {
-            println!("App data dir: {}", path.display());
-            path
-        }
-        Err(error) => {
-            println!("ERROR: Failed to get app data dir: {}", error);
-            return Err(error.to_string());
-        }
-    };
+    let app_data_dir = app
+        .path()
+        .app_data_dir()
+        .map_err(|error| error.to_string())?;
 
     println!("Sending project to server...");
 
-    let response = match project_service::create_project(_api_state.inner(), &project).await {
-        Ok(response) => {
-            println!("Server response received");
-            println!("Success: {}", response.success);
-            println!("Status: {}", response.status);
-            println!("Message: {}", response.message);
-            response
-        }
-        Err(error) => {
+    let response = project_service::create_project(
+        _api_state.inner(),
+        &project
+    )
+        .await
+        .map_err(|error| {
             println!("ERROR: Server request failed: {}", error);
-            return Err(error);
-        }
-    };
+            error
+        })?;
 
     if !response.success {
         println!("ERROR: Server rejected project: {}", response.message);
@@ -102,16 +106,6 @@ pub async fn create_project(
 
     println!("Project successfully saved to disk");
 
-    // let created_project = match response.data {
-    //     Some(project) => {
-    //         println!("Server returned created project");
-    //         project
-    //     }
-    //     None => {
-    //         println!("ERROR: Server did not return created project");
-    //         return Err("Сервер не вернул созданный проект".to_string());
-    //     }
-    // };
 
     println!("Updating ProjectManager state...");
 

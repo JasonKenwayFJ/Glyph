@@ -22,7 +22,7 @@ pub struct User {
 impl User {
     
     pub fn new(
-        id: Option<Uuid>,
+        id: Uuid,
         token: Option<String>,
         username: String,
         email: String,
@@ -30,7 +30,7 @@ impl User {
     ) -> Self {
 
         User {
-            id : id.unwrap_or_else(|| Uuid::new_v4()),
+            id,
             token: token.unwrap_or_else(|| String::new()),
             entity_type: EntityType::User,
             username,
