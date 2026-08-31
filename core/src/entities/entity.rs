@@ -61,6 +61,8 @@ impl Entity {
             extra_fields,
         }
     }
+
+
 }
 impl Storable for Entity{
     fn storage_id(&self) -> Uuid{

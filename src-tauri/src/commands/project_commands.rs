@@ -94,6 +94,7 @@ pub async fn create_project(
 
     if !response.success {
         println!("ERROR: Server rejected project: {}", response.message);
+        project.is_pending = true;
         return Err(response.message);
     }
 

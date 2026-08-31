@@ -1,7 +1,7 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use crate::entities::entity::EntityType;
+use crate::entities::entity::{Entity, EntityType};
 use crate::traits::storable::Storable;
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -15,10 +15,16 @@ pub struct Project {
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
     pub weight: i32,
+    pub is_pending: bool,
 }
 
 impl Project {
-    pub fn new(user_id: Uuid, title: &str, description: &str, image_path: &str) -> Self {
+    pub fn new(
+        user_id: Uuid,
+        title: &str,
+        description: &str,
+        image_path: &str,
+        is_pending: bool) -> Self {
         let now = Utc::now();
         Project {
             id: Uuid::new_v4(),
@@ -30,6 +36,7 @@ impl Project {
             created_at: now,
             updated_at: now,
             weight: 0,
+            is_pending
         }
     }
 }
