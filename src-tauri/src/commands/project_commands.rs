@@ -10,7 +10,7 @@ pub fn open_project(
     app: tauri::AppHandle,
     state: tauri::State<ProjectManager>,
     project: Project) {
-    state.set_project(project.clone());
+    state.set_current_project(project.clone());
     app.emit("OnProjectChanged", project).unwrap();
 }
 
@@ -110,7 +110,7 @@ pub async fn create_project(
 
     println!("Updating ProjectManager state...");
 
-    state.set_project(project.clone());
+    state.set_current_project(project.clone());
 
     println!("Emitting OnProjectCreated event...");
 

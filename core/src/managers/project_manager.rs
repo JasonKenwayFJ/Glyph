@@ -30,7 +30,10 @@ impl ProjectManager {
             .find(|project| project.id == id)
             .cloned()
     }
-    pub fn set_project(&self, project: Project) {
+    pub fn set_projects(&self, projects: Vec<Project>) {
+        self.projects.lock().unwrap().replace(projects);
+    }
+    pub fn set_current_project(&self, project: Project){
         self.current_project.lock().unwrap().replace(project);
     }
 

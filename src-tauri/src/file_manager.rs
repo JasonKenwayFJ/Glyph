@@ -96,7 +96,7 @@ pub async fn load_projects(storage_dir: &Path) -> Result<Vec<Project>, String> {
 
     Ok(project_list)
 }
-pub async fn load_entities(storage_dir: &Path) -> Result<(Vec<Entity>), String> {
+pub async fn load_entities(storage_dir: &Path) -> Result<Vec<Entity>, String> {
     let mut entities =
         load_json_files::<Entity>(&directory_for_type(storage_dir, EntityType::Card)).await?;
     entities.extend(
@@ -269,18 +269,21 @@ mod tests {
     use glyph_core::entities::project_entity::Project;
     use tempfile::tempdir;
     use uuid::Uuid;
-    use glyph_core::entities::entity::EntityType::Project;
 
     #[tokio::test]
     async fn save_project(){
         let dir = tempdir().unwrap();
         let storage_dir = dir.path().to_path_buf();
-        
-        let project = Project::new_out_dto(
+
+        let project : Project = Project::new(
+            Uuid::new_v4(),
             "title",
             "description",
-            ""
+            "",
+            false
         );
+
+        save_pending_entities(&storage_dir, project).await.unwrap();
     }
     #[tokio::test]
     async fn save_and_load_roundup() {
@@ -307,23 +310,24 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn load_projects() {
+    async fn load_projects_test() {
         let dir = tempdir().unwrap(); // временная папка, удаляется сама в конце теста
         let storage_dir = dir.path().to_path_buf();
-    
+
         let project = Project::new(
             Uuid::new_v4(),
             "Test project",
             "Test project for testing",
             "",
+            false
         );
-    
+
         let result = save_to_disk(&storage_dir, &project).await;
-    
+
         assert!(result.is_ok());
-    
+
         let loaded = load_projects(&storage_dir).await.unwrap();
-    
+
         assert_eq!(loaded.len(), 1);
         assert_eq!(loaded[0].id, project.id);
         assert_eq!(loaded[0].title, "Test project");

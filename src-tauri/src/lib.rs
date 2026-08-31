@@ -30,23 +30,23 @@ pub fn run() {
                 )?;
             }
 
-            // ===== Загрузка данных с диска при старте =====
             let app_handle = app.handle().clone();
 
-            // Запускаем асинхронную задачу в фоне, не блокируя открытие окна
             tauri::async_runtime::spawn(async move {
-                // Путь к папке данных приложения (свой на каждой платформе)
                 let storage_dir = app_handle.path().app_data_dir().expect("no app data dir");
 
                 println!("{}", storage_dir.display());
 
-                // Достаём тот самый EntityManager, что зарегистрировали через .manage()
+
                 let user_manager = app_handle.state::<UserManager>();
+                let project_manager = app_handle.state::<ProjectManager>();
                 let entity_manager = app_handle.state::<EntityManager>();
-                // Пытаемся загрузить сущности с диска
-                match file_manager::load_user(&storage_dir).await {
+
+                match file_manager::preload_data(&storage_dir).await {
                     Ok(loaded) => {
-                        user_manager.set_user(loaded);
+                        user_manager.set_user(loaded.0);
+                        project_manager.set_projects(loaded.1);
+                        entity_manager.hydrate(loaded.2);
                         println!("loaded user");
                     }
                     Err(e) => {
@@ -54,23 +54,14 @@ pub fn run() {
                     }
                 }
 
-                match file_manager::load_entities(&storage_dir).await {
-                    Ok(loaded) => {
-                        entity_manager.hydrate(loaded);
-                        println!("Сущности успешно загружены с диска");
-                    }
-                    Err(e) => {
-                        eprintln!("Не удалось загрузить сущности: {e}");
-                    }
-                }
             });
 
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
-            get_projects,
             create_project,
             open_project,
+            get_projects,
             get_project,
             login,
             register,
