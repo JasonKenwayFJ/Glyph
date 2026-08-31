@@ -546,6 +546,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "commands"
+version = "0.0.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "688226b9769bbf11a9d82a94fb4adda15793a6023d33a8ca7695dbafec6f4123"
+
+[[package]]
 name = "concurrent-queue"
 version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4162,6 +4168,7 @@ dependencies = [
 name = "tglyph"
 version = "0.1.0"
 dependencies = [
+ "commands",
  "glyph_core",
  "log",
  "serde",

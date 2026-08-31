@@ -10,6 +10,8 @@ use glyph_core::managers::user_manager::UserManager;
 use glyph_core::network::api_client::ApiClient;
 use glyph_core::ProjectManager;
 use tauri::Manager;
+use glyph_core::managers::ai_chat_manager::AiChatManager;
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -20,6 +22,7 @@ pub fn run() {
         .manage(ProjectManager::new())
         .manage(EntityManager::new())
         .manage(UserManager::new())
+        .manage(AiChatManager::new())
         .plugin(tauri_plugin_opener::init())
         .setup(|app| {
             if cfg!(debug_assertions) {
