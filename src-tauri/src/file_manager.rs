@@ -1,4 +1,3 @@
-use std::fs::create_dir_all;
 use glyph_core::entities::entity::{Entity, EntityType};
 use glyph_core::traits::storable::Storable;
 
@@ -9,7 +8,7 @@ use serde::Serialize;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
 use tokio::fs;
-use tokio::fs::{try_exists, File};
+use tokio::fs::{File};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use uuid::Uuid;
 
@@ -67,34 +66,36 @@ pub async fn load_user(storage_dir: &Path) -> Result<User, String> {
     Ok(user)
 }
 pub async fn load_projects(storage_dir: &Path) -> Result<Vec<Project>, String> {
-    let path = directory_for_type(storage_dir, EntityType::Project);
-    let mut project_list = Vec::new();
-    let mut entries = fs::read_dir(&path).await.map_err(|e| e.to_string())?;
+    load_json_files::<Project>(&directory_for_type(storage_dir, EntityType::Project)).await
 
-    while let Some(entry) = entries
-        .next_entry()
-        .await
-        .map_err(|error| format!("Не удалось прочитать каталог {}: {error}", &path.display()))?
-    {
-        let path = entry.path();
-
-        if !path.is_file()
-            || path.extension().and_then(|extension| extension.to_str()) != Some("json")
-        {
-            continue;
-        }
-
-        let content = fs::read_to_string(&path)
-            .await
-            .map_err(|error| format!("Не удалось прочитать {}: {error}", path.display()))?;
-
-        let item = serde_json::from_str::<Project>(&content)
-            .map_err(|error| format!("Некорректный JSON в {}: {error}", path.display()))?;
-
-        project_list.push(item);
-    }
-
-    Ok(project_list)
+    // let path = directory_for_type(storage_dir, EntityType::Project);
+    // let mut project_list = Vec::new();
+    // let mut entries = fs::read_dir(&path).await.map_err(|e| e.to_string())?;
+    //
+    // while let Some(entry) = entries
+    //     .next_entry()
+    //     .await
+    //     .map_err(|error| format!("Не удалось прочитать каталог {}: {error}", &path.display()))?
+    // {
+    //     let path = entry.path();
+    //
+    //     if !path.is_file()
+    //         || path.extension().and_then(|extension| extension.to_str()) != Some("json")
+    //     {
+    //         continue;
+    //     }
+    //
+    //     let content = fs::read_to_string(&path)
+    //         .await
+    //         .map_err(|error| format!("Не удалось прочитать {}: {error}", path.display()))?;
+    //
+    //     let item = serde_json::from_str::<Project>(&content)
+    //         .map_err(|error| format!("Некорректный JSON в {}: {error}", path.display()))?;
+    //
+    //     project_list.push(item);
+    // }
+    //
+    // Ok(project_list)
 }
 pub async fn load_entities(storage_dir: &Path) -> Result<Vec<Entity>, String> {
     let mut entities =
@@ -300,6 +301,7 @@ mod tests {
             vec![],
             vec![],
             vec![],
+            false
         );
 
         save_to_disk(&storage_dir, &entity).await.unwrap();

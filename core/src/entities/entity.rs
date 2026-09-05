@@ -32,6 +32,7 @@ pub struct Entity {
     pub categories: Vec<Characteristic>,
     pub tags: Vec<Characteristic>,
     pub extra_fields: Vec<ExtraField>,
+    pub is_pending: bool
 }
 impl Entity {
     pub fn new(
@@ -44,6 +45,7 @@ impl Entity {
         categories: Vec<Characteristic>,
         tags: Vec<Characteristic>,
         extra_fields: Vec<ExtraField>,
+        is_pending: bool
     ) -> Self{
         let now = Utc::now();
         Entity {
@@ -59,6 +61,7 @@ impl Entity {
             categories,
             tags,
             extra_fields,
+            is_pending
         }
     }
 

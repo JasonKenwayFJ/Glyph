@@ -10,4 +10,5 @@ export interface Project {
     createdAt: string;
     updatedAt: string;
     weight: number;
+    isPending: boolean;
 }

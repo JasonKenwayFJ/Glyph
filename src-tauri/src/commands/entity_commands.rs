@@ -21,31 +21,6 @@ pub async fn get_entities(
 }
 
 
-// #[tauri::command]
-// pub async fn get_entities(
-//     entity_type: EntityType,
-//     api_state: tauri::State<'_, ApiClient>,
-//     entity_state: tauri::State<'_, EntityManager>,
-// ) -> Result<ApiResponse<Vec<Entity>>, String> {
-//     let local_entities = entity_state.get_entities(entity_type);
-//
-//     if !local_entities.is_empty() {
-//         return Ok(ApiResponse {
-//             success: true,
-//             message: "Entities loaded from cache".to_string(),
-//             status: 200,
-//             data: Some(local_entities),
-//         });
-//     }
-//
-//     let response = entity_service::get_entities::<Vec<Entity>>(
-//         api_state.inner(),
-//         entity_type,
-//     ).await?;
-//
-//     Ok(response)
-// }
-
 #[tauri::command]
 pub async fn create_entity(
     app: tauri::AppHandle,
@@ -58,25 +33,25 @@ pub async fn create_entity(
         .app_data_dir()
         .map_err(|error| error.to_string())?;
     println!("App data dir: {}", app_data_dir.display());
-    let final_entity = entity.get_entity();
+    let mut final_entity = entity.get_entity();
 
     let response =
         entity_service::create_entity::<()>(api_state.inner(), &final_entity).await?;
-    if !response.success { return Err(response.message); }
+    if !response.success
+    {
+        final_entity.is_pending = true;
+    }
     println!(
         "Success: {}, Status Code: {}, message: {}",
         response.success,
         response.status,
         response.message
     );
-    // 1. Сохраняем на диск
+
     file_manager::save_to_disk(&app_data_dir, &final_entity).await?;
 
     println!("Сущность успешно сохранена на диск");
 
-    // 2. Отправляем на сервер
-
-    // 3. Добавляем локально
     entity_state.add_entity_locally(&final_entity);
 
     println!("Сущность успешно добавлена локально");

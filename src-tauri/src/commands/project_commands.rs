@@ -1,15 +1,13 @@
 use crate::file_manager;
-use glyph_core::network::api_client::ApiClient;
-use glyph_core::{Project, ProjectManager};
-use tauri::{Emitter, Manager};
 use glyph_core::entities::user_entity::User;
 use glyph_core::managers::user_manager::UserManager;
+use glyph_core::network::api_client::ApiClient;
 use glyph_core::network::project_service;
+use glyph_core::{Project, ProjectManager};
+use tauri::{Emitter, Manager};
+
 #[tauri::command]
-pub fn open_project(
-    app: tauri::AppHandle,
-    state: tauri::State<ProjectManager>,
-    project: Project) {
+pub fn open_project(app: tauri::AppHandle, state: tauri::State<ProjectManager>, project: Project) {
     state.set_current_project(project.clone());
     app.emit("OnProjectChanged", project).unwrap();
 }
@@ -25,34 +23,61 @@ pub async fn get_projects(
     user_manager: tauri::State<'_, UserManager>,
     _api_state: tauri::State<'_, ApiClient>,
 ) -> Result<Vec<Project>, String> {
+    println!("=== get_projects START ===");
+
     let app_data_dir = app
         .path()
         .app_data_dir()
         .map_err(|error| error.to_string())?;
+    println!("app_data_dir -> OK: {:?}", app_data_dir);
+
     let projects = manager.get_projects();
 
-    if projects.unwrap().is_empty() {
-
-
-        let user = user_manager
-            .get_user()
-            .ok_or("User not found".to_string())?;
-
-        let local_response = file_manager::load_projects(&app_data_dir).await?;
-        if local_response.is_empty() {
-            let response = project_service::get_projects(_api_state.inner(), &user.id).await.map_err(|error|
-                format!("Error getting projects: {}", error)
-            )?;
-            if response.is_empty(){
-                return Ok(Vec::new())
-            }
-            return Ok(Vec::from(response));
+    match projects {
+        Some(existing) if !existing.is_empty() => {
+            println!("BRANCH: manager projects NOT EMPTY");
+            println!("RETURN: {} projects from manager", existing.len());
+            println!("=== get_projects END ===");
+            Ok(existing)
         }
-        return Ok(Vec::from(local_response))
-    }
-    Ok(Vec::new())
-}
+        _ => {
+            println!("BRANCH: manager projects EMPTY");
 
+            let user = user_manager
+                .get_user()
+                .ok_or_else(|| format!("Error at line {}", 42))?;
+
+            println!("user_manager.get_user -> OK: {}", user.id);
+
+            let local_response = file_manager::load_projects(&app_data_dir).await?;
+            println!("load_projects -> {} projects", local_response.len());
+
+            if local_response.is_empty() {
+                println!("BRANCH: local projects EMPTY");
+
+                let response = project_service::get_projects(_api_state.inner(), &user.id)
+                    .await
+                    .map_err(|error| format!("Error getting projects: {}", error))?;
+
+                println!("API get_projects -> {} projects", response.len());
+
+                if response.is_empty() {
+                    println!("BRANCH: API projects EMPTY");
+                    println!("RETURN: empty Vec");
+                    return Ok(Vec::new());
+                }
+
+                println!("BRANCH: API projects NOT EMPTY");
+                println!("RETURN: {} API projects", response.len());
+                return Ok(Vec::from(response));
+            }
+
+            println!("BRANCH: local projects NOT EMPTY");
+            println!("RETURN: {} local projects", local_response.len());
+            Ok(local_response)
+        }
+    }
+}
 
 #[tauri::command]
 pub async fn create_project(
@@ -65,11 +90,9 @@ pub async fn create_project(
     println!("=== CREATE PROJECT ===");
     println!("Project: {}", project.title);
 
-
-    let user: User =
-        user_state.get_user()
-            .ok_or("Cannot get he user: Create_project::Command"
-                .to_string())?;
+    let user: User = user_state
+        .get_user()
+        .ok_or("Cannot get the user: Create_project::Command".to_string())?;
 
     project.user_id = user.id;
 
@@ -82,20 +105,15 @@ pub async fn create_project(
 
     println!("Sending project to server...");
 
-    let response = project_service::create_project(
-        _api_state.inner(),
-        &project
-    )
+    let response = project_service::create_project(_api_state.inner(), &project)
         .await
         .map_err(|error| {
             println!("ERROR: Server request failed: {}", error);
             error
-        })?;
+        });
 
-    if !response.success {
-        println!("ERROR: Server rejected project: {}", response.message);
+    if response.is_err() {
         project.is_pending = true;
-        return Err(response.message);
     }
 
     println!("Saving project to disk...");
@@ -106,7 +124,6 @@ pub async fn create_project(
     }
 
     println!("Project successfully saved to disk");
-
 
     println!("Updating ProjectManager state...");
 
@@ -120,6 +137,5 @@ pub async fn create_project(
     }
 
     println!("=== CREATE PROJECT SUCCESS ===");
-
     Ok(project)
 }

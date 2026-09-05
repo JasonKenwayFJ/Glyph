@@ -52,6 +52,7 @@ impl EntityDto {
             self.categories,
             self.tags,
             self.extra_fields,
+            false
         )
     }
 }
