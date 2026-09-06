@@ -5,7 +5,7 @@ import {useEffect, useState} from "react";
 import {Entity, EntityType} from "../types/Entities.ts";
 import {invoke} from "@tauri-apps/api/core";
 // import {invoke} from "@tauri-apps/api/core";
-
+import "./MainStyles/MainPageStyle.scss"
 const MainPage = () => {
     const {id} = useParams()
     const navigate = useNavigate();
@@ -50,7 +50,6 @@ const MainPage = () => {
         <div className={"MainPageContainer"}>
             <div className="MainPageHeader">
                 <h2>{document?.title ?? "Новый документ"}</h2>
-                <button onClick={handleSave}>Сохранить</button>
             </div>
 
             <div className="Editor">

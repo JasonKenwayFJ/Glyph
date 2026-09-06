@@ -18,7 +18,7 @@ export const router = createHashRouter([
                 element: <ProjectPage />,
             },
             {
-                path: "mainpage",
+                path: "mainPage",
                 element: <MainPage />,
             },
             {
