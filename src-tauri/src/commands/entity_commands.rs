@@ -27,26 +27,23 @@ pub async fn create_entity(
     api_state: tauri::State<'_, ApiClient>,
     entity_state: tauri::State<'_, EntityManager>,
     entity: EntityDto,
-) -> Result<ApiResponse<()>, String> {
+) -> Result<Entity, String> {
+
     let app_data_dir = app
         .path()
         .app_data_dir()
         .map_err(|error| error.to_string())?;
     println!("App data dir: {}", app_data_dir.display());
+
     let mut final_entity = entity.get_entity();
 
     let response =
-        entity_service::create_entity::<()>(api_state.inner(), &final_entity).await?;
-    if !response.success
-    {
+        entity_service::create_entity::<()>(api_state.inner(), &final_entity).await;
+
+    if response.is_err(){
         final_entity.is_pending = true;
     }
-    println!(
-        "Success: {}, Status Code: {}, message: {}",
-        response.success,
-        response.status,
-        response.message
-    );
+
 
     file_manager::save_to_disk(&app_data_dir, &final_entity).await?;
 
@@ -57,7 +54,7 @@ pub async fn create_entity(
     println!("Сущность успешно добавлена локально");
 
     app.emit("OnEntityCreated", &final_entity).map_err(|e| e.to_string())?;
-    Ok(response)
+    Ok(final_entity)
 }
 
 #[tauri::command]
