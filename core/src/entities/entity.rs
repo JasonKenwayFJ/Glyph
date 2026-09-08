@@ -2,6 +2,8 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use crate::traits::storable::Storable;
+use crate::traits::Trashable::Trashable;
+
 //TODO: Добавить User в TS Enum, и перетащить Project на index[1]
 #[derive(Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub enum EntityType{
@@ -32,7 +34,9 @@ pub struct Entity {
     pub categories: Vec<Characteristic>,
     pub tags: Vec<Characteristic>,
     pub extra_fields: Vec<ExtraField>,
-    pub is_pending: bool
+    pub is_pending: bool,
+    pub is_deleted: bool,
+    pub deleted_at: Option<DateTime<Utc>>,
 }
 impl Entity {
     pub fn new(
@@ -61,7 +65,9 @@ impl Entity {
             categories,
             tags,
             extra_fields,
-            is_pending
+            is_pending,
+            is_deleted: false,
+            deleted_at: None,
         }
     }
 
@@ -75,7 +81,21 @@ impl Storable for Entity{
         self.entity_type
     }
 }
+impl Trashable for Entity{
+    fn is_deleted(&self) -> bool {self.is_deleted}
 
+    fn deleted_at(&self) -> Option<DateTime<Utc>> {self.deleted_at}
+
+    fn move_to_trash(&mut self) {
+        self.is_deleted = true;
+        self.deleted_at = Some(Utc::now());
+    }
+
+    fn restore(&mut self) {
+        self.is_deleted = false;
+        self.deleted_at = None;
+    }
+}
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Characteristic {
