@@ -121,27 +121,6 @@ const ProjectPage = () => {
                     <span className="ProjectCardNewPlus">+</span>
                     <p>Создать проект</p>
                 </div>
-                <div
-
-                    className="ProjectCard"
-                    onMouseMove={handleTilt}
-                    onMouseLeave={resetTilt}
-                    onClick={() => {
-                    }}
-                >
-                    <div className="ProjectCardCover">
-                        <div className="ProjectCardAurora"/>
-                        <span className="ProjectActiveBadge">активен</span>
-                    </div>
-                    <div className="ProjectCardBody">
-                        <h3>title</h3>
-                        <p>description</p>
-                        <div className="ProjectCardFooter">
-                            <span>5 сущностей</span>
-                            <span>25 july</span>
-                        </div>
-                    </div>
-                </div>
 
                 {filtered.map((project, i) => (
                     <div

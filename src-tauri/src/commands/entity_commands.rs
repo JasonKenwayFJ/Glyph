@@ -5,19 +5,23 @@ use glyph_core::network::api_client::{ApiClient, ApiResponse};
 use glyph_core::network::entity_service;
 use tauri::{Emitter, Manager};
 use glyph_core::dto_entities::entity_dto::EntityDto;
+use glyph_core::ProjectManager;
 
 #[tauri::command]
 pub async fn get_entities(
     app: tauri::AppHandle,
     entity_state: tauri::State<'_, EntityManager>,
-    r#type: EntityType,
+    entity_type: EntityType,
+    project_state: tauri::State<'_, ProjectManager>,
 ) -> Result<Vec<Entity>, String> {
+    let project = project_state.get_project().
+        ok_or("No active project found".to_string())?;
     let app_data_dir = app.path().app_data_dir().expect("no app data dir");
     println!("App data dir: {}", app_data_dir.display());
     let loaded = file_manager::load_entities(&app_data_dir)
         .await?;
     entity_state.hydrate(loaded);
-    entity_state.get_entities(r#type)
+    entity_state.get_entities(entity_type, project.id)
 }
 
 
@@ -26,8 +30,12 @@ pub async fn create_entity(
     app: tauri::AppHandle,
     api_state: tauri::State<'_, ApiClient>,
     entity_state: tauri::State<'_, EntityManager>,
+    project_state: tauri::State<'_, ProjectManager>,
     entity: EntityDto,
 ) -> Result<Entity, String> {
+
+    let project = project_state.get_project().
+        ok_or("No active project found".to_string())?;
 
     let app_data_dir = app
         .path()
@@ -35,7 +43,7 @@ pub async fn create_entity(
         .map_err(|error| error.to_string())?;
     println!("App data dir: {}", app_data_dir.display());
 
-    let mut final_entity = entity.get_entity();
+    let mut final_entity = entity.get_entity(project.id);
 
     let response =
         entity_service::create_entity::<()>(api_state.inner(), &final_entity).await;

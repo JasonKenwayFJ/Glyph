@@ -26,7 +26,7 @@ const Card = ({data, onClick}: CardProps) => {
                 <button className="CardButton">✕</button>
             </div>
             <h1>{data.title}</h1>
-            <img className="CardImage" src={data.imagePath || "/favicon.svg"}/>
+            <img className="CardImage" src={data.imagePath || "/tauri.svg"} alt={"Card Image"}/>
             {!data.imagePath ? <button className="CardAddImage">
                 <p className="ButtonAddImageLabel">Добавить изображение</p>
             </button> : ""}

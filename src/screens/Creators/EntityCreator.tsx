@@ -1,5 +1,5 @@
 import "./../MainStyles/Panels/EntityCreator.scss";
-import { useEffect, useState } from "react";
+import {useState} from "react";
 import "../../index.scss";
 
 import Category from "../../components/Shared/Category/Category.tsx";
@@ -7,10 +7,9 @@ import Tag from "../../components/Shared/Tag/Tag.tsx";
 import Dropdown from "../../components/Shared/Dropdown/Dropdown.tsx";
 import ImageUploader from "../../components/Shared/ImageUploader/ImageUploader.tsx";
 
-import { CreatorMode, Entity, EntityType } from "../../types/Entities.ts";
-import { invoke } from "@tauri-apps/api/core";
-import { Project } from "../../types/Project.ts";
-import { EntityDTO } from "../../types/DTO/EntityDTO.ts";
+import {CreatorMode, Entity, EntityType} from "../../types/Entities.ts";
+import {invoke} from "@tauri-apps/api/core";
+import {EntityDTO} from "../../types/DTO/EntityDTO.ts";
 
 type CharacteristicItem = {
     id: string;
@@ -23,14 +22,15 @@ type EntityCreatorProp<T> = {
     data?: T;
     mode?: CreatorMode;
     entityType?: EntityType;
-    onSaved?: (entity: Entity) => void;
+    onSaved: () => void;
     prefillContent?: string;
 };
 
 const EntityCreator = (props: EntityCreatorProp<Entity>) => {
-    const [project, setProject] = useState<Project | null>(null);
+
+    const [isLoading, setLoading] = useState<boolean>(false)
+
     const [form, setForm] = useState<EntityDTO>({
-        projectId: props.data?.projectId ?? "",
         entityType: props.data?.entityType ?? EntityType.Card,
         title: props.data?.title ?? "",
         description: props.data?.description ?? "",
@@ -41,33 +41,13 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
         extraFields: props.data?.extraFields ?? [],
     });
 
-    useEffect(() => {
-        const getProject = async () => {
-            try {
-                const result = await invoke<Project | null>("get_project");
-                setProject(result);
-            } catch (error) {
-                console.error("Error getting project:", error);
-            }
-        };
-
-        getProject();
-    }, []);
-    useEffect(() => {
-        if (!project) return;
-
-        setForm(prev => ({
-            ...prev,
-            projectId: prev.projectId || project.id,
-        }));
-    }, [project]);
-
 
     const [selectedCategories, setSelectedCategories] = useState<CharacteristicItem[]>([]);
     const [categories, setCategories] = useState<CharacteristicItem[]>([]);
     const [selectedTags, setSelectedTags] = useState<CharacteristicItem[]>([]);
     const [tags, setTags] = useState<CharacteristicItem[]>([]);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
     function imageHandler(value: File | undefined) {
         if (!value) return;
 
@@ -78,6 +58,7 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
 
         setPreviewUrl(URL.createObjectURL(value));
     }
+
     function typeHandler(value: string | undefined) {
         if (!value) return;
 
@@ -90,40 +71,42 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
             entityType,
         }));
     }
+
     function addCategoryHandler(category: CharacteristicItem) {
         setCategories(prev => prev.filter(cat => cat.id !== category.id));
         setSelectedCategories(prev => [...prev, category]);
     }
+
     function removeCategoryHandler(category: CharacteristicItem) {
         setCategories(prev => [...prev, category]);
         setSelectedCategories(prev => prev.filter(cat => cat.id !== category.id));
     }
+
     function addTagHandler(tag: CharacteristicItem) {
         setTags(prev => prev.filter(t => t.id !== tag.id));
         setSelectedTags(prev => [...prev, tag]);
     }
+
     function removeTagHandler(tag: CharacteristicItem) {
         setTags(prev => [...prev, tag]);
         setSelectedTags(prev => prev.filter(t => t.id !== tag.id));
     }
 
     async function processEntity() {
-        if (!project) {
-            console.error("Project is null");
-            return;
+        setLoading(true)
+        const entity = {...form}
+        try{
+            await invoke<Entity>("create_entity", {entity});
+            props.onSaved()
+        }catch (e) {
+            console.error(e)
         }
-
-        const entity = {
-            ...form,
-            projectId: project.id,
-        };
-
-        await invoke("create_entity", { entity });
-        props.onClose()
+        setLoading(false)
     }
 
     return (
         <div className="EntityCreatorOverlay" onClick={props.onClose}>
+            {isLoading && <div>Загрузка</div>}
             <form
                 className="EntityCreatorForm"
                 onClick={e => e.stopPropagation()}
@@ -146,7 +129,7 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
 
                 <div className="EntityCreatorBody">
                     <div className="EntityCreatorBodyFooter">
-                        <ImageUploader imagePath={previewUrl} onUpload={imageHandler} />
+                        <ImageUploader imagePath={previewUrl} onUpload={imageHandler}/>
 
                         <div className="EntityCreatorInputContainer">
                             <input

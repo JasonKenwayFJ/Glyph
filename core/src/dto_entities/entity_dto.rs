@@ -5,7 +5,6 @@ use crate::entities::entity::{Characteristic, Entity, EntityType, ExtraField};
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct EntityDto {
-    project_id: Uuid,
     entity_type: EntityType,
     title: String,
     description: String,
@@ -18,7 +17,6 @@ pub struct EntityDto {
 
 impl EntityDto {
     pub fn new(
-        project_id: Uuid,
         entity_type: EntityType,
         title: String,
         description: String,
@@ -29,7 +27,6 @@ impl EntityDto {
         extra_fields: Vec<ExtraField>,
     ) -> Self {
         Self {
-            project_id,
             entity_type,
             title,
             description,
@@ -41,9 +38,9 @@ impl EntityDto {
         }
     }
 
-    pub fn get_entity(self) -> Entity{
+    pub fn get_entity(self, project_id: Uuid) -> Entity{
         Entity::new(
-            self.project_id,
+            project_id,
             &self.title,
             &self.description,
             &self.content,

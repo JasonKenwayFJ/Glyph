@@ -19,7 +19,7 @@ import {listen} from "@tauri-apps/api/event";
 
 
 export const EntityPage = () => {
-    const {type} = useParams<{ type: EntityType }>();
+    const {entity_type} = useParams<{ entity_type: EntityType }>();
     const [entities, setEntities] = useState<Entity[]>([]);
     const [filteredEntities, setFilteredEntities] = useState<Entity[]>([]);
     const [isCreator, setCreator] = useState<boolean>(false);
@@ -39,8 +39,9 @@ export const EntityPage = () => {
 
     useEffect(() => {
         const getEntities = async () => {
-            setEntities(await invoke('get_entities'))
-            setFilteredEntities(entities)
+            const result = await invoke<Entity[]>('get_entities', { entityType: entity_type });
+            setEntities(result);
+            setFilteredEntities(result);
         }
         getEntities()
     }, []);
@@ -56,9 +57,8 @@ export const EntityPage = () => {
     }
 
     function onSave() {
-
+        setCreator(false);
     }
-
 
     return (
         <div className={"EntityPageContainer"}>
@@ -71,31 +71,31 @@ export const EntityPage = () => {
 
             </div>
             <div>
-                {type === EntityType.Card && <CardContent
+                {entity_type === EntityType.Card && <CardContent
                     invokeCreator={toggleCreator}
                     entities={entities} filteredEntities={filteredEntities}/>}
-                {type === EntityType.Document && <DocumentContent
+                {entity_type === EntityType.Document && <DocumentContent
                     invokeCreator={toggleCreator}
                     entities={entities} filteredEntities={filteredEntities}/>}
-                {type === EntityType.Note && <NoteContent
+                {entity_type === EntityType.Note && <NoteContent
                     invokeCreator={toggleCreator}
                     entities={entities} filteredEntities={filteredEntities}/>}
-                {type === EntityType.Audio && <AudioContent
+                {entity_type === EntityType.Audio && <AudioContent
                     invokeCreator={toggleCreator}
                     entities={entities} filteredEntities={filteredEntities}/>}
-                {type === EntityType.Video && <VideoContent
+                {entity_type === EntityType.Video && <VideoContent
                     invokeCreator={toggleCreator}
                     entities={entities} filteredEntities={filteredEntities}/>}
-                {type === EntityType.Graph && <GraphContent
+                {entity_type === EntityType.Graph && <GraphContent
                     invokeCreator={toggleCreator}
                     entities={entities} filteredEntities={filteredEntities}/>}
-                {type === EntityType.Table && <TableContent
+                {entity_type === EntityType.Table && <TableContent
                     invokeCreator={toggleCreator}
                     entities={entities} filteredEntities={filteredEntities}/>}
-                {type === EntityType.Task && <TaskContent
+                {entity_type === EntityType.Task && <TaskContent
                     invokeCreator={toggleCreator}
                     entities={entities} filteredEntities={filteredEntities}/>}
-                {type === EntityType.Trash && <TrashContent
+                {entity_type === EntityType.Trash && <TrashContent
                     invokeCreator={toggleCreator}
                     entities={entities} filteredEntities={filteredEntities}/>}
 

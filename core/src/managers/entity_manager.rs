@@ -1,5 +1,6 @@
 use crate::entities::entity::{Entity, EntityType};
 use std::sync::Mutex;
+use uuid::Uuid;
 
 pub struct EntityManager {
     entities: Mutex<Vec<Entity>>
@@ -25,12 +26,13 @@ impl EntityManager {
             }
         }
     }
-    pub fn get_entities(&self, r#type: EntityType) -> Result<Vec<Entity>, String> {
+    pub fn get_entities(&self, entity_type: EntityType, project_id: Uuid) -> Result<Vec<Entity>, String> {
         let entities = self.entities.lock().unwrap();
 
         let result = entities
             .iter()
-            .filter(|e| e.entity_type == r#type)
+            .filter(|&e| e.entity_type == entity_type
+                && e.project_id == project_id)
             .cloned()
             .collect();
 

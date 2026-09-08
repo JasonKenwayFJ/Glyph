@@ -18,6 +18,7 @@ impl ProjectManager {
     pub fn get_project(&self) -> Option<Project> {
         self.current_project.lock().unwrap().clone()
     }
+
     pub fn get_projects(&self) -> Option<Vec<Project>> {
         self.projects.lock().unwrap().clone()
     }

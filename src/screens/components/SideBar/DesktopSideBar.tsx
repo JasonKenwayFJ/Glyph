@@ -67,7 +67,7 @@ export const DesktopSideBar = ({onInvokeAssistEvent}: Button) => {
                         <ButtonSideBar
                             label={"Документы"}
                             icon={<IconFileDescriptionFilled/>}
-                            path={"/entityPage/Documents"}
+                            path={"/entityPage/Document"}
                             isCollapsed={isCollapsed}/>
 
                         <ButtonSideBar

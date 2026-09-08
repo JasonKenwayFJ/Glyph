@@ -26,7 +26,7 @@ export const router = createHashRouter([
                 element: <MainPage />,
             },
             {
-                path: "entityPage/:type",
+                path: "entityPage/:entity_type",
                 element: <EntityPage />,
             },
             {
