@@ -4,7 +4,7 @@ use uuid::Uuid;
 use crate::entities::entity::{EntityType};
 use crate::traits::storable::Storable;
 use crate::traits::Trashable::Trashable;
-
+use glhserializer;
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Project {
@@ -44,6 +44,7 @@ impl Project {
             is_deleted: false,
             deleted_at: None,
         }
+        
     }
 }
 impl Storable for Project{
