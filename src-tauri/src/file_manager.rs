@@ -7,6 +7,7 @@ use serde::de::DeserializeOwned;
 use serde::Serialize;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
+use glh;
 use tokio::fs;
 use tokio::fs::{File};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
@@ -19,6 +20,8 @@ const PROJECTS_DIRECTORY: &str = "Projects";
 const PENDING_FILE_DIRECTORY: &str = "Entities/PendingFiles";
 const TRASH_DIRECTORY: &str = "Trash";
 static TEMP_FILE_COUNTER: AtomicU64 = AtomicU64::new(0);
+
+
 
 pub async fn preload_data(storage_dir: &Path) -> Result<(User, Vec<Project>, Vec<Entity>), String> {
     let user = load_user(storage_dir).await?;
@@ -171,7 +174,7 @@ async fn load_json_files<T: DeserializeOwned>(directory: &Path) -> Result<Vec<T>
     Ok(items)
 }
 
-//TODO: Заменить "Result<Vec<Entity>" на Generic для расширения функционала в будущем
+
 
 pub async fn save_to_disk<T: Storable + Serialize + Trashable>(
     storage_dir: &Path,
@@ -261,72 +264,88 @@ pub async fn delete_from_disk<T: Trashable + Storable>(storage_dir: &Path, item:
 }
 #[cfg(test)]
 mod tests {
+    use std::result;
+    use glh::Data;
     use super::*;
     use glyph_core::entities::project_entity::Project;
     use tempfile::tempdir;
     use uuid::Uuid;
+    #[test]
+    fn write_then_read_string() {
+        let dir = std::env::temp_dir();
+        let file_name = "pu-pu-pu.glh".to_string();
 
-    // #[tokio::test]
-    // async fn save_project(){
-    //     let dir = tempdir().unwrap();
-    //     let storage_dir = dir.path().to_path_buf();
-    //
-    //     let project : Project = Project::new(
-    //         Uuid::new_v4(),
-    //         "title",
-    //         "description",
-    //         "",
-    //         false
-    //     );
-    //
-    //     save_pending_entities(&storage_dir, project).await.unwrap();
-    // }
-    // #[tokio::test]
-    // async fn save_and_load_roundup() {
-    //     let dir = tempdir().unwrap(); // временная папка, удаляется сама в конце теста
-    //     let storage_dir = dir.path().to_path_buf();
-    //
-    //     let entity = Entity::new(
-    //         Uuid::new_v4(),
-    //         "Test",
-    //         "",
-    //         "",
-    //         "",
-    //         EntityType::Card,
-    //         vec![],
-    //         vec![],
-    //         vec![],
-    //         false
-    //     );
-    //
-    //     save_to_disk(&storage_dir, &entity).await.unwrap();
-    //     let loaded = load_entities(&storage_dir).await.unwrap();
-    //
-    //     assert_eq!(loaded.len(), 1);
-    //     assert_eq!(loaded[0].id, entity.id);
-    // }
-    //
-    // #[tokio::test]
-    // async fn load_projects_test() {
-    //     let dir = tempdir().unwrap(); // временная папка, удаляется сама в конце теста
-    //     let storage_dir = dir.path().to_path_buf();
-    //
-    //     let project = Project::new(
-    //         Uuid::new_v4(),
-    //         "Test project",
-    //         "Test project for testing",
-    //         "",
-    //         false
-    //     );
-    //
-    //     let result = save_to_disk(&storage_dir, &project).await;
-    //
-    //     assert!(result.is_ok());
-    //
-    //     let loaded = load_projects(&storage_dir).await.unwrap();
-    //
-    //     assert_eq!(loaded.len(), 1);
-    //     assert_eq!(loaded[0].id, project.id);
-    //     assert_eq!(loaded[0].title, "Test project");
-    // }
+        let write_result = glh::write(dir.clone(), file_name.clone(), "Hello");
+        assert!(write_result.is_ok(), "запись не удалась: {:?}", write_result);
+
+        let path = dir.join(&file_name);
+        let decoded = glh::read(&path).unwrap();
+
+        println!("Прочитанное значение: {:?}", decoded); // выведется только если запустить с --nocapture
+
+        assert_eq!(decoded, Data::String("Hello".to_string()));
+    }
+    #[tokio::test]
+    async fn save_project(){
+        let dir = tempdir().unwrap();
+        let storage_dir = dir.path().to_path_buf();
+
+        let project : Project = Project::new(
+            Uuid::new_v4(),
+            "title",
+            "description",
+            "",
+            false
+        );
+
+        save_pending_entities(&storage_dir, project).await.unwrap();
+    }
+    #[tokio::test]
+    async fn save_and_load_roundup() {
+        let dir = tempdir().unwrap(); // временная папка, удаляется сама в конце теста
+        let storage_dir = dir.path().to_path_buf();
+
+        let entity = Entity::new(
+            Uuid::new_v4(),
+            "Test",
+            "",
+            "",
+            "",
+            EntityType::Card,
+            vec![],
+            vec![],
+            vec![],
+            false
+        );
+
+        save_to_disk(&storage_dir, &entity).await.unwrap();
+        let loaded = load_entities(&storage_dir).await.unwrap();
+
+        assert_eq!(loaded.len(), 1);
+        assert_eq!(loaded[0].id, entity.id);
+    }
+
+    #[tokio::test]
+    async fn load_projects_test() {
+        let dir = tempdir().unwrap(); // временная папка, удаляется сама в конце теста
+        let storage_dir = dir.path().to_path_buf();
+
+        let project = Project::new(
+            Uuid::new_v4(),
+            "Test project",
+            "Test project for testing",
+            "",
+            false
+        );
+
+        let result = save_to_disk(&storage_dir, &project).await;
+
+        assert!(result.is_ok());
+
+        let loaded = load_projects(&storage_dir).await.unwrap();
+
+        assert_eq!(loaded.len(), 1);
+        assert_eq!(loaded[0].id, project.id);
+        assert_eq!(loaded[0].title, "Test project");
+    }
 }

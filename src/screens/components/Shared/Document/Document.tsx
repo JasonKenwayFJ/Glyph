@@ -21,9 +21,7 @@ const DocumentTemplate = ({ data, linksCount = 0, onClick }: DocumentProps) => {
     if (!data) {
         return (
             <div className="DocumentItem DocumentItemEmpty" onClick={onClick}>
-                <div className="DocumentIconWrapper DocumentIconWrapperEmpty">
-                    <i className="ti ti-plus" aria-hidden="true" />
-                </div>
+
                 <div className="DocumentBody" onClick={onClick}>
                     <h3 className="DocumentTitle DocumentTitleMuted">Создать документ</h3>
                     <p className="DocumentExcerpt">Начните новый диздок</p>

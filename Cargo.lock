@@ -1471,9 +1471,13 @@ dependencies = [
 
 [[package]]
 name = "glhserializer"
-version = "0.2.0"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ae4a6103097cb22d22db91bb329b7ac0434cfd13cf8222afd553aac2a6983563"
+checksum = "cbeb149646150a52f09403f2a5087de307d6cfc36b79c339b78500ad83e39252"
+dependencies = [
+ "serde",
+ "serde_json",
+]
 
 [[package]]
 name = "glib"
@@ -1534,7 +1538,6 @@ version = "0.1.0"
 dependencies = [
  "chrono",
  "dirs 7.0.0",
- "glhserializer",
  "reqwest",
  "serde",
  "serde_json",
@@ -4242,6 +4245,8 @@ name = "tglyph"
 version = "0.1.0"
 dependencies = [
  "commands",
+ "dirs 7.0.0",
+ "glhserializer",
  "glyph_core",
  "log",
  "serde",

@@ -1,9 +1,25 @@
+@media (max-width: 650px) {
+  .DocumentItemEmpty {
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    gap: 12px;
+    border: 0.5px dashed #b4b2a9;
+    color: #888780;
+    height: 11rem;
+    &:hover {
+      border-color: #5f5e5a;
+    }
+  }
+}
+
+
 .DocumentItem {
   display: flex;
   flex-direction: column;
   background: var(--backgroundDark);
   border: 0.5px solid var(--borderHover);
-  width: 15%;
+  width: 11rem;
   height: 11rem;
   border-radius: 12px;
   padding: 1rem 1.25rem;
@@ -18,10 +34,12 @@
 .DocumentItemEmpty {
   flex-direction: row;
   align-items: center;
+
   gap: 12px;
   border: 0.5px dashed #b4b2a9;
   color: #888780;
   height: 11rem;
+  width: 11rem;
   &:hover {
     border-color: #5f5e5a;
   }
@@ -38,7 +56,7 @@
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: #e6f1fb;
+  background: white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -46,7 +64,7 @@
 
   i {
     font-size: 16px;
-    color: #185fa5;
+    color: white;
   }
 }
 

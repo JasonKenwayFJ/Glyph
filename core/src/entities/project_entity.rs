@@ -4,7 +4,6 @@ use uuid::Uuid;
 use crate::entities::entity::{EntityType};
 use crate::traits::storable::Storable;
 use crate::traits::Trashable::Trashable;
-use glhserializer;
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Project {
@@ -17,7 +16,9 @@ pub struct Project {
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
     pub weight: i32,
+    #[serde(default)]
     pub is_pending: bool,
+    #[serde(default)]
     pub is_deleted: bool,
     deleted_at: Option<DateTime<Utc>>,
 }
