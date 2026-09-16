@@ -125,7 +125,7 @@ pub(crate) async fn save_to_disk<T: Storable + Serialize + Trashable>(
 ) -> Result<(), String>{
     let directory = directory_for_type(storage_dir, item.entity_type()).await?;
 
-    writing::write_typed(directory, item.storage_id().to_string(), item)
+    writing::write_typed(directory, item.file_name(), item)
 }
 pub async fn update_on_disk<T: Storable + Serialize + Trashable>(
     storage_dir: &Path,
@@ -135,7 +135,7 @@ pub async fn update_on_disk<T: Storable + Serialize + Trashable>(
 }
 pub async fn hard_delete<T: Trashable + Storable>(storage_dir: &Path, item: &T) -> Result<(), String> {
     let directory = directory_for_type(storage_dir, item.entity_type()).await?;
-    let file = directory.join(item.storage_id().to_string());
+    let file = directory.join(item.file_name());
 
     if fs::try_exists(&file)
         .await

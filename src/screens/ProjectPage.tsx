@@ -10,6 +10,7 @@ import {useNavigate} from "react-router-dom";
 const ProjectPage = () => {
 
     const navigate = useNavigate();
+
     function handleTilt(e: React.MouseEvent<HTMLDivElement>) {
         const card = e.currentTarget;
         const rect = card.getBoundingClientRect();
@@ -48,7 +49,7 @@ const ProjectPage = () => {
                 console.log(data)
                 setProjects(data ?? []);
                 setFiltered(data ?? [])
-            }catch (e) {
+            } catch (e) {
                 console.error(e)
             }
         }
@@ -94,6 +95,7 @@ const ProjectPage = () => {
         setCreator(false);
         setProjects(prev => [...prev, project]);
         setFiltered(prev => [...prev, project]);
+        await openProject(project);
         navigate("/mainPage");
     }
 

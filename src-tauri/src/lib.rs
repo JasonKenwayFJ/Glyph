@@ -36,8 +36,12 @@ pub fn run() {
             let app_handle = app.handle().clone();
 
             tauri::async_runtime::block_on(async move {
-                let storage_dir = app_handle.path().app_data_dir().expect("no app data dir");
+                let storage_dir = app_handle
+                    .path()
+                    .app_data_dir()
+                    .expect("no app data dir");
 
+                println!("Storage directory: {}", storage_dir.display());
                 let user_manager = app_handle.state::<UserManager>();
                 let project_manager = app_handle.state::<ProjectManager>();
                 let entity_manager = app_handle.state::<EntityManager>();
