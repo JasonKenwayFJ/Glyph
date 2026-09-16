@@ -1,4 +1,4 @@
-use crate::file_manager;
+use crate::glyph_fs;
 use glyph_core::entities::user_entity::User;
 use glyph_core::managers::user_manager::UserManager;
 use glyph_core::network::api_client::ApiClient;
@@ -49,7 +49,7 @@ pub async fn get_projects(
 
             println!("user_manager.get_user -> OK: {}", user.id);
 
-            let local_response = file_manager::load_projects(&app_data_dir).await?;
+            let local_response = glyph_fs::load_projects(&app_data_dir).await?;
             println!("load_projects -> {} projects", local_response.len());
 
             if local_response.is_empty() {
@@ -118,7 +118,7 @@ pub async fn create_project(
 
     println!("Saving project to disk...");
 
-    if let Err(error) = file_manager::save_to_disk(&app_data_dir, &project).await {
+    if let Err(error) = glyph_fs::save_to_disk(&app_data_dir, &project).await {
         println!("ERROR: Failed to save project to disk: {}", error);
         return Err(error);
     }

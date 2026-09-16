@@ -1,4 +1,4 @@
-use crate::file_manager;
+use crate::{glyph_fs};
 use glyph_core::entities::entity::{Entity, EntityType};
 use glyph_core::managers::entity_manager::EntityManager;
 use glyph_core::network::api_client::{ApiClient, ApiResponse};
@@ -22,7 +22,7 @@ pub async fn get_entities(
     let app_data_dir = app.path().app_data_dir().expect("no app data dir");
 
 
-    let loaded = file_manager::load_entities(&app_data_dir)
+    let loaded = glyph_fs::load_entities(&app_data_dir)
         .await?;
     entity_state.hydrate(loaded);
     entity_state.get_entities(entity_type, project.id)
@@ -57,7 +57,7 @@ pub async fn create_entity(
     }
 
 
-    file_manager::save_to_disk(&app_data_dir, &final_entity).await?;
+    glyph_fs::save_to_disk(&app_data_dir, &final_entity).await?;
 
     println!("Сущность успешно сохранена на диск");
 

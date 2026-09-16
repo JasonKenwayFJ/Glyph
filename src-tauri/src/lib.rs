@@ -1,6 +1,5 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 mod commands;
-pub mod file_manager;
 mod glyph_fs;
 
 use commands::entity_commands::{create_entity, delete_entity, get_entities, update_entity};
@@ -43,7 +42,7 @@ pub fn run() {
                 let project_manager = app_handle.state::<ProjectManager>();
                 let entity_manager = app_handle.state::<EntityManager>();
 
-                match file_manager::preload_data(&storage_dir).await {
+                match glyph_fs::preload_data(&storage_dir).await {
                     Ok(loaded) => {
                         user_manager.set_user(loaded.0);
                         project_manager.set_projects(loaded.1);
