@@ -14,10 +14,14 @@ pub async fn get_entities(
     entity_type: EntityType,
     project_state: tauri::State<'_, ProjectManager>,
 ) -> Result<Vec<Entity>, String> {
+
     let project = project_state.get_project().
         ok_or("No active project found".to_string())?;
+
+
     let app_data_dir = app.path().app_data_dir().expect("no app data dir");
-    println!("App data dir: {}", app_data_dir.display());
+
+
     let loaded = file_manager::load_entities(&app_data_dir)
         .await?;
     entity_state.hydrate(loaded);

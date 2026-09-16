@@ -1471,9 +1471,9 @@ dependencies = [
 
 [[package]]
 name = "glhserializer"
-version = "0.4.1"
+version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9593dc784e431d1ea4732d80d8d7717a18a8a5855fd6c16edb34d5de87933add"
+checksum = "f60f4de1dd5d416d95eb1e73be730979a859dd83d072b51b0959c41d12ba7a43"
 dependencies = [
  "serde",
  "serde_json",

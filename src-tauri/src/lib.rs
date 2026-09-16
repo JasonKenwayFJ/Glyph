@@ -1,6 +1,7 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 mod commands;
 pub mod file_manager;
+mod glyph_fs;
 
 use commands::entity_commands::{create_entity, delete_entity, get_entities, update_entity};
 use commands::project_commands::{create_project, get_project, get_projects, open_project};
