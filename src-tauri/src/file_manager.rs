@@ -7,7 +7,6 @@ use serde::de::DeserializeOwned;
 use serde::Serialize;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
-use glh;
 use tokio::fs;
 use tokio::fs::{File};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
@@ -27,7 +26,6 @@ pub async fn preload_data(storage_dir: &Path) -> Result<(User, Vec<Project>, Vec
     let user = load_user(storage_dir).await?;
     let projects = load_projects(storage_dir).await?;
     let entities = load_entities(storage_dir).await?;
-
     Ok((user, projects, entities))
 }
 
@@ -264,27 +262,12 @@ pub async fn delete_from_disk<T: Trashable + Storable>(storage_dir: &Path, item:
 }
 #[cfg(test)]
 mod tests {
-    use std::result;
-    use glh::Data;
+
     use super::*;
     use glyph_core::entities::project_entity::Project;
     use tempfile::tempdir;
     use uuid::Uuid;
-    #[test]
-    fn write_then_read_string() {
-        let dir = std::env::temp_dir();
-        let file_name = "pu-pu-pu.glh".to_string();
 
-        let write_result = glh::write(dir.clone(), file_name.clone(), "Hello");
-        assert!(write_result.is_ok(), "запись не удалась: {:?}", write_result);
-
-        let path = dir.join(&file_name);
-        let decoded = glh::read(&path).unwrap();
-
-        println!("Прочитанное значение: {:?}", decoded); // выведется только если запустить с --nocapture
-
-        assert_eq!(decoded, Data::String("Hello".to_string()));
-    }
     #[tokio::test]
     async fn save_project(){
         let dir = tempdir().unwrap();

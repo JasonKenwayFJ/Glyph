@@ -5,8 +5,9 @@ use crate::traits::storable::Storable;
 use crate::traits::Trashable::Trashable;
 
 //TODO: Добавить User в TS Enum, и перетащить Project на index[1]
-#[derive(Clone, Copy, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Copy, PartialEq, Serialize, Deserialize, Default)]
 pub enum EntityType{
+    #[default]
     User,
     Project,
     Card,

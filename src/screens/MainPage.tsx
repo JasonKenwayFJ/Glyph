@@ -58,10 +58,10 @@ const MainPage = () => {
                 {showCreator && (
                     <EntityCreator
                         onClose={() => setShowCreator(false)}
-                        onSaved={handleCreated}
                         entityType={EntityType.Document}
-                        prefillContent={content}
-                    />
+                        prefillContent={content} onSaved={function (): void {
+                        throw new Error("Function not implemented.");
+                    }}                    />
                 )}
 
             </div>

@@ -1,13 +1,14 @@
-use chrono::{DateTime, Utc};
+use chrono::{Date, DateTime, Local, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use crate::entities::entity::EntityType;
+use crate::entities::user_config::UserConfig;
 
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct User {
     pub id: Uuid,
-    pub token: String,
+    pub token: Option<String>,
     pub entity_type: EntityType,
     pub username: String,
     pub email: String,
@@ -18,7 +19,25 @@ pub struct User {
     pub is_subscribed: bool,
     pub subscription_expires_at: DateTime<Utc>
 }
+impl Default for User {
+    fn default() -> Self {
+        let config = UserConfig::default();
 
+        Self {
+            id: Uuid::new_v4(),
+            token: None,
+            entity_type: EntityType::User,
+            username: "Jabbo".to_string(),
+            email: "example@gmail.com".to_string(),
+            image_path: "/glyph-default-userpfp.png".to_string(),
+            created_at: Utc::now(),
+            user_config: serde_json::to_string(&config).unwrap(),
+            is_verified: false,
+            is_subscribed: false,
+            subscription_expires_at: Default::default(),
+        }
+    }
+}
 impl User {
     
     pub fn new(
@@ -31,7 +50,7 @@ impl User {
 
         User {
             id,
-            token: token.unwrap_or_else(|| String::new()),
+            token: Some(token.unwrap_or_else(|| String::new())),
             entity_type: EntityType::User,
             username,
             email,

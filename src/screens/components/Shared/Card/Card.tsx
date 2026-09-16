@@ -13,7 +13,7 @@ const Card = ({data, onClick}: CardProps) => {
         return (
             <div onClick={onClick} className="CardContainer">
             <h1 style={{fontSize: "3rem", textAlign: "center", userSelect: "none", cursor: "pointer"}}>+</h1>
-            <img className="CardImage" src={"/favicon.svg"}/>
+            <img className="CardImage" src={"/favicon.svg"} alt={""}/>
         </div>
         )
     }
@@ -26,7 +26,7 @@ const Card = ({data, onClick}: CardProps) => {
                 <button className="CardButton">✕</button>
             </div>
             <h1>{data.title}</h1>
-            <img className="CardImage" src={data.imagePath || "/tauri.svg"} alt={"Card Image"}/>
+            <img className="CardImage" src={data.imagePath} alt={"Card Image"}/>
             {!data.imagePath ? <button className="CardAddImage">
                 <p className="ButtonAddImageLabel">Добавить изображение</p>
             </button> : ""}

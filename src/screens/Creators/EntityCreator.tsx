@@ -18,12 +18,12 @@ type CharacteristicItem = {
 };
 
 type EntityCreatorProp<T> = {
-    onClose: () => void;
-    data?: T;
+    entityType: EntityType;
     mode?: CreatorMode;
-    entityType?: EntityType;
-    onSaved: () => void;
+    data?: T;
     prefillContent?: string;
+    onClose: () => void;
+    onSaved: () => void;
 };
 
 const EntityCreator = (props: EntityCreatorProp<Entity>) => {
@@ -31,11 +31,11 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
     const [isLoading, setLoading] = useState<boolean>(false)
 
     const [form, setForm] = useState<EntityDTO>({
-        entityType: props.data?.entityType ?? EntityType.Card,
+        entityType: props.entityType,
         title: props.data?.title ?? "",
         description: props.data?.description ?? "",
         content: props.data?.content ?? props.prefillContent ?? "",
-        imagePath: props.data?.imagePath ?? "",
+        imagePath: props.data?.imagePath ?? "/glyph-default-cover.svg",
         categories: props.data?.categories ?? [],
         tags: props.data?.tags ?? [],
         extraFields: props.data?.extraFields ?? [],

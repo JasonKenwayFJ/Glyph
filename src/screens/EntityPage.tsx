@@ -26,9 +26,11 @@ export const EntityPage = () => {
 
     useEffect(() => {
         const onCreating = listen<Entity>('OnEntityCreated', (event) => {
-            setEntities(prev => [...prev, event.payload])
+            if (event.payload.entityType !== entity_type) return;
+            setEntities(prev => [...prev, event.payload]);
         });
         const onDeleting = listen<Entity>('OnEntityDeleted', (event) => {
+            if (event.payload.entityType !== entity_type) return;
             setEntities(prev => prev.filter(e => e.id !== event.payload.id));
         });
         return () => {
@@ -62,7 +64,7 @@ export const EntityPage = () => {
 
     return (
         <div className={"EntityPageContainer"}>
-            {isCreator && <EntityCreator onSaved={onSave} onClose={() => setCreator(false)} mode={mode} data={entity}/>}
+            {isCreator && <EntityCreator entityType={entity_type!} onSaved={onSave} onClose={() => setCreator(false)} mode={mode} data={entity}/>}
             <div className={"SearcherContainer"}>
                 <Searcher placeholder={"Что ищем?"} value={""} setSearch={() => {
                 }}/>
@@ -73,16 +75,20 @@ export const EntityPage = () => {
             <div>
                 {entity_type === EntityType.Card && <CardContent
                     invokeCreator={toggleCreator}
-                    entities={entities} filteredEntities={filteredEntities}/>}
+                    entities={entities.filter(e=> e.entityType === entity_type)} filteredEntities={filteredEntities.filter(e=> e.entityType === entity_type)}/>}
+
                 {entity_type === EntityType.Document && <DocumentContent
                     invokeCreator={toggleCreator}
-                    entities={entities} filteredEntities={filteredEntities}/>}
+                    entities={entities.filter(e=> e.entityType === entity_type)}
+                    filteredEntities={filteredEntities.filter(e=> e.entityType === entity_type)}/>}
                 {entity_type === EntityType.Note && <NoteContent
                     invokeCreator={toggleCreator}
-                    entities={entities} filteredEntities={filteredEntities}/>}
+                    entities={entities.filter(e=> e.entityType === entity_type)}
+                    filteredEntities={filteredEntities.filter(e=> e.entityType === entity_type)}/>}
                 {entity_type === EntityType.Audio && <AudioContent
                     invokeCreator={toggleCreator}
-                    entities={entities} filteredEntities={filteredEntities}/>}
+                    entities={entities.filter(e=> e.entityType === entity_type)}
+                    filteredEntities={filteredEntities.filter(e=> e.entityType === entity_type)}/>}
                 {entity_type === EntityType.Video && <VideoContent
                     invokeCreator={toggleCreator}
                     entities={entities} filteredEntities={filteredEntities}/>}
@@ -94,7 +100,8 @@ export const EntityPage = () => {
                     entities={entities} filteredEntities={filteredEntities}/>}
                 {entity_type === EntityType.Task && <TaskContent
                     invokeCreator={toggleCreator}
-                    entities={entities} filteredEntities={filteredEntities}/>}
+                    entities={entities.filter(e=> e.entityType === entity_type)}
+                    filteredEntities={filteredEntities.filter(e=> e.entityType === entity_type)}/>}
                 {entity_type === EntityType.Trash && <TrashContent
                     invokeCreator={toggleCreator}
                     entities={entities} filteredEntities={filteredEntities}/>}
