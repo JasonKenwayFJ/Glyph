@@ -1,2 +1,3 @@
 pub mod storable;
-pub mod Trashable;
+pub mod trashable;
+pub mod entity;

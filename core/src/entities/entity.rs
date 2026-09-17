@@ -1,9 +1,10 @@
+use std::path::PathBuf;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use crate::traits::entity::EntityLike;
 use crate::traits::storable::Storable;
-use crate::traits::Trashable::Trashable;
-
+use crate::traits::trashable::Trashable;
 //TODO: Добавить User в TS Enum, и перетащить Project на index[1]
 #[derive(Clone, Copy, PartialEq, Serialize, Deserialize, Default)]
 pub enum EntityType{
@@ -25,10 +26,11 @@ pub enum EntityType{
 pub struct Entity {
     pub id: Uuid,
     pub project_id: Uuid,
+    pub user_id: Uuid,
     pub title: String,
     pub description: String,
     pub content: String,
-    pub image_path: String,
+    pub thumbnail: Option<PathBuf>,
     pub entity_type: EntityType,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
@@ -42,10 +44,11 @@ pub struct Entity {
 impl Entity {
     pub fn new(
         project_id: Uuid,
+        user_id: Uuid,
         title: &str,
         description: &str,
         content: &str,
-        image_path: &str,
+        thumbnail: Option<PathBuf>,
         entity_type: EntityType,
         categories: Vec<Characteristic>,
         tags: Vec<Characteristic>,
@@ -56,10 +59,11 @@ impl Entity {
         Entity {
             id: Uuid::new_v4(),
             project_id,
+            user_id,
             title: title.to_string(),
             description: description.to_string(),
             content: content.to_string(),
-            image_path: image_path.to_string(),
+            thumbnail,
             entity_type,
             created_at: now,
             updated_at: now,
@@ -74,6 +78,17 @@ impl Entity {
 
 
 }
+impl EntityLike for Entity{
+    fn id(&self) -> Uuid { self.id }
+    fn user_id(&self) -> Uuid { self.user_id }
+
+    fn project_id(&self) -> Uuid { self.project_id }
+
+    fn entity_type(&self) -> EntityType { self.entity_type }
+
+    fn thumbnail(&self) -> PathBuf { self.thumbnail.clone().unwrap_or_else(|| PathBuf::from("public/glyph-default-cover.svg")) }
+}
+
 impl Storable for Entity{
     fn storage_id(&self) -> Uuid{
         self.id

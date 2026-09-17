@@ -4,11 +4,10 @@ use glyph_core::entities::user_entity::User;
 use glyph_core::Project;
 use serde::de::DeserializeOwned;
 use std::path::{Path, PathBuf};
-use std::sync::atomic::{AtomicU64};
 use serde::Serialize;
 use tokio::fs;
 use glyph_core::traits::storable::Storable;
-use glyph_core::traits::Trashable::Trashable;
+use glyph_core::traits::trashable::Trashable;
 
 const USERS_DIRECTORY: &str = "Users";
 const ENTITIES_DIRECTORY: &str = "Entities";
@@ -58,11 +57,11 @@ pub async fn load_user(storage_dir: &Path) -> Result<User, String> {
         .map_err(|error| error.to_string())?
     {
         let user: User = User::default();
-        writing::write_typed(path, "User".to_string(), &user).map_err(|e| e.to_string())?;
+        writer::write_typed(path, "User".to_string(), &user).map_err(|e| e.to_string())?;
         return Ok(user);
     }
 
-    Ok(reading::read::<User>(&user_path)?)
+    Ok(reader::read::<User>(&user_path)?)
 }
 
 pub async fn load_projects(storage_dir: &Path) -> Result<Vec<Project>, String> {
@@ -112,7 +111,7 @@ async fn load_files<T: DeserializeOwned>(directory: &Path) -> Result<Vec<T>, Str
             continue;
         }
 
-        items.push(reading::read::<T>(&path)?);
+        items.push(reader::read::<T>(&path)?);
     }
 
     Ok(items)
@@ -125,7 +124,7 @@ pub(crate) async fn save_to_disk<T: Storable + Serialize + Trashable>(
 ) -> Result<(), String>{
     let directory = directory_for_type(storage_dir, item.entity_type()).await?;
 
-    writing::write_typed(directory, item.file_name(), item)
+    writer::write_typed(directory, item.file_name(), item)
 }
 pub async fn update_on_disk<T: Storable + Serialize + Trashable>(
     storage_dir: &Path,

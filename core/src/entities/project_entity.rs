@@ -1,9 +1,11 @@
+use std::path::PathBuf;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use crate::entities::entity::{EntityType};
+use crate::traits::entity::EntityLike;
 use crate::traits::storable::Storable;
-use crate::traits::Trashable::Trashable;
+use crate::traits::trashable::Trashable;
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Project {
@@ -12,7 +14,7 @@ pub struct Project {
     pub title: String,
     pub entity_type: EntityType,
     pub description: String,
-    pub image_path: String,
+    pub thumbnail: Option<PathBuf>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
     pub weight: i32,
@@ -28,7 +30,7 @@ impl Project {
         user_id: Uuid,
         title: &str,
         description: &str,
-        image_path: &str,
+        thumbnail: Option<PathBuf>,
         is_pending: bool) -> Self {
         let now = Utc::now();
         Project {
@@ -37,7 +39,7 @@ impl Project {
             title: title.to_string(),
             entity_type: EntityType::Project,
             description: description.to_string(),
-            image_path: image_path.to_string(),
+            thumbnail,
             created_at: now,
             updated_at: now,
             weight: 0,
@@ -47,6 +49,14 @@ impl Project {
         }
         
     }
+}
+impl EntityLike for Project{
+    fn id(&self) -> Uuid {self.id}
+    fn user_id(&self) -> Uuid {self.user_id}
+    fn project_id(&self) -> Uuid {self.id}
+    fn entity_type(&self) -> EntityType {self.entity_type}
+    fn thumbnail(&self) -> PathBuf { self.thumbnail.clone().unwrap_or_else(|| PathBuf::from("public/glyph-default-cover.svg")) }
+
 }
 impl Storable for Project{
     fn storage_id(&self) -> Uuid{

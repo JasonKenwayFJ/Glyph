@@ -1,7 +1,7 @@
-use chrono::{Date, DateTime, Local, Utc};
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use crate::entities::entity::EntityType;
+use crate::entities::entity::{EntityType};
 use crate::entities::user_config::UserConfig;
 
 #[derive(Clone, Serialize, Deserialize)]

@@ -552,12 +552,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "commands"
-version = "0.0.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "688226b9769bbf11a9d82a94fb4adda15793a6023d33a8ca7695dbafec6f4123"
-
-[[package]]
 name = "concurrent-queue"
 version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1471,9 +1465,9 @@ dependencies = [
 
 [[package]]
 name = "glhserializer"
-version = "0.4.3"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f60f4de1dd5d416d95eb1e73be730979a859dd83d072b51b0959c41d12ba7a43"
+checksum = "d2959f40c21d67dfa9ecd3228dd32fc34bc57d66c604b167b82d050004b5a1de"
 dependencies = [
  "serde",
  "serde_json",
@@ -4244,20 +4238,15 @@ dependencies = [
 name = "tglyph"
 version = "0.1.0"
 dependencies = [
- "commands",
- "dirs 7.0.0",
  "glhserializer",
  "glyph_core",
  "log",
  "serde",
- "serde_json",
  "tauri",
  "tauri-build",
  "tauri-plugin-log",
  "tauri-plugin-opener",
- "tempfile",
  "tokio",
- "uuid",
 ]
 
 [[package]]

@@ -1,5 +1,4 @@
 use chrono::{DateTime, Utc};
-use uuid::Uuid;
 
 pub trait Trashable {
     fn is_deleted(&self) -> bool;
