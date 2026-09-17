@@ -6,6 +6,7 @@ use serde::de::DeserializeOwned;
 use std::path::{Path, PathBuf};
 use serde::Serialize;
 use tokio::fs;
+use glyph_core::entities::trash_entity::Trash;
 use glyph_core::enums::entity_type::EntityType;
 use glyph_core::traits::storable::Storable;
 use glyph_core::traits::trashable::Trashable;
@@ -118,7 +119,7 @@ async fn load_files<T: DeserializeOwned>(directory: &Path) -> Result<Vec<T>, Str
 }
 
 
-pub(crate) async fn save_to_disk<T: Storable + Serialize>(
+pub async fn save_to_disk<T: Storable + Serialize>(
     storage_dir: &Path,
     item: &T
 ) -> Result<(), String>{
@@ -132,21 +133,17 @@ pub async fn update_on_disk<T: Storable + Serialize + Trashable>(
 ) -> Result<(), String> {
     save_to_disk(storage_dir, item).await
 }
-pub async fn hard_delete<T: Trashable + Storable>(storage_dir: &Path, item: &T) -> Result<(), String> {
-    let directory = directory_for_type(storage_dir, item.entity_type()).await?;
-    let file = directory.join(item.file_name());
 
-    if fs::try_exists(&file)
-        .await
-        .map_err(|error| format!("Не удалось проверить {}: {error}", file.display()))?
-    {
-        fs::remove_file(&file)
-            .await
-            .map_err(|error| format!("Не удалось удалить {}: {error}", file.display()))?;
-    }
+pub async fn restore<T : Trashable + Storable>(
+    storage_dir: &Path,
+    item: Trash<T>
+) -> Result<(), String>{
 
+    // let old_file_path = directory_for_type(storage_dir, item.entity_type()).await?;
+    let new_file_path = directory_for_type(storage_dir, item.trash.entity_type()).await?;
     Ok(())
 }
+
 pub async fn soft_delete<T: Trashable + Storable>(storage_dir: &Path, item: &T) -> Result<(), String> {
     let file_path = directory_for_type(storage_dir, item.entity_type()).await
         .map_err(|e| e.to_string())?
@@ -164,6 +161,21 @@ pub async fn soft_delete<T: Trashable + Storable>(storage_dir: &Path, item: &T) 
     fs::rename(file_path, new_path)
         .await
         .map_err(|e| e.to_string())?;
+
+    Ok(())
+}
+pub async fn hard_delete<T: Trashable + Storable>(storage_dir: &Path, item: &T) -> Result<(), String> {
+    let directory = directory_for_type(storage_dir, item.entity_type()).await?;
+    let file = directory.join(item.file_name());
+
+    if fs::try_exists(&file)
+        .await
+        .map_err(|error| format!("Не удалось проверить {}: {error}", file.display()))?
+    {
+        fs::remove_file(&file)
+            .await
+            .map_err(|error| format!("Не удалось удалить {}: {error}", file.display()))?;
+    }
 
     Ok(())
 }

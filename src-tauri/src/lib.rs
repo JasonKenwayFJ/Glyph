@@ -7,10 +7,11 @@ use commands::project_commands::{create_project, get_project, get_projects, open
 use commands::user_commands::{get_user, login, register};
 use glyph_core::managers::entity_manager::EntityManager;
 use glyph_core::managers::user_manager::UserManager;
+use glyph_core::managers::ai_chat_manager::AiChatManager;
+use glyph_core::managers::trash_manager::TrashManager;
 use glyph_core::network::api_client::ApiClient;
 use glyph_core::ProjectManager;
 use tauri::Manager;
-use glyph_core::managers::ai_chat_manager::AiChatManager;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -19,9 +20,10 @@ pub fn run() {
             ApiClient::new("https://glyphserver.onrender.com")
                 .expect("Не удалось создать HTTP-клиент"),
         )
+        .manage(UserManager::new())
         .manage(ProjectManager::new())
         .manage(EntityManager::new())
-        .manage(UserManager::new())
+        .manage(TrashManager::new())
         .manage(AiChatManager::new())
         .plugin(tauri_plugin_opener::init())
         .setup(|app| {
