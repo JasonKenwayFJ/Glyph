@@ -9,3 +9,4 @@ pub mod audio_entity;
 pub mod graph_entity;
 pub mod note_entity;
 pub mod table_entity;
+pub mod trash_entity;

@@ -2,7 +2,7 @@ use std::path::PathBuf;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use crate::entities::entity::EntityType;
+use crate::enums::entity_type::EntityType;
 use crate::traits::entity::EntityLike;
 
 #[derive(Clone, Serialize, Deserialize, PartialEq)]

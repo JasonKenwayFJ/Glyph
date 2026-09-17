@@ -2,7 +2,7 @@ use std::path::PathBuf;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use crate::entities::entity::{EntityType};
+use crate::enums::entity_type::EntityType;
 use crate::enums::source::Source;
 use crate::traits::entity::EntityLike;
 use crate::traits::storable::Storable;
@@ -77,6 +77,18 @@ impl Storable for Video{
     }
 }
 impl Trashable for Video{
+    fn trash_id(&self) -> Uuid {
+        self.id
+    }
+
+    fn trash_project_id(&self) -> Uuid {
+        self.project_id
+    }
+
+    fn trash_user_id(&self) -> Uuid {
+        self.user_id
+    }
+
     fn is_deleted(&self) -> bool {self.is_deleted}
 
     fn deleted_at(&self) -> Option<DateTime<Utc>> {self.deleted_at}

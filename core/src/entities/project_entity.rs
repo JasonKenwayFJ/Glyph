@@ -2,10 +2,9 @@ use std::path::PathBuf;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use crate::entities::entity::{EntityType};
+use crate::enums::entity_type::EntityType;
 use crate::traits::entity::EntityLike;
 use crate::traits::storable::Storable;
-use crate::traits::trashable::Trashable;
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Project {
@@ -64,20 +63,5 @@ impl Storable for Project{
     }
     fn entity_type(&self) -> EntityType{
         self.entity_type
-    }
-}
-impl Trashable for Project{
-    fn is_deleted(&self) -> bool {self.is_deleted}
-
-    fn deleted_at(&self) -> Option<DateTime<Utc>> {self.deleted_at}
-
-    fn move_to_trash(&mut self) {
-        self.is_deleted = true;
-        self.deleted_at = Some(Utc::now());
-    }
-
-    fn restore(&mut self) {
-        self.is_deleted = false;
-        self.deleted_at = None;
     }
 }

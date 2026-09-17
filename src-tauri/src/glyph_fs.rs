@@ -1,11 +1,12 @@
 use glh::functions::*;
-use glyph_core::entities::entity::{Entity, EntityType};
+use glyph_core::entities::entity::{Entity};
 use glyph_core::entities::user_entity::User;
 use glyph_core::Project;
 use serde::de::DeserializeOwned;
 use std::path::{Path, PathBuf};
 use serde::Serialize;
 use tokio::fs;
+use glyph_core::enums::entity_type::EntityType;
 use glyph_core::traits::storable::Storable;
 use glyph_core::traits::trashable::Trashable;
 
@@ -27,7 +28,6 @@ async fn directory_for_type(storage_dir: &Path, entity_type: EntityType) -> Resu
         EntityType::Video => storage_dir.join(ENTITIES_DIRECTORY).join("Video"),
         EntityType::Graph => storage_dir.join(ENTITIES_DIRECTORY).join("Graph"),
         EntityType::Table => storage_dir.join(ENTITIES_DIRECTORY).join("Table"),
-        EntityType::List => storage_dir.join(ENTITIES_DIRECTORY).join("List"),
         EntityType::Task => storage_dir.join(ENTITIES_DIRECTORY).join("Task"),
     };
     if !fs::try_exists(&path)
@@ -118,7 +118,7 @@ async fn load_files<T: DeserializeOwned>(directory: &Path) -> Result<Vec<T>, Str
 }
 
 
-pub(crate) async fn save_to_disk<T: Storable + Serialize + Trashable>(
+pub(crate) async fn save_to_disk<T: Storable + Serialize>(
     storage_dir: &Path,
     item: &T
 ) -> Result<(), String>{

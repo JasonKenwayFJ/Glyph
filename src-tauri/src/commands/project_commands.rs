@@ -1,8 +1,6 @@
 use crate::glyph_fs;
 use glyph_core::entities::user_entity::User;
 use glyph_core::managers::user_manager::UserManager;
-use glyph_core::network::api_client::ApiClient;
-use glyph_core::network::project_service;
 use glyph_core::{Project, ProjectManager};
 use tauri::{Emitter, Manager};
 
@@ -21,7 +19,6 @@ pub async fn get_projects(
     app: tauri::AppHandle,
     manager: tauri::State<'_, ProjectManager>,
     user_manager: tauri::State<'_, UserManager>,
-    _api_state: tauri::State<'_, ApiClient>,
 ) -> Result<Vec<Project>, String> {
     println!("=== get_projects START ===");
 
@@ -52,25 +49,25 @@ pub async fn get_projects(
             let local_response = glyph_fs::load_projects(&app_data_dir).await?;
             println!("load_projects -> {} projects", local_response.len());
 
-            if local_response.is_empty() {
-                println!("BRANCH: local projects EMPTY");
-
-                let response = project_service::get_projects(_api_state.inner(), &user.id)
-                    .await
-                    .map_err(|error| format!("Error getting projects: {}", error))?;
-
-                println!("API get_projects -> {} projects", response.len());
-
-                if response.is_empty() {
-                    println!("BRANCH: API projects EMPTY");
-                    println!("RETURN: empty Vec");
-                    return Ok(Vec::new());
-                }
-
-                println!("BRANCH: API projects NOT EMPTY");
-                println!("RETURN: {} API projects", response.len());
-                return Ok(Vec::from(response));
-            }
+            // if local_response.is_empty() {
+            //     println!("BRANCH: local projects EMPTY");
+            //
+            //     let response = project_service::get_projects(_api_state.inner(), &user.id)
+            //         .await
+            //         .map_err(|error| format!("Error getting projects: {}", error))?;
+            //
+            //     println!("API get_projects -> {} projects", response.len());
+            //
+            //     if response.is_empty() {
+            //         println!("BRANCH: API projects EMPTY");
+            //         println!("RETURN: empty Vec");
+            //         return Ok(Vec::new());
+            //     }
+            //
+            //     println!("BRANCH: API projects NOT EMPTY");
+            //     println!("RETURN: {} API projects", response.len());
+            //     return Ok(Vec::from(response));
+            // }
 
             println!("BRANCH: local projects NOT EMPTY");
             println!("RETURN: {} local projects", local_response.len());
@@ -84,7 +81,6 @@ pub async fn create_project(
     app: tauri::AppHandle,
     state: tauri::State<'_, ProjectManager>,
     user_state: tauri::State<'_, UserManager>,
-    _api_state: tauri::State<'_, ApiClient>,
     mut project: Project,
 ) -> Result<Project, String> {
     println!("=== CREATE PROJECT ===");
@@ -103,18 +99,18 @@ pub async fn create_project(
         .app_data_dir()
         .map_err(|error| error.to_string())?;
 
-    println!("Sending project to server...");
-
-    let response = project_service::create_project(_api_state.inner(), &project)
-        .await
-        .map_err(|error| {
-            println!("ERROR: Server request failed: {}", error);
-            error
-        });
-
-    if response.is_err() {
-        project.is_pending = true;
-    }
+    // println!("Sending project to server...");
+    // 
+    // let response = project_service::create_project(_api_state.inner(), &project)
+    //     .await
+    //     .map_err(|error| {
+    //         println!("ERROR: Server request failed: {}", error);
+    //         error
+    //     });
+    // 
+    // if response.is_err() {
+    //     project.is_pending = true;
+    // }
 
     println!("Saving project to disk...");
 

@@ -1,10 +1,10 @@
 use crate::{glyph_fs};
-use glyph_core::entities::entity::{Entity, EntityType};
+use glyph_core::entities::entity::{Entity};
 use glyph_core::managers::entity_manager::EntityManager;
-use glyph_core::network::api_client::{ApiClient, ApiResponse};
-use glyph_core::network::entity_service;
 use tauri::{Emitter, Manager};
 use glyph_core::dto_entities::entity_dto::EntityDto;
+use glyph_core::enums::entity_type::EntityType;
+use glyph_core::managers::user_manager::UserManager;
 use glyph_core::ProjectManager;
 
 #[tauri::command]
@@ -18,9 +18,7 @@ pub async fn get_entities(
     let project = project_state.get_project().
         ok_or("No active project found".to_string())?;
 
-
     let app_data_dir = app.path().app_data_dir().expect("no app data dir");
-
 
     let loaded = glyph_fs::load_entities(&app_data_dir)
         .await?;
@@ -32,14 +30,16 @@ pub async fn get_entities(
 #[tauri::command]
 pub async fn create_entity(
     app: tauri::AppHandle,
-    api_state: tauri::State<'_, ApiClient>,
+    user_state: tauri::State<'_, UserManager>,
     entity_state: tauri::State<'_, EntityManager>,
     project_state: tauri::State<'_, ProjectManager>,
     entity: EntityDto,
 ) -> Result<Entity, String> {
 
-    let project = project_state.get_project().
-        ok_or("No active project found".to_string())?;
+    let project_id = project_state.get_project().
+        ok_or("No active project found".to_string())?.id;
+    let user_id = user_state.get_user().
+        ok_or("No active user found".to_string())?.id;
 
     let app_data_dir = app
         .path()
@@ -47,14 +47,14 @@ pub async fn create_entity(
         .map_err(|error| error.to_string())?;
     println!("App data dir: {}", app_data_dir.display());
 
-    let mut final_entity = entity.get_entity(project.id);
+    let final_entity = entity.get_entity(project_id, user_id);
 
-    let response =
-        entity_service::create_entity::<()>(api_state.inner(), &final_entity).await;
-
-    if response.is_err(){
-        final_entity.is_pending = true;
-    }
+    // let response =
+    //     entity_service::create_entity::<()>(api_state.inner(), &final_entity).await;
+    //
+    // if response.is_err(){
+    //     final_entity.is_pending = true;
+    // }
 
 
     glyph_fs::save_to_disk(&app_data_dir, &final_entity).await?;
@@ -72,25 +72,35 @@ pub async fn create_entity(
 #[tauri::command]
 pub async fn update_entity(
     app: tauri::AppHandle,
-    api_state: tauri::State<'_, ApiClient>,
     entity_state: tauri::State<'_, EntityManager>,
     entity: Entity,
-) -> Result<ApiResponse<()>, String> {
-    let response = entity_service::update_entity::<()>(api_state.inner(), &entity).await?;
+) -> Result<(), String> {
+    let app_data_dir = app
+        .path()
+        .app_data_dir()
+        .map_err(|error| error.to_string())?;
+
     entity_state.update_entity_locally(&entity);
+    glyph_fs::update_on_disk(&app_data_dir, &entity).await?;
 
     app.emit("OnEntityUpdated", &entity).map_err(|e| e.to_string())?;
-    Ok(response)
+    Ok(())
 }
 #[tauri::command]
-pub async fn delete_entity(
+pub async fn soft_delete_entity(
     app: tauri::AppHandle,
-    api_state: tauri::State<'_, ApiClient>,
     entity_state: tauri::State<'_, EntityManager>,
     entity: Entity,
-) -> Result<ApiResponse<()>, String> {
-    let response = entity_service::delete_entity::<()>(api_state.inner(), &entity).await?;
+) -> Result<(), String> {
+    let app_data_dir = app
+        .path()
+        .app_data_dir()
+        .map_err(|error| error.to_string())?;
+
     entity_state.delete_entity_locally(&entity);
+    glyph_fs::soft_delete(&app_data_dir, &entity).await?;
+
     app.emit("OnEntityDeleted", &entity).map_err(|e| e.to_string())?;
-    Ok(response)
+    Ok(())
 }
+

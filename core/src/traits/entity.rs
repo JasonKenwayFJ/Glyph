@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 use uuid::Uuid;
-use crate::entities::entity::EntityType;
+use crate::enums::entity_type::EntityType;
 
 pub trait EntityLike{
     fn id(&self) -> Uuid;

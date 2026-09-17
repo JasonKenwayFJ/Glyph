@@ -2,24 +2,13 @@ use std::path::PathBuf;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use crate::enums::entity_type::EntityType;
+use crate::enums::source::Source;
 use crate::traits::entity::EntityLike;
 use crate::traits::storable::Storable;
 use crate::traits::trashable::Trashable;
 //TODO: Добавить User в TS Enum, и перетащить Project на index[1]
-#[derive(Clone, Copy, PartialEq, Serialize, Deserialize, Default)]
-pub enum EntityType{
-    #[default]
-    User,
-    Project,
-    Card,
-    Document,
-    Note,
-    Audio,
-    Video,
-    Graph,
-    Table,
-    Task,
-}
+
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Entity {
@@ -29,6 +18,7 @@ pub struct Entity {
     pub title: String,
     pub description: String,
     pub content: String,
+    pub thumbnail_source: Source,
     pub thumbnail: Option<PathBuf>,
     pub entity_type: EntityType,
     pub created_at: DateTime<Utc>,
@@ -47,6 +37,7 @@ impl Entity {
         title: &str,
         description: &str,
         content: &str,
+        thumbnail_source: Source,
         thumbnail: Option<PathBuf>,
         entity_type: EntityType,
         categories: Vec<Characteristic>,
@@ -62,6 +53,7 @@ impl Entity {
             title: title.to_string(),
             description: description.to_string(),
             content: content.to_string(),
+            thumbnail_source,
             thumbnail,
             entity_type,
             created_at: now,
@@ -97,6 +89,18 @@ impl Storable for Entity{
     }
 }
 impl Trashable for Entity{
+    fn trash_id(&self) -> Uuid {
+        self.id
+    }
+
+    fn trash_project_id(&self) -> Uuid {
+        self.project_id
+    }
+
+    fn trash_user_id(&self) -> Uuid {
+        self.user_id
+    }
+
     fn is_deleted(&self) -> bool {self.is_deleted}
 
     fn deleted_at(&self) -> Option<DateTime<Utc>> {self.deleted_at}

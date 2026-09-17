@@ -1,6 +1,9 @@
+use std::path::PathBuf;
 use serde::Deserialize;
 use uuid::Uuid;
-use crate::entities::entity::{Characteristic, Entity, EntityType, ExtraField};
+use crate::entities::entity::{Characteristic, Entity, ExtraField};
+use crate::enums::entity_type::EntityType;
+use crate::enums::source::Source;
 
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -9,7 +12,8 @@ pub struct EntityDto {
     title: String,
     description: String,
     content: String,
-    image_path: String,
+    thumbnail_source: Source,
+    thumbnail: Option<PathBuf>,
     categories: Vec<Characteristic>,
     tags: Vec<Characteristic>,
     extra_fields: Vec<ExtraField>
@@ -21,7 +25,8 @@ impl EntityDto {
         title: String,
         description: String,
         content: String,
-        image_path: String,
+        thumbnail_source: Source,
+        thumbnail: Option<PathBuf>,
         categories: Vec<Characteristic>,
         tags: Vec<Characteristic>,
         extra_fields: Vec<ExtraField>,
@@ -31,25 +36,28 @@ impl EntityDto {
             title,
             description,
             content,
-            image_path,
+            thumbnail_source,
+            thumbnail,
             categories,
             tags,
             extra_fields,
         }
     }
 
-    pub fn get_entity(self, project_id: Uuid) -> Entity{
+    pub fn get_entity(self, project_id: Uuid, user_id: Uuid) -> Entity {
         Entity::new(
             project_id,
+            user_id,
             &self.title,
             &self.description,
             &self.content,
-            &self.image_path,
+            self.thumbnail_source,
+            self.thumbnail,
             self.entity_type,
             self.categories,
             self.tags,
             self.extra_fields,
-            false
+            false,
         )
     }
 }

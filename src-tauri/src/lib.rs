@@ -2,7 +2,7 @@
 mod commands;
 mod glyph_fs;
 
-use commands::entity_commands::{create_entity, delete_entity, get_entities, update_entity};
+use commands::entity_commands::{create_entity, soft_delete_entity, get_entities, update_entity};
 use commands::project_commands::{create_project, get_project, get_projects, open_project};
 use commands::user_commands::{get_user, login, register};
 use glyph_core::managers::entity_manager::EntityManager;
@@ -72,7 +72,7 @@ pub fn run() {
             get_entities,
             create_entity,
             update_entity,
-            delete_entity,
+            soft_delete_entity,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -1,5 +1,5 @@
 use uuid::Uuid;
-use crate::entities::entity::EntityType;
+use crate::enums::entity_type::EntityType;
 
 pub trait Storable{
     fn storage_id(&self) -> Uuid;
