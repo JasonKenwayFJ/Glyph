@@ -6,3 +6,6 @@ pub mod entity;
 pub mod task_entity;
 pub mod video_entity;
 pub mod audio_entity;
+pub mod graph_entity;
+pub mod note_entity;
+pub mod table_entity;

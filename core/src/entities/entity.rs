@@ -18,7 +18,6 @@ pub enum EntityType{
     Video,
     Graph,
     Table,
-    List,
     Task,
 }
 #[derive(Clone, Serialize, Deserialize)]
