@@ -6,6 +6,7 @@ import MainPage from "../screens/MainPage.tsx";
 import EntityPage from "../screens/EntityPage.tsx";
 import LoginPage from "../screens/LoginPage.tsx";
 import {AccountPage} from "../screens/AccountPage.tsx";
+import {CodeEditorPage} from "../screens/CodeEditorPage.tsx";
 
 
 export const router = createHashRouter([
@@ -41,6 +42,10 @@ export const router = createHashRouter([
                 path: "projectPage",
                 element: <ProjectPage />,
             },
+            {
+                path: "codeEditorPage",
+                element: <CodeEditorPage/>
+            }
         ],
     },
 ]);
