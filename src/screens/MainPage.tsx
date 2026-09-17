@@ -1,14 +1,13 @@
 import Editor from "../components/Shared/Editor/Editor.tsx";
 import EntityCreator from "./Creators/EntityCreator.tsx";
-import {useNavigate, useParams} from "react-router-dom";
+// import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {Entity, EntityType} from "../types/Entities.ts";
-import {invoke} from "@tauri-apps/api/core";
+import {EntityType} from "../types/Entities.ts";
+// import {invoke} from "@tauri-apps/api/core";
 // import {invoke} from "@tauri-apps/api/core";
 import "./MainStyles/MainPageStyle.scss"
 const MainPage = () => {
-    const {id} = useParams()
-    const navigate = useNavigate();
+    // const {id} = useParams()
 
     useEffect(() => {
         const handleKeyDown = async (event: KeyboardEvent) => {
@@ -26,25 +25,25 @@ const MainPage = () => {
         }
     }, []);
 
-    const [document, setDocument] = useState<Entity | null>(null);
+    // const [document, setDocument] = useState<Entity | null>(null);
     const [content, setContent] = useState<string>("");
     const [showCreator, setShowCreator] = useState(false);
 
     const handleSave = async () => {
-        if (document) {
-            document.id = id!;
-            document.content = content;
-            await invoke('UpdateDocument', document);
-        } else {
-            setShowCreator(true);
-        }
+        // if (document) {
+        //     document.id = id!;
+        //     document.content = content;
+        //     await invoke('UpdateDocument', document);
+        // } else {
+        //     setShowCreator(true);
+        // }
     };
 
-    const handleCreated = (created: Entity) => {
-        setDocument(created);
-        setShowCreator(false);
-        navigate(`/mainPage/${created.id}`, {replace: true}); //Хз что за реплейс, предположу, что это замена документа, но свойства replace ниде нет
-    };
+    // const handleCreated = (created: Entity) => {
+    //     setDocument(created);
+    //     setShowCreator(false);
+    //     navigate(`/mainPage/${created.id}`, {replace: true}); //Хз что за реплейс, предположу, что это замена документа, но свойства replace ниде нет
+    // };
 
     return(
         <div className={"MainPageContainer"}>

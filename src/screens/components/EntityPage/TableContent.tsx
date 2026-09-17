@@ -1,6 +1,6 @@
-import {EntityPageContentProp} from "../../../types/LocalProps.ts";
 
-export const TableContent = (props : EntityPageContentProp) => {
+
+export const TableContent = () => {
     return (
         <div>
 

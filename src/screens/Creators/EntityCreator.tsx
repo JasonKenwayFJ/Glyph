@@ -2,8 +2,8 @@ import "./../MainStyles/Panels/EntityCreator.scss";
 import {useState} from "react";
 import "../../index.scss";
 
-import Category from "../../components/Shared/Category/Category.tsx";
-import Tag from "../../components/Shared/Tag/Tag.tsx";
+// import Category from "../../components/Shared/Category/Category.tsx";
+// import Tag from "../../components/Shared/Tag/Tag.tsx";
 import Dropdown from "../../components/Shared/Dropdown/Dropdown.tsx";
 import ImageUploader from "../../components/Shared/ImageUploader/ImageUploader.tsx";
 
@@ -11,11 +11,11 @@ import {CreatorMode, Entity, EntityType} from "../../types/Entities.ts";
 import {invoke} from "@tauri-apps/api/core";
 import {EntityDTO} from "../../types/DTO/EntityDTO.ts";
 
-type CharacteristicItem = {
-    id: string;
-    title: string;
-    isSelected: boolean;
-};
+// type CharacteristicItem = {
+//     id: string;
+//     title: string;
+//     isSelected: boolean;
+// };
 
 type EntityCreatorProp<T> = {
     entityType: EntityType;
@@ -42,10 +42,10 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
     });
 
 
-    const [selectedCategories, setSelectedCategories] = useState<CharacteristicItem[]>([]);
-    const [categories, setCategories] = useState<CharacteristicItem[]>([]);
-    const [selectedTags, setSelectedTags] = useState<CharacteristicItem[]>([]);
-    const [tags, setTags] = useState<CharacteristicItem[]>([]);
+    // const [selectedCategories, setSelectedCategories] = useState<CharacteristicItem[]>([]);
+    // const [categories, setCategories] = useState<CharacteristicItem[]>([]);
+    // const [selectedTags, setSelectedTags] = useState<CharacteristicItem[]>([]);
+    // const [tags, setTags] = useState<CharacteristicItem[]>([]);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
     function imageHandler(value: File | undefined) {
@@ -72,25 +72,25 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
         }));
     }
 
-    function addCategoryHandler(category: CharacteristicItem) {
-        setCategories(prev => prev.filter(cat => cat.id !== category.id));
-        setSelectedCategories(prev => [...prev, category]);
-    }
-
-    function removeCategoryHandler(category: CharacteristicItem) {
-        setCategories(prev => [...prev, category]);
-        setSelectedCategories(prev => prev.filter(cat => cat.id !== category.id));
-    }
-
-    function addTagHandler(tag: CharacteristicItem) {
-        setTags(prev => prev.filter(t => t.id !== tag.id));
-        setSelectedTags(prev => [...prev, tag]);
-    }
-
-    function removeTagHandler(tag: CharacteristicItem) {
-        setTags(prev => [...prev, tag]);
-        setSelectedTags(prev => prev.filter(t => t.id !== tag.id));
-    }
+    // function addCategoryHandler(category: CharacteristicItem) {
+    //     setCategories(prev => prev.filter(cat => cat.id !== category.id));
+    //     setSelectedCategories(prev => [...prev, category]);
+    // }
+    //
+    // function removeCategoryHandler(category: CharacteristicItem) {
+    //     setCategories(prev => [...prev, category]);
+    //     setSelectedCategories(prev => prev.filter(cat => cat.id !== category.id));
+    // }
+    //
+    // function addTagHandler(tag: CharacteristicItem) {
+    //     setTags(prev => prev.filter(t => t.id !== tag.id));
+    //     setSelectedTags(prev => [...prev, tag]);
+    // }
+    //
+    // function removeTagHandler(tag: CharacteristicItem) {
+    //     setTags(prev => [...prev, tag]);
+    //     setSelectedTags(prev => prev.filter(t => t.id !== tag.id));
+    // }
 
     async function processEntity() {
         setLoading(true)
@@ -144,15 +144,15 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
                             />
 
                             <div className="TagHandler">
-                                {selectedTags.map(tag => (
-                                    <Tag
-                                        key={tag.id}
-                                        id={tag.id}
-                                        title={tag.title}
-                                        onRemove={() => removeTagHandler(tag)}
-                                        isSelected={true}
-                                    />
-                                ))}
+                                {/*{selectedTags.map(tag => (*/}
+                                {/*    <Tag*/}
+                                {/*        key={tag.id}*/}
+                                {/*        id={tag.id}*/}
+                                {/*        title={tag.title}*/}
+                                {/*        onRemove={() => removeTagHandler(tag)}*/}
+                                {/*        isSelected={true}*/}
+                                {/*    />*/}
+                                {/*))}*/}
                             </div>
                         </div>
                     </div>
@@ -187,30 +187,30 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
                     <div className="EntityCreatorField">
                         <p>Выберите категории</p>
                         <div className="EntityCreatorCategories">
-                            {categories.map(category => (
-                                <Category
-                                    key={category.id}
-                                    id={category.id}
-                                    title={category.title}
-                                    onAdd={() => addCategoryHandler(category)}
-                                    isSelected={false}
-                                />
-                            ))}
+                            {/*{categories.map(category => (*/}
+                            {/*    <Category*/}
+                            {/*        key={category.id}*/}
+                            {/*        id={category.id}*/}
+                            {/*        title={category.title}*/}
+                            {/*        onAdd={() => addCategoryHandler(category)}*/}
+                            {/*        isSelected={false}*/}
+                            {/*    />*/}
+                            {/*))}*/}
                         </div>
                     </div>
 
                     <div className="EntityCreatorField">
                         <p>Выберите тег</p>
                         <div className="EntityCreatorCategories">
-                            {tags.map(tag => (
-                                <Tag
-                                    key={tag.id}
-                                    id={tag.id}
-                                    title={tag.title}
-                                    onAdd={() => addTagHandler(tag)}
-                                    isSelected={false}
-                                />
-                            ))}
+                            {/*{tags.map(tag => (*/}
+                            {/*    <Tag*/}
+                            {/*        key={tag.id}*/}
+                            {/*        id={tag.id}*/}
+                            {/*        title={tag.title}*/}
+                            {/*        onAdd={() => addTagHandler(tag)}*/}
+                            {/*        isSelected={false}*/}
+                            {/*    />*/}
+                            {/*))}*/}
                         </div>
                     </div>
 
@@ -275,15 +275,15 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
 
                     <div className="EntityCreatorButtonHandler">
                         <div className="EntitySelectedCategories">
-                            {selectedCategories.map(category => (
-                                <Category
-                                    key={category.id}
-                                    id={category.id}
-                                    title={category.title}
-                                    onRemove={() => removeCategoryHandler(category)}
-                                    isSelected={true}
-                                />
-                            ))}
+                            {/*{selectedCategories.map(category => (*/}
+                            {/*    <Category*/}
+                            {/*        key={category.id}*/}
+                            {/*        id={category.id}*/}
+                            {/*        title={category.title}*/}
+                            {/*        onRemove={() => removeCategoryHandler(category)}*/}
+                            {/*        isSelected={true}*/}
+                            {/*    />*/}
+                            {/*))}*/}
                         </div>
 
                         <div>

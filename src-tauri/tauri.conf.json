@@ -22,8 +22,23 @@
     }
   },
   "bundle": {
+    "windows": {
+      "nsis": {
+        "installerHooks": "./windows/hooks.nsi"
+      }
+    },
     "active": true,
     "targets": "all",
+    "resources": {
+      "icons/glh-file-icon.ico": "icons/glh-file-icon.ico"},
+    "fileAssociations": [
+      {
+        "ext": ["glh"],
+        "name": "GLH File",
+        "description": "Glyph binary data file",
+        "role": "Editor"
+      }
+    ],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -31,5 +46,6 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ]
+    }
   }
-}
+

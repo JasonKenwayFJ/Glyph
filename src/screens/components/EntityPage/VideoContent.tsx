@@ -1,6 +1,5 @@
-import {EntityPageContentProp} from "../../../types/LocalProps.ts";
 
-export const VideoContent = (props : EntityPageContentProp) => {
+export const VideoContent = () => {
     return (
         <div>
 

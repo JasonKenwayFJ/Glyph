@@ -3,10 +3,9 @@ import {useEffect, useRef, useState} from "react";
 import {router} from "../../../../router/router.tsx";
 import {listen} from '@tauri-apps/api/event'
 import {Project} from "../../../../types/Project.ts";
-import {useNavigate} from "react-router-dom";
 
 
-export const Toolbar = ({isCollapsed}: ToolbarProp) => {
+export const Toolbar = (isCollapsed : boolean) => {
 
     const [project, setProject] = useState<Project>();
 

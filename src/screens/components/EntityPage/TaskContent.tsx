@@ -1,8 +1,7 @@
-import {EntityPageContentProp} from "../../../types/LocalProps.ts";
 
 import {Task} from "../Shared/Task/Task.tsx";
 
-export const TaskContent = (props: EntityPageContentProp) => {
+export const TaskContent = () => {
 
     return (
         <div className={"TasksContainer"}>

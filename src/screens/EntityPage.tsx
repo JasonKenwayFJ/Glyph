@@ -1,15 +1,8 @@
 import {useParams} from "react-router-dom";
 import {CardContent} from "./components/EntityPage/CardContent.tsx";
-import {AudioContent} from "./components/EntityPage/AudioContent.tsx";
-import {VideoContent} from "./components/EntityPage/VideoContent.tsx";
-import {GraphContent} from "./components/EntityPage/GraphContent.tsx";
-import {TaskContent} from "./components/EntityPage/TaskContent.tsx";
-import {NoteContent} from "./components/EntityPage/NoteContent.tsx";
 import {DocumentContent} from "./components/EntityPage/DocumentContent.tsx";
-import {TableContent} from "./components/EntityPage/TableContent.tsx";
 import {Searcher} from "./components/Shared/Searcher.tsx";
 import "./MainStyles/EntityPageStyle.scss"
-import {TrashContent} from "./components/EntityPage/TrashContent.tsx";
 import {CreatorMode, Entity, EntityType} from "../types/Entities.ts";
 import {useEffect, useState} from "react";
 import EntityCreator from "./Creators/EntityCreator.tsx";
@@ -81,30 +74,30 @@ export const EntityPage = () => {
                     invokeCreator={toggleCreator}
                     entities={entities.filter(e=> e.entityType === entity_type)}
                     filteredEntities={filteredEntities.filter(e=> e.entityType === entity_type)}/>}
-                {entity_type === EntityType.Note && <NoteContent
-                    invokeCreator={toggleCreator}
-                    entities={entities.filter(e=> e.entityType === entity_type)}
-                    filteredEntities={filteredEntities.filter(e=> e.entityType === entity_type)}/>}
-                {entity_type === EntityType.Audio && <AudioContent
-                    invokeCreator={toggleCreator}
-                    entities={entities.filter(e=> e.entityType === entity_type)}
-                    filteredEntities={filteredEntities.filter(e=> e.entityType === entity_type)}/>}
-                {entity_type === EntityType.Video && <VideoContent
-                    invokeCreator={toggleCreator}
-                    entities={entities} filteredEntities={filteredEntities}/>}
-                {entity_type === EntityType.Graph && <GraphContent
-                    invokeCreator={toggleCreator}
-                    entities={entities} filteredEntities={filteredEntities}/>}
-                {entity_type === EntityType.Table && <TableContent
-                    invokeCreator={toggleCreator}
-                    entities={entities} filteredEntities={filteredEntities}/>}
-                {entity_type === EntityType.Task && <TaskContent
-                    invokeCreator={toggleCreator}
-                    entities={entities.filter(e=> e.entityType === entity_type)}
-                    filteredEntities={filteredEntities.filter(e=> e.entityType === entity_type)}/>}
-                {entity_type === EntityType.Trash && <TrashContent
-                    invokeCreator={toggleCreator}
-                    entities={entities} filteredEntities={filteredEntities}/>}
+                {/*{entity_type === EntityType.Note && <NoteContent*/}
+                {/*    invokeCreator={toggleCreator}*/}
+                {/*    entities={entities.filter(e=> e.entityType === entity_type)}*/}
+                {/*    filteredEntities={filteredEntities.filter(e=> e.entityType === entity_type)}/>}*/}
+                {/*{entity_type === EntityType.Audio && <AudioContent*/}
+                {/*    invokeCreator={toggleCreator}*/}
+                {/*    entities={entities.filter(e=> e.entityType === entity_type)}*/}
+                {/*    filteredEntities={filteredEntities.filter(e=> e.entityType === entity_type)}/>}*/}
+                {/*{entity_type === EntityType.Video && <VideoContent*/}
+                {/*    invokeCreator={toggleCreator}*/}
+                {/*    entities={entities} filteredEntities={filteredEntities}/>}*/}
+                {/*{entity_type === EntityType.Graph && <GraphContent*/}
+                {/*    invokeCreator={toggleCreator}*/}
+                {/*    entities={entities} filteredEntities={filteredEntities}/>}*/}
+                {/*{entity_type === EntityType.Table && <TableContent*/}
+                {/*    invokeCreator={toggleCreator}*/}
+                {/*    entities={entities} filteredEntities={filteredEntities}/>}*/}
+                {/*{entity_type === EntityType.Task && <TaskContent*/}
+                {/*    invokeCreator={toggleCreator}*/}
+                {/*    entities={entities.filter(e=> e.entityType === entity_type)}*/}
+                {/*    filteredEntities={filteredEntities.filter(e=> e.entityType === entity_type)}/>}*/}
+                {/*{entity_type === EntityType.Trash && <TrashContent*/}
+                {/*    invokeCreator={toggleCreator}*/}
+                {/*    entities={entities} filteredEntities={filteredEntities}/>}*/}
 
             </div>
 

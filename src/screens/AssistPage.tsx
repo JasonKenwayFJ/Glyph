@@ -20,9 +20,9 @@ const AIChat = () => {
         listRef.current?.scrollTo({top: listRef.current.scrollHeight, behavior: "smooth"});
     }, [messages]);
 
-    async function SendMessage(userMsg: message) {
-        
-    }
+    // async function SendMessage() {
+    //
+    // }
 
     async function sendRequest() {
         if (!textInput.trim() || isSending) return;
@@ -39,13 +39,13 @@ const AIChat = () => {
         setMessages((prev) => [...prev, userMsg]);
         setTextInput("");
         setSending(true);
-
-        try {
-            const response = await SendMessage(userMsg)
-            setMessages((prev) => [...prev, response]);
-        } finally {
-            setSending(false);
-        }
+        //
+        // try {
+        //     const response = await SendMessage(userMsg)
+        //     setMessages((prev) => [...prev, response]);
+        // } finally {
+        //     setSending(false);
+        // }
     }
 
     async function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {

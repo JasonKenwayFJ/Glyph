@@ -1,6 +1,5 @@
-import {EntityPageContentProp} from "../../../types/LocalProps.ts";
 
-export const TrashContent = (props : EntityPageContentProp) => {
+export const TrashContent = () => {
 
     return (
         <div>

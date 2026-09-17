@@ -9,7 +9,7 @@ import {
 } from "@tabler/icons-react";
 import {useState} from "react";
 import {Button} from "./Toolbar/SideBar.tsx";
-import {Toolbar} from "./Toolbar/Toolbar.tsx";
+// import {Toolbar} from "./Toolbar/Toolbar.tsx";
 import {ButtonSideBar} from "./Controls/ButtonSideBar.tsx";
 
 export const DesktopSideBar = ({onInvokeAssistEvent}: Button) => {
@@ -24,7 +24,7 @@ export const DesktopSideBar = ({onInvokeAssistEvent}: Button) => {
             <div className={`SidebarWindow ${isCollapsed ? "collapsed" : ""}`}>
                 <div className={`SidebarWindowCloser ${isCollapsed ? "collapsed" : ""}`}>
 
-                    {!isCollapsed && <Toolbar isCollapsed={isCollapsed}/>}
+                    {/*{!isCollapsed && <Toolbar isCollapsed={isCollapsed}/>}*/}
 
                     <div className={"MainSideButtons"}>
 

@@ -29,14 +29,14 @@ const LoginPage = () => {
     };
 
     async function logIn(email: string, password: string) {
-        e.preventDefault();
+        // e.preventDefault();
         let response: ApiResponse<string> = await invoke('login', {email, password})
         console.log(`Получен ответ: ${response.status}: UserId: ${response.data}`)
     }
 
-    async function signUp(username: string, email: string, password: string) {
-
-    }
+    // async function signUp(username: string, email: string, password: string) {
+    //
+    // }
 
     return (
         <form className="AuthorizationContainer" onSubmit={e => e.preventDefault()}>

@@ -1,6 +1,6 @@
-import {EntityPageContentProp} from "../../../types/LocalProps.ts";
 
-export const AudioContent = (props : EntityPageContentProp) =>{
+
+export const AudioContent = () =>{
     return(
         <div>
 
