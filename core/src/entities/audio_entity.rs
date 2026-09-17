@@ -2,54 +2,62 @@ use std::path::PathBuf;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use crate::entities::entity::{EntityType};
+use crate::entities::entity::EntityType;
 use crate::enums::source::Source;
 use crate::traits::entity::EntityLike;
 use crate::traits::storable::Storable;
 use crate::traits::trashable::Trashable;
 
-
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Video{
+pub struct Audio {
     pub id: Uuid,
     pub project_id: Uuid,
     pub user_id: Uuid,
     pub entity_type: EntityType,
+
     pub title: String,
     pub file_path: String,
-    pub video_source: Source,
+    pub audio_source: Source,
+
     pub thumbnail: Option<PathBuf>,
     pub duration: u64,
-    pub height: u32,
-    pub width: u32,
+
+    pub codec: String,
+    pub bitrate: u32,
+    pub sample_rate: u32,
+    pub channels: u8,
+
     pub is_pending: bool,
     pub is_deleted: bool,
+
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
     pub deleted_at: Option<DateTime<Utc>>,
 }
 
-impl Video {
+impl Audio {
     pub fn new(
         project_id: Uuid,
         user_id: Uuid,
         title: String,
         file_path: String,
-        video_source: Source,
-    ) -> Self {
+        audio_source: Source) -> Self
+    {
         Self {
             id: Uuid::new_v4(),
             project_id,
             user_id,
-            entity_type: EntityType::Video,
+            entity_type: EntityType::Audio,
             title,
             file_path,
-            video_source,
+            audio_source,
             thumbnail: None,
             duration: 0,
-            height: 0,
-            width: 0,
+            codec: String::new(),
+            bitrate: 0,
+            sample_rate: 0,
+            channels: 0,
             is_pending: false,
             is_deleted: false,
             created_at: Utc::now(),
@@ -58,7 +66,7 @@ impl Video {
         }
     }
 }
-impl EntityLike for Video{
+impl EntityLike for Audio{
     fn id(&self) -> Uuid { self.id }
     fn user_id(&self) -> Uuid { self.user_id }
 
@@ -68,7 +76,7 @@ impl EntityLike for Video{
 
     fn thumbnail(&self) -> PathBuf { self.thumbnail.clone().unwrap_or_else(|| PathBuf::from("public/glyph-default-cover.svg")) }
 }
-impl Storable for Video{
+impl Storable for Audio{
     fn storage_id(&self) -> Uuid{
         self.id
     }
@@ -76,7 +84,7 @@ impl Storable for Video{
         self.entity_type
     }
 }
-impl Trashable for Video{
+impl Trashable for Audio{
     fn is_deleted(&self) -> bool {self.is_deleted}
 
     fn deleted_at(&self) -> Option<DateTime<Utc>> {self.deleted_at}
