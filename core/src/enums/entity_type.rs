@@ -13,4 +13,5 @@ pub enum EntityType{
     Graph,
     Table,
     Task,
+    Plugin,
 }

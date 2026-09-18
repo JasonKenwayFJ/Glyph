@@ -1,6 +1,6 @@
-use glyph_core::entities::trash_entity::Trash;
-use glyph_core::managers::trash_manager::TrashManager;
-use glyph_core::traits::trashable::Trashable;
+// use glyph_core::entities::trash_entity::Trash;
+// use glyph_core::managers::trash_manager::TrashManager;
+// use glyph_core::traits::trashable::Trashable;
 use crate::glyph_fs;
 
 // #[tauri::command]

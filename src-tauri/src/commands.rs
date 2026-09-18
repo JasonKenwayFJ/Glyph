@@ -9,3 +9,4 @@ pub mod video_commands;
 pub mod table_commands;
 pub mod note_commands;
 pub mod trash_commands;
+pub mod plugin_commands;

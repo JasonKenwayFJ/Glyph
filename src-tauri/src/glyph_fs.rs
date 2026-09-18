@@ -6,12 +6,14 @@ use serde::de::DeserializeOwned;
 use std::path::{Path, PathBuf};
 use serde::Serialize;
 use tokio::fs;
+use glyph_core::entities::plugin::Plugin;
 use glyph_core::entities::trash_entity::Trash;
 use glyph_core::enums::entity_type::EntityType;
 use glyph_core::traits::storable::Storable;
 use glyph_core::traits::trashable::Trashable;
 
 const USERS_DIRECTORY: &str = "Users";
+const PLUGIN_DIRECTORY: &str = "Plugins";
 const ENTITIES_DIRECTORY: &str = "Entities";
 const PROJECTS_DIRECTORY: &str = "Projects";
 const PENDING_FILE_DIRECTORY: &str = "Entities/PendingFiles";
@@ -41,11 +43,25 @@ async fn directory_for_type(storage_dir: &Path, entity_type: EntityType) -> Resu
     }
     Ok(path)
 }
-pub async fn preload_data(storage_dir: &Path) -> Result<(User, Vec<Project>, Vec<Entity>), String> {
+pub async fn preload_data(storage_dir: &Path) -> Result<(User, Vec<Project>, Vec<Entity>, Option<Vec<Plugin>>), String> {
     let user = load_user(storage_dir).await?;
     let projects = load_projects(storage_dir).await?;
     let entities = load_entities(storage_dir).await?;
-    Ok((user, projects, entities))
+    let plugins = load_plugins(storage_dir).await?;
+    Ok((user, projects, entities, plugins))
+}
+
+pub async fn load_plugins(storage_dir: &Path) -> Result<Option<Vec<Plugin>>>{
+    if !fs::try_exists(storage_dir)
+        .await
+        .map_err(|error| error.to_string())?
+    {
+        fs::create_dir_all(storage_dir)
+            .await
+            .map_err(|error| error.to_string())?;
+    };
+    
+    
 }
 
 pub async fn load_user(storage_dir: &Path) -> Result<User, String> {
@@ -134,17 +150,17 @@ pub async fn update_on_disk<T: Storable + Serialize + Trashable>(
     save_to_disk(storage_dir, item).await
 }
 
-pub async fn restore<T : Trashable + Storable>(
+pub async fn _restore<T : Trashable + Storable>(
     storage_dir: &Path,
     item: Trash<T>
 ) -> Result<(), String>{
 
     // let old_file_path = directory_for_type(storage_dir, item.entity_type()).await?;
-    let new_file_path = directory_for_type(storage_dir, item.trash.entity_type()).await?;
+    directory_for_type(storage_dir, item.trash.entity_type()).await?;
     Ok(())
 }
 
-pub async fn soft_delete<T: Trashable + Storable>(storage_dir: &Path, item: &T) -> Result<(), String> {
+pub async fn _soft_delete<T: Trashable + Storable>(storage_dir: &Path, item: &T) -> Result<(), String> {
     let file_path = directory_for_type(storage_dir, item.entity_type()).await
         .map_err(|e| e.to_string())?
         .join(item.file_name());
@@ -164,7 +180,7 @@ pub async fn soft_delete<T: Trashable + Storable>(storage_dir: &Path, item: &T) 
 
     Ok(())
 }
-pub async fn hard_delete<T: Trashable + Storable>(storage_dir: &Path, item: &T) -> Result<(), String> {
+pub async fn _hard_delete<T: Trashable + Storable>(storage_dir: &Path, item: &T) -> Result<(), String> {
     let directory = directory_for_type(storage_dir, item.entity_type()).await?;
     let file = directory.join(item.file_name());
 

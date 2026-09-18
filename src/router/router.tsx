@@ -7,6 +7,7 @@ import EntityPage from "../screens/EntityPage.tsx";
 import LoginPage from "../screens/LoginPage.tsx";
 import {AccountPage} from "../screens/AccountPage.tsx";
 import {CodeEditorPage} from "../screens/CodeEditorPage.tsx";
+import {PluginRouter} from "./pluginRouter.tsx";
 
 
 export const router = createHashRouter([
@@ -45,6 +46,10 @@ export const router = createHashRouter([
             {
                 path: "codeEditorPage",
                 element: <CodeEditorPage/>
+            },
+            {
+                path: "plugin/:pageId",
+                element: <PluginRouter/>
             }
         ],
     },

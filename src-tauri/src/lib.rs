@@ -12,6 +12,7 @@ use glyph_core::managers::trash_manager::TrashManager;
 use glyph_core::network::api_client::ApiClient;
 use glyph_core::ProjectManager;
 use tauri::Manager;
+use glyph_core::managers::plugin_manager::PluginManager;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -20,6 +21,7 @@ pub fn run() {
             ApiClient::new("https://glyphserver.onrender.com")
                 .expect("Не удалось создать HTTP-клиент"),
         )
+        .manage(PluginManager::new())
         .manage(UserManager::new())
         .manage(ProjectManager::new())
         .manage(EntityManager::new())

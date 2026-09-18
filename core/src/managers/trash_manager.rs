@@ -1,5 +1,4 @@
 use std::sync::Mutex;
-use uuid::Uuid;
 use crate::entities::entity::Entity;
 
 pub struct TrashManager {

@@ -98,7 +98,7 @@ pub async fn soft_delete_entity(
         .map_err(|error| error.to_string())?;
 
     entity_state.delete_entity_locally(&entity);
-    glyph_fs::soft_delete(&app_data_dir, &entity).await?;
+    glyph_fs::_soft_delete(&app_data_dir, &entity).await?;
 
     app.emit("OnEntityDeleted", &entity).map_err(|e| e.to_string())?;
     Ok(())
