@@ -2,6 +2,7 @@ use std::path::PathBuf;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use crate::entities::entity::Entity;
 use crate::enums::entity_type::EntityType;
 use crate::enums::source::Source;
 use crate::traits::entity::EntityLike;
@@ -69,6 +70,8 @@ impl EntityLike for Video{
     fn thumbnail(&self) -> PathBuf { self.thumbnail.clone().unwrap_or_else(|| PathBuf::from("public/glyph-default-cover.svg")) }
 }
 impl Storable for Video{
+    fn file_name(&self) -> String {self.title.clone()}
+
     fn storage_id(&self) -> Uuid{
         self.id
     }

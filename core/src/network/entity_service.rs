@@ -14,6 +14,7 @@ fn define_path(entity_type: EntityType) -> String {
         EntityType::Task => "api/task/".parse().unwrap(),
         EntityType::Graph => "api/graph/".parse().unwrap(),
         EntityType::Table => "api/table/".parse().unwrap(),
+        EntityType::Plugin => "api/plugin/".parse().unwrap(),
     }
 }
 

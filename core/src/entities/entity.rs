@@ -81,6 +81,8 @@ impl EntityLike for Entity{
 }
 
 impl Storable for Entity{
+    fn file_name(&self) -> String {self.title.clone()}
+
     fn storage_id(&self) -> Uuid{
         self.id
     }

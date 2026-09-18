@@ -2,6 +2,7 @@ use std::path::PathBuf;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use crate::entities::entity::Entity;
 use crate::enums::entity_type::EntityType;
 use crate::traits::entity::EntityLike;
 use crate::traits::storable::Storable;
@@ -58,6 +59,8 @@ impl EntityLike for Project{
 
 }
 impl Storable for Project{
+    fn file_name(&self) -> String {self.title.clone()}
+
     fn storage_id(&self) -> Uuid{
         self.id
     }

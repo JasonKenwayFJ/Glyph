@@ -3,6 +3,7 @@ use glyph_core::entities::user_entity::User;
 use glyph_core::managers::user_manager::UserManager;
 use glyph_core::{Project, ProjectManager};
 use tauri::{Emitter, Manager};
+use crate::glyph_fs::{loader, writer};
 
 #[tauri::command]
 pub fn open_project(app: tauri::AppHandle, state: tauri::State<ProjectManager>, project: Project) {
@@ -46,7 +47,7 @@ pub async fn get_projects(
 
             println!("user_manager.get_user -> OK: {}", user.id);
 
-            let local_response = glyph_fs::load_projects(&app_data_dir).await?;
+            let local_response = loader::load_projects(&app_data_dir).await?;
             println!("load_projects -> {} projects", local_response.len());
 
             // if local_response.is_empty() {
@@ -114,7 +115,7 @@ pub async fn create_project(
 
     println!("Saving project to disk...");
 
-    if let Err(error) = glyph_fs::save_to_disk(&app_data_dir, &project).await {
+    if let Err(error) = writer::save_to_disk(&app_data_dir, &project).await {
         println!("ERROR: Failed to save project to disk: {}", error);
         return Err(error);
     }

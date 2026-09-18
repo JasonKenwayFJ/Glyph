@@ -89,7 +89,26 @@ impl PluginManager {
     pub fn add_plugin(&self, plugin: Plugin) -> Result<(), String> {
         let mut guard = self.plugins.lock().unwrap();
         let plugins = guard.as_mut().ok_or("Could not open the plugin list".to_string())?;
-        plugins.push(plugin);
+        plugins.push(plugin.clone());
+        Ok(())
+    }
+    
+    pub fn delete_plugin(&self, plugin_id: Uuid) -> Result<(), String> {
+        {
+            let mut guard = self.plugins.lock().unwrap();
+            let plugins = guard
+                .as_mut()
+                .ok_or("Plugins haven't been loaded".to_string())?.retain(|p| p.id == plugin_id);
+            
+        }
+
+        {
+            let mut guard = self.active_plugins.lock().unwrap();
+            let plugins = guard
+                .as_mut()
+                .ok_or("Plugins haven't been loaded".to_string())?.retain(|p| p.id == plugin_id);
+        }
+
         Ok(())
     }
 }

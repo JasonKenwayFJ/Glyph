@@ -13,6 +13,7 @@ use glyph_core::network::api_client::ApiClient;
 use glyph_core::ProjectManager;
 use tauri::Manager;
 use glyph_core::managers::plugin_manager::PluginManager;
+use glyph_fs::loader;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -50,7 +51,7 @@ pub fn run() {
                 let project_manager = app_handle.state::<ProjectManager>();
                 let entity_manager = app_handle.state::<EntityManager>();
 
-                match glyph_fs::preload_data(&storage_dir).await {
+                match loader::preload_data(&storage_dir).await {
                     Ok(loaded) => {
                         user_manager.set_user(loaded.0);
                         project_manager.set_projects(loaded.1);
