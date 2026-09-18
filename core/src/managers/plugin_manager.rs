@@ -15,8 +15,18 @@ impl PluginManager {
         }
     }
 
+    pub fn get_plugin(&self, plugin_id: Uuid) -> Option<Plugin>{
+        self.plugins
+            .lock()
+            .unwrap()
+            .as_ref()?
+            .iter()
+            .find(|plugin| plugin.id == plugin_id)
+            .cloned()
+    }
 
-    pub fn get_all_plugins(&self) -> Option<Vec<Plugin>>{
+
+    pub fn get_all_plugins(&self) -> Option<Vec<Plugin>> {
          self.plugins.lock().unwrap().clone()
     }
     pub fn get_active_plugins(&self) -> Option<Vec<Plugin>>{
@@ -92,14 +102,14 @@ impl PluginManager {
         plugins.push(plugin.clone());
         Ok(())
     }
-    
+
     pub fn delete_plugin(&self, plugin_id: Uuid) -> Result<(), String> {
         {
             let mut guard = self.plugins.lock().unwrap();
             let plugins = guard
                 .as_mut()
                 .ok_or("Plugins haven't been loaded".to_string())?.retain(|p| p.id == plugin_id);
-            
+
         }
 
         {
