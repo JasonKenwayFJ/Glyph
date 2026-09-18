@@ -1,37 +1,34 @@
 export const glyphApiDeclarationSource = `
 declare namespace Glyph {
-    interface ButtonOptions {
-        /** Уникальный идентификатор кнопки */
-        id: string;
-        /** Тип кнопки: 'nav' — переход по ссылке, 'action' — вызов функции по клику */
-        type: 'nav' | 'action';
+    export namespace ui {
+        interface ButtonOptions {
+            id: string;
+            type: 'nav' | 'action';
+            label: string;
+            icon: string;
+            order: number;
+            path?: string;
+            onClick?: () => void;
+        }
 
-        /** Текст, отображаемый на кнопке */
-        label: string;
-        /** Название иконки: 'settings' | 'trash' | 'favorite' | ... */
-        icon: string;
-        /** Порядок отображения — меньше значит выше в списке */
-        order: number;
-        /** Путь для навигационной кнопки (переход по клику) — ОБЯЗАТЕЛЕН, если type: 'nav' */
-        path?: string;
-        /** Обработчик клика для кнопки-действия — ОБЯЗАТЕЛЕН, если type: 'action' */
-        onClick?: () => void;
+        interface PageOptions {
+            path: string;
+            content: string;
+        }
+
+        export function createButton(options: ButtonOptions): void;
+        export function createPage(options: PageOptions): void;
     }
 
-    interface WindowOptions {
-        /** Путь до страницы. Пример: '/newWindow' */
-        path: string;
+    export namespace plugin {
+        interface InfoOptions {
+            name: string;
+            version: string;
+            author: string;
+            tags: string[];
+        }
 
-        /** HTML разметка */
-        content: string;
-        /** Кнопка по которому открывается новая страница */
-        button: ButtonOptions;
+        export function setInfo(options: InfoOptions): void;
     }
-
-    /** Добавляет кнопку в боковую панель */
-    function registerButton(options: ButtonOptions): void;
-    function unregisterButton(options: ButtonOptions): void;
-
-    function createWindow(options: WindowOptions): void;
 }
 `;

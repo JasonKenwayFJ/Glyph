@@ -1,34 +1,61 @@
 use crate::glyph_fs::{deleter, loader, writer};
+use glyph_core::dto_entities::plugin_dto::PluginDto;
 use glyph_core::entities::plugin::Plugin;
 use glyph_core::managers::plugin_manager::PluginManager;
+use glyph_core::traits::storable::Storable;
 use tauri::{Emitter, Manager};
+use tokio::fs;
 
 #[tauri::command]
 pub async fn _get_plugins(
     app: tauri::AppHandle,
     _manager: tauri::State<'_, PluginManager>,
 ) -> Result<Vec<Plugin>, String> {
-    let document_folder = app
-        .path()
-        .document_dir()
-        .map_err(|error| error.to_string())?;
-
-    let plugs = loader::load_plugins(&document_folder).await;
-    plugs
+    let plugin_list = _manager.get_all_plugins();
+    app.emit("OnAllPluginsGet", &plugin_list).map_err(|e| e.to_string())?;
+    Ok(plugin_list)
 }
 
 #[tauri::command]
 pub async fn _get_active_plugins(
     app: tauri::AppHandle,
-    manager: PluginManager
+    manager: PluginManager,
 ) -> Result<(), String> {
-    let plugins = manager.get_active_plugins().ok_or("Error while getting active plugins".to_string())?;
-    app.emit("OnPluginDeactivated", plugins)
+    let plugins = manager.get_active_plugins();
+    app.emit("OnActivePluginGot", plugins)
         .map_err(|e| e.to_string())
 }
 
 #[tauri::command]
 pub async fn _create_plugins(
+    app: tauri::AppHandle,
+    manager: tauri::State<'_, PluginManager>,
+    plugin_dto: PluginDto,
+) -> Result<(), String> {
+    let document_folder = app
+        .path()
+        .document_dir()
+        .map_err(|error| error.to_string())?;
+
+    let mut plugin = plugin_dto.get_plugin();
+    writer::save_to_disk(&document_folder, &plugin)
+        .await
+        .map_err(|e| e.to_string())?;
+
+    let file_path = document_folder.join(plugin.file_path());
+
+    plugin.size = fs::metadata(file_path)
+        .await
+        .map_err(|e| e.to_string())?
+        .len();
+
+    manager.add_plugin(plugin.clone())?;
+    app.emit("OnPluginCreated", plugin)
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub async fn _delete_plugins(
     app: tauri::AppHandle,
     manager: tauri::State<'_, PluginManager>,
     plugin: Plugin,
@@ -38,29 +65,10 @@ pub async fn _create_plugins(
         .document_dir()
         .map_err(|error| error.to_string())?;
 
-    writer::save_to_disk(&document_folder, &plugin)
-        .await
-        .map_err(|e| e.to_string())?;
-    manager.add_plugin(plugin.clone())?;
-    app.emit("OnPluginCreated", plugin)
-        .map_err(|e| e.to_string())
-}
-
-#[tauri::command]
-pub async fn _delete_plugins(
-    app: tauri::AppHandle,
-    manager: PluginManager,
-    plugin: Plugin,
-) -> Result<(), String> {
-    let document_folder = app
-        .path()
-        .document_dir()
-        .map_err(|error| error.to_string())?;
-
-    manager.delete_plugin(plugin.id)?;
     deleter::_hard_delete(&document_folder, &plugin)
         .await
         .map_err(|e| e.to_string())?;
+    manager.delete_plugin(plugin.id)?;
     app.emit("OnPluginDeleted", plugin)
         .map_err(|e| e.to_string())
 }
@@ -68,9 +76,12 @@ pub async fn _delete_plugins(
 #[tauri::command]
 pub async fn _activate_plugin(
     app: tauri::AppHandle,
-    manager: PluginManager,
-    plugin: Plugin) -> Result<(), String>{
-    manager.activate_plugin(plugin.id).map_err(|e| e.to_string())?;
+    manager: tauri::State<'_, PluginManager>,
+    plugin: Plugin,
+) -> Result<(), String> {
+    manager
+        .activate_plugin(plugin.id)
+        .map_err(|e| e.to_string())?;
     app.emit("OnPluginActivated", plugin)
         .map_err(|e| e.to_string())
 }
@@ -78,9 +89,12 @@ pub async fn _activate_plugin(
 #[tauri::command]
 pub async fn _deactivate_plugin(
     app: tauri::AppHandle,
-    manager: PluginManager,
-    plugin: Plugin) -> Result<(), String>{
-    manager.deactivate_plugin(plugin.id).map_err(|e| e.to_string())?;
+    manager: tauri::State<'_, PluginManager>,
+    plugin: Plugin,
+) -> Result<(), String> {
+    manager
+        .deactivate_plugin(plugin.id)
+        .map_err(|e| e.to_string())?;
     app.emit("OnPluginDeactivated", plugin)
         .map_err(|e| e.to_string())
 }
