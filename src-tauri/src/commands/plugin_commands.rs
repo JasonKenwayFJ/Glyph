@@ -12,7 +12,8 @@ pub async fn _get_plugins(
     _manager: tauri::State<'_, PluginManager>,
 ) -> Result<Vec<Plugin>, String> {
     let plugin_list = _manager.get_all_plugins();
-    app.emit("OnAllPluginsGet", &plugin_list).map_err(|e| e.to_string())?;
+    app.emit("OnAllPluginsGet", &plugin_list)
+        .map_err(|e| e.to_string())?;
     Ok(plugin_list)
 }
 
@@ -26,6 +27,18 @@ pub async fn _get_active_plugins(
         .map_err(|e| e.to_string())
 }
 
+#[tauri::command]
+pub async fn export_plugin(app: tauri::AppHandle, plugin_dto: PluginDto) -> Result<(), String> {
+    let document_folder = app
+        .path()
+        .document_dir()
+        .map_err(|error| error.to_string())?;
+
+    let plugin = plugin_dto.get_plugin();
+    writer::save_to_disk(&document_folder, &plugin)
+        .await
+        .map_err(|e| e.to_string())
+}
 #[tauri::command]
 pub async fn _create_plugins(
     app: tauri::AppHandle,

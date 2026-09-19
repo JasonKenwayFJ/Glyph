@@ -47,7 +47,9 @@ pub struct Plugin {
     pub size: u64,
     pub enabled: bool,
     pub entity_type: EntityType,
-    pub code: String,
+    pub js_code: String,
+    pub html_code: String,
+    pub css_code: String,
 }
 impl Plugin {
     pub fn new(
@@ -60,7 +62,9 @@ impl Plugin {
         glyph_version: String,
         size: u64,
         enabled: bool,
-        code: String
+        js_code: String,
+        html_code: String,
+        css_code: String,
         
     ) -> Self {
         Plugin{
@@ -73,7 +77,9 @@ impl Plugin {
             glyph_version,
             size,
             enabled,
-            code,
+            js_code,
+            html_code,
+            css_code,
             entity_type: EntityType::Plugin
         }
     }

@@ -4,11 +4,15 @@
   flex-direction: column;
   align-items: center;
 
+  .EditorButtons{
+
+    align-self: end;
   .ApplyCodeButton {
     background-color: transparent;
-    justify-self: center;
+    justify-self: right;
     border: none;
     margin: 10px;
+  }
   }
   .EditorTabs{
     display: flex;

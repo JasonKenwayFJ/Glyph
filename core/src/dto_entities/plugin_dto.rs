@@ -11,7 +11,9 @@ pub struct PluginDto {
     author: String,
     tags: Vec<PluginTag>,
     glyph_version: String,
-    code: String,   // сам исполняемый JS-текст из редактора
+    js_code: String,
+    html_code: String,
+    css_code: String,
 }
 
 impl PluginDto {
@@ -26,11 +28,13 @@ impl PluginDto {
             self.glyph_version.clone(),
             0,
             false,
-            self.code.clone(),
+            self.css_code.clone(),
+            self.html_code.clone(),
+            self.js_code.clone(),
         )
     }
 
-    pub fn code(&self) -> &str {
-        &self.code
+    pub fn code(&self) -> (&str, &str, &str) {
+        (&self.js_code, &self.html_code, &self.css_code)
     }
 }
