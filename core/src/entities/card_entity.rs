@@ -1,15 +1,16 @@
-use crate::enums::entity::{Characteristic, ExtraField};
+use crate::entities::document_entity::{Characteristic, ExtraField};
 use crate::enums::entity_type::EntityType;
 use crate::enums::source::Source;
 use crate::traits::entity::EntityLike;
 use crate::traits::storable::Storable;
 use crate::traits::trashable::Trashable;
+use crate::Project;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
-use uuid::Uuid;
-use crate::entities::document_entity::{Characteristic, ExtraField};
 use ts_rs::TS;
+use uuid::Uuid;
+
 #[derive(Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Card {
@@ -45,7 +46,7 @@ impl Card {
         categories: Vec<Characteristic>,
         tags: Vec<Characteristic>,
         extra_fields: Vec<ExtraField>,
-        is_pending: bool
+        is_pending: bool,
     ) -> Self {
         let now = Utc::now();
         Card {
@@ -69,51 +70,70 @@ impl Card {
         }
     }
 }
-    impl EntityLike for Card{
-        fn id(&self) -> Uuid { self.id }
-        fn user_id(&self) -> Uuid { self.user_id }
-
-        fn project_id(&self) -> Uuid { self.project_id }
-
-        fn entity_type(&self) -> EntityType { self.entity_type }
-
-        fn thumbnail(&self) -> PathBuf { self.thumbnail.clone().unwrap_or_else(|| PathBuf::from("public/glyph-default-cover.svg")) }
+impl EntityLike for Card {
+    fn id(&self) -> Uuid {
+        self.id
+    }
+    fn user_id(&self) -> Uuid {
+        self.user_id
+    }
+    fn project_id(&self) -> Uuid {
+        self.id
+    }
+    fn entity_type(&self) -> EntityType {
+        self.entity_type
+    }
+    fn thumbnail(&self) -> PathBuf {
+        self.thumbnail
+            .clone()
+            .unwrap_or_else(|| PathBuf::from("public/glyph-default-cover.svg"))
     }
 
-    impl Storable for Card{
-        fn file_name(&self) -> String {self.title.clone()}
-
-        fn storage_id(&self) -> Uuid{
-            self.id
-        }
-        fn entity_type(&self) -> EntityType{
-            self.entity_type
-        }
+    fn clone_box(&self) -> Box<dyn EntityLike> {
+        Box::new(self.clone())
     }
-    impl Trashable for Card{
-        fn trash_id(&self) -> Uuid {
-            self.id
-        }
+}
 
-        fn trash_project_id(&self) -> Uuid {
-            self.project_id
-        }
-
-        fn trash_user_id(&self) -> Uuid {
-            self.user_id
-        }
-
-        fn is_deleted(&self) -> bool {self.is_deleted}
-
-        fn deleted_at(&self) -> Option<DateTime<Utc>> {self.deleted_at}
-
-        fn move_to_trash(&mut self) {
-            self.is_deleted = true;
-            self.deleted_at = Some(Utc::now());
-        }
-
-        fn restore(&mut self) {
-            self.is_deleted = false;
-            self.deleted_at = None;
-        }
+impl Storable for Card {
+    fn file_name(&self) -> String {
+        self.title.clone()
     }
+
+    fn storage_id(&self) -> Uuid {
+        self.id
+    }
+    fn entity_type(&self) -> EntityType {
+        self.entity_type
+    }
+}
+impl Trashable for Card {
+    fn trash_id(&self) -> Uuid {
+        self.id
+    }
+
+    fn trash_project_id(&self) -> Uuid {
+        self.project_id
+    }
+
+    fn trash_user_id(&self) -> Uuid {
+        self.user_id
+    }
+
+    fn is_deleted(&self) -> bool {
+        self.is_deleted
+    }
+
+    fn deleted_at(&self) -> Option<DateTime<Utc>> {
+        self.deleted_at
+    }
+
+    fn move_to_trash(&mut self) {
+        self.is_deleted = true;
+        self.deleted_at = Some(Utc::now());
+    }
+
+    fn restore(&mut self) {
+        self.is_deleted = false;
+        self.deleted_at = None;
+    }
+}

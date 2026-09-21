@@ -3,7 +3,7 @@ use crate::entities::helpers::dto::DataObject;
 use crate::entities::user_entity::User;
 use crate::enums::entity::Entity;
 use crate::enums::source::Source;
-#[derive(Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct UserDto{
     pub user_name: String,

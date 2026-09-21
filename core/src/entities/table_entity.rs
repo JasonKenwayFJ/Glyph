@@ -15,7 +15,7 @@ pub struct TableRow {
     pub id: Uuid,
     pub cells: Vec<String>,
 }
-#[derive(Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Table{
     pub id: Uuid,

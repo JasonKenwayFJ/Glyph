@@ -2,6 +2,7 @@ use std::path::PathBuf;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use crate::entities::card_entity::Card;
 use crate::enums::entity_type::EntityType;
 use crate::enums::source::Source;
 use crate::traits::entity::EntityLike;
@@ -69,15 +70,28 @@ impl Document {
 
 
 }
-impl EntityLike for Document{
-    fn id(&self) -> Uuid { self.id }
-    fn user_id(&self) -> Uuid { self.user_id }
+impl EntityLike for Document {
+    fn id(&self) -> Uuid {
+        self.id
+    }
+    fn user_id(&self) -> Uuid {
+        self.user_id
+    }
+    fn project_id(&self) -> Uuid {
+        self.id
+    }
+    fn entity_type(&self) -> EntityType {
+        self.entity_type
+    }
+    fn thumbnail(&self) -> PathBuf {
+        self.thumbnail
+            .clone()
+            .unwrap_or_else(|| PathBuf::from("public/glyph-default-cover.svg"))
+    }
 
-    fn project_id(&self) -> Uuid { self.project_id }
-
-    fn entity_type(&self) -> EntityType { self.entity_type }
-
-    fn thumbnail(&self) -> PathBuf { self.thumbnail.clone().unwrap_or_else(|| PathBuf::from("public/glyph-default-cover.svg")) }
+    fn clone_box(&self) -> Box<dyn EntityLike> {
+        Box::new(self.clone())
+    }
 }
 
 impl Storable for Document{

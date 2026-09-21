@@ -16,7 +16,7 @@ use uuid::Uuid;
 use crate::dto_entities::project_dto::ProjectDto;
 use crate::enums::source::Source;
 
-#[derive(Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Project {
     pub id: Uuid,
@@ -116,6 +116,9 @@ impl EntityLike for Project{
     fn entity_type(&self) -> EntityType {self.entity_type}
     fn thumbnail(&self) -> PathBuf { self.thumbnail.clone().unwrap_or_else(|| PathBuf::from("public/glyph-default-cover.svg")) }
 
+    fn clone_box(&self) -> Box<dyn EntityLike> {
+        Box::new(self.clone()) 
+    }
 }
 impl Storable for Project{
     fn file_name(&self) -> String {self.title.clone()}

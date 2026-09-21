@@ -13,3 +13,4 @@ pub mod plugin_commands;
 pub mod card_commands;
 pub mod document_commands;
 pub mod global_commands;
+pub mod commands;

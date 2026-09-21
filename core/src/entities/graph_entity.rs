@@ -19,7 +19,7 @@ pub struct GraphEdge {
     pub source: Uuid,
     pub target: Uuid,
 }
-#[derive(Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct GraphEntity {
     pub id: Uuid,
