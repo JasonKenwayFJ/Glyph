@@ -11,3 +11,5 @@ pub mod note_entity;
 pub mod table_entity;
 pub mod trash_entity;
 pub mod plugin;
+pub mod card_entity;
+pub mod document_entity;
