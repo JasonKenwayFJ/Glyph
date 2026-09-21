@@ -1,6 +1,8 @@
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use crate::dto_entities::user_dto::UserDto;
 use crate::entities::user_config::UserConfig;
 use crate::enums::entity_type::EntityType;
 
@@ -32,6 +34,24 @@ impl Default for User {
             image_path: "/glyph-default-userpfp.png".to_string(),
             created_at: Utc::now(),
             user_config: serde_json::to_string(&config).unwrap(),
+            is_verified: false,
+            is_subscribed: false,
+            subscription_expires_at: Default::default(),
+        }
+    }
+}
+
+impl From<&UserDto> for User{
+    fn from(dto: &UserDto) -> Self {
+        Self{
+            id: Uuid::new_v4(),
+            token: None,
+            entity_type: EntityType::User,
+            username: dto.user_name.to_string(),
+            email: dto.email.to_string(),
+            image_path: "".to_string(),
+            created_at: Default::default(),
+            user_config: "".to_string(),
             is_verified: false,
             is_subscribed: false,
             subscription_expires_at: Default::default(),

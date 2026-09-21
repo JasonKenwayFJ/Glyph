@@ -15,7 +15,7 @@ impl ProjectManager {
         }
     }
 
-    
+
     pub fn get_project(&self) -> Option<Project> {
         self.current_project.lock().unwrap().clone()
     }
@@ -31,6 +31,17 @@ impl ProjectManager {
             .iter()
             .find(|project| project.id == id)
             .cloned()
+    }
+
+    pub fn add_project(&self, project: Project) -> Result<(), String> {
+        let mut projects = self.projects.lock().unwrap();
+
+        match projects.as_mut() {
+            Some(projects) => projects.push(project),
+            None => *projects = Some(vec![project]),
+        }
+
+        Ok(())
     }
 
     pub fn set_projects(&self, projects: Vec<Project>) {

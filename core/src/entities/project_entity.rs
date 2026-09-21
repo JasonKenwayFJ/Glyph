@@ -48,7 +48,7 @@ pub struct Project {
 }
 impl From<&ProjectDto> for Project{
     fn from(value: &ProjectDto) -> Self {
-        let mut project = Self{
+        Self{
             id: Uuid::new_v4(),
             user_id: Default::default(),
             title: value.title.to_string(),
@@ -70,22 +70,7 @@ impl From<&ProjectDto> for Project{
             videos: None,
             trash: None,
             image_source: None,
-        };
-
-        if value.thumbnail.is_some(){
-            match &value.image_source {
-                Source::Url(url) => {
-                    println!("Это URL: {}", url);
-                    project.thumbnail = Some(PathBuf::from(url));
-                }
-
-                Source::File(path) => {
-                    println!("Это файл: {:?}", path);
-                }
-            }
         }
-
-        project
     }
 }
 

@@ -46,9 +46,8 @@ pub async fn create<T: DataObject>(
 
     match object.entity_type() {
         EntityType::User => {}
-        EntityType::Project => {}
+        EntityType::Project => { project_state.add_project(object)?; }
         EntityType::Plugin => {}
-
 
         EntityType::Card => {}
         EntityType::Document => {}

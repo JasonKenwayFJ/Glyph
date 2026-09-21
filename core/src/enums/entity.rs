@@ -21,7 +21,7 @@ use crate::traits::storable::Storable;
 use crate::traits::trashable::Trashable;
 //TODO: Добавить User в TS Enum, и перетащить Project на index[1]
 
-#[derive(Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 #[serde(tag = "type")]
 pub enum Entity {

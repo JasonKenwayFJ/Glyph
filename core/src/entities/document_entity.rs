@@ -117,7 +117,7 @@ impl Trashable for Document{
         self.deleted_at = None;
     }
 }
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Characteristic {
     id: Uuid,
@@ -132,7 +132,7 @@ impl Characteristic {
     }
 }
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct ExtraField {
     id: Uuid,
