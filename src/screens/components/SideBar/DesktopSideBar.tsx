@@ -1,13 +1,25 @@
 import './../../MainStyles/Panels/ToolbarStyle.scss';
 import {IconChevronLeft, IconChevronRight, IconSettings} from '@tabler/icons-react';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useMemo} from 'react';
 import {ButtonSideBar} from './Controls/ButtonSideBar.tsx';
 import {useSidebarStorage} from '../../../Storage/ToolbarStorage.ts';
 import {useNavigate} from "react-router-dom";
+import {Project} from "../../../types/Project.ts";
+import {listen} from "@tauri-apps/api/event";
 
 export const DesktopSideBar = () => {
     const navigate = useNavigate();
+    const [project, setProject] = useState<Project | null>(null);
+    useEffect(() => {
+        const unlisten = listen<Project>('OnProjectChanged', (event) => {
+            setProject(event.payload)
+        })
+
+        return () =>{
+            unlisten.then((fn) => fn())
+        }
+    })
     const [isCollapsed, setCollapsed] = useState(false);
     const [dropDown, setDropDown] = useState(false);
     const rawButtons = useSidebarStorage((state) => state.buttons);
@@ -26,16 +38,14 @@ export const DesktopSideBar = () => {
                             <span className="AppName" onClick={toggleDropDown}>Glyph</span>
 
                             <button className="ProjectName">
-                                Project
+                                {project?.title}
                             </button>
 
                             {dropDown && <div className="ProjectDropdown">
                                 <button className={"dropDownButton"}>Войти</button>
-                                <button className={"dropDownButton"}>Новый проект</button>
-                                <button className={"dropDownButton"}>Сменить проект</button>
+                                <button className={"dropDownButton"} onClick={() => navigate("/projectPage")}>Сменить проект</button>
                                 <button className={"dropDownButton"}>Сохранить проект</button>
                                 <button className={"dropDownButton"} onClick={() => navigate("/editorCodePage")}>Плагин</button>
-                                <button className={"dropDownButton"}>Выход из приложения</button>
                             </div>}
                         </div>
                         <div className={"MainSideButtons"}>

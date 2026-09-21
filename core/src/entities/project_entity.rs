@@ -22,7 +22,7 @@ pub struct Project {
     pub is_pending: bool,
     #[serde(default)]
     pub is_deleted: bool,
-    deleted_at: Option<DateTime<Utc>>,
+    pub deleted_at: Option<DateTime<Utc>>,
 }
 
 impl Project {
