@@ -70,6 +70,7 @@ impl Card {
         }
     }
 }
+#[typetag::serde]
 impl EntityLike for Card {
     fn id(&self) -> Uuid {
         self.id

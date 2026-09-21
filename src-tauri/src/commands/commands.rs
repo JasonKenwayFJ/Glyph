@@ -16,6 +16,5 @@ pub async fn get_entities(
     let app_data_dir = app.path().document_dir().expect("no app data dir").join("Glyph").join(project.title);
     let loaded = loader::load_entities(&app_data_dir).await?;
 
-    project_state.set_entities();
-    let entities = project_state.get_entities(entity_type);
+    project_state.get_entities(EntityType::Card)?
 }

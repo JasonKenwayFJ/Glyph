@@ -91,7 +91,10 @@ impl ProjectManager {
     pub fn set_projects(&self, projects: Vec<Project>) {
         *self.projects.lock().unwrap() = projects;
     }
-
+    pub fn set_entities(&self, entities: Vec<Box<dyn EntityLike>>) {
+        let mut guard = self.entities.lock().unwrap();
+        guard.extend(entities);
+    }
     pub fn set_current_project(&self, project: Project) {
         self.current_project.lock().unwrap().replace(project);
     }

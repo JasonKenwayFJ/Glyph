@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 use uuid::Uuid;
 use crate::enums::entity_type::EntityType;
-
+#[typetag::serde(tag = "type")]
 pub trait EntityLike{
     fn id(&self) -> Uuid;
     fn user_id(&self) -> Uuid;
