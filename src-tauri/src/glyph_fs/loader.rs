@@ -1,13 +1,13 @@
-use std::path::Path;
+use crate::glyph_fs::paths::directory_for_type;
 use glh::functions::{reader, writer};
-use serde::de::DeserializeOwned;
-use tokio::fs;
-use glyph_core::entities::entity::Entity;
 use glyph_core::entities::plugin::Plugin;
 use glyph_core::entities::user_entity::User;
+use glyph_core::enums::entity::Entity;
 use glyph_core::enums::entity_type::EntityType;
-use glyph_core::{Project, ProjectManager};
-use crate::glyph_fs::paths::directory_for_type;
+use glyph_core::Project;
+use serde::de::DeserializeOwned;
+use std::path::Path;
+use tokio::fs;
 
 pub async fn preload_data(storage_dir: &Path) -> Result<(User, Vec<Project>, Vec<Entity>, Vec<Plugin>), String> {
     let user = load_user(storage_dir).await?;

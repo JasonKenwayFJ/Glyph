@@ -1,11 +1,6 @@
-use std::path::PathBuf;
-use chrono::{DateTime, Utc};
-use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 use crate::entities::audio_entity::Audio;
 use crate::entities::card_entity::Card;
 use crate::entities::document_entity::Document;
-use crate::entities::entity::Entity;
 use crate::entities::graph_entity::GraphEntity;
 use crate::entities::note_entity::Note;
 use crate::entities::task_entity::Task;
@@ -14,9 +9,14 @@ use crate::entities::video_entity::Video;
 use crate::enums::entity_type::EntityType;
 use crate::traits::entity::EntityLike;
 use crate::traits::storable::Storable;
-use crate::traits::trashable::Trashable;
+use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
+use std::path::PathBuf;
+use uuid::Uuid;
+use crate::dto_entities::project_dto::ProjectDto;
+use crate::enums::source::Source;
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Project {
     pub id: Uuid,
@@ -42,7 +42,51 @@ pub struct Project {
     pub graphs: Option<Vec<GraphEntity>>,
     pub audios: Option<Vec<Audio>>,
     pub videos: Option<Vec<Video>>,
-    pub trash: Option<Vec<Trash>>
+    pub trash: Option<Vec<Trash>>,
+
+    pub image_source: Option<Source>
+}
+impl From<&ProjectDto> for Project{
+    fn from(value: &ProjectDto) -> Self {
+        let mut project = Self{
+            id: Uuid::new_v4(),
+            user_id: Default::default(),
+            title: value.title.to_string(),
+            entity_type: EntityType::Project,
+            description: value.description.to_string(),
+            thumbnail: None,
+            created_at:  Utc::now(),
+            updated_at: Default::default(),
+            weight: 0,
+            is_pending: false,
+            is_deleted: false,
+            deleted_at: None,
+            cards: None,
+            documents: None,
+            tasks: None,
+            notes: None,
+            graphs: None,
+            audios: None,
+            videos: None,
+            trash: None,
+            image_source: None,
+        };
+
+        if value.thumbnail.is_some(){
+            match &value.image_source {
+                Source::Url(url) => {
+                    println!("Это URL: {}", url);
+                    project.thumbnail = Some(PathBuf::from(url));
+                }
+
+                Source::File(path) => {
+                    println!("Это файл: {:?}", path);
+                }
+            }
+        }
+
+        project
+    }
 }
 
 impl Project {
@@ -74,9 +118,12 @@ impl Project {
             audios: None,
             videos: None,
             trash: None,
+            image_source: None,
         }
     }
 }
+
+
 impl EntityLike for Project{
     fn id(&self) -> Uuid {self.id}
     fn user_id(&self) -> Uuid {self.user_id}

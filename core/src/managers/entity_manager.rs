@@ -1,8 +1,8 @@
-use crate::entities::entity::{Entity};
-use std::sync::Mutex;
-use uuid::Uuid;
+use crate::enums::entity::Entity;
 // use crate::entities::trash_entity::Trash;
 use crate::enums::entity_type::EntityType;
+use std::sync::Mutex;
+use uuid::Uuid;
 
 pub struct EntityManager {
     entities: Mutex<Vec<Entity>>

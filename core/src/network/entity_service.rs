@@ -1,4 +1,4 @@
-use crate::entities::entity::{Entity};
+use crate::enums::entity::Entity;
 use crate::enums::entity_type::EntityType;
 use crate::network::api_client::{ApiClient, ApiResponse};
 
@@ -15,6 +15,7 @@ fn define_path(entity_type: EntityType) -> String {
         EntityType::Graph => "api/graph/".parse().unwrap(),
         EntityType::Table => "api/table/".parse().unwrap(),
         EntityType::Plugin => "api/plugin/".parse().unwrap(),
+        EntityType::Trash => "api/trash/".parse().unwrap(),
     }
 }
 

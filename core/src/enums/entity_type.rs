@@ -14,4 +14,5 @@ pub enum EntityType{
     Table,
     Task,
     Plugin,
+    Trash,
 }

@@ -9,7 +9,7 @@ use crate::traits::storable::Storable;
 use crate::traits::trashable::Trashable;
 //TODO: Добавить User в TS Enum, и перетащить Project на index[1]
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Document {
     pub id: Uuid,

@@ -4,7 +4,7 @@ use uuid::Uuid;
 use crate::entities::user_config::UserConfig;
 use crate::enums::entity_type::EntityType;
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct User {
     pub id: Uuid,

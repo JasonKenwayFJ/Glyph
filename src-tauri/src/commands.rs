@@ -10,3 +10,6 @@ pub mod table_commands;
 pub mod note_commands;
 pub mod trash_commands;
 pub mod plugin_commands;
+pub mod card_commands;
+pub mod document_commands;
+pub mod global_commands;

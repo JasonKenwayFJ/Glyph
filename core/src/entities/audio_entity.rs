@@ -1,15 +1,14 @@
-use std::path::PathBuf;
-use chrono::{DateTime, Utc};
-use serde::{Deserialize, Serialize};
-use uuid::Uuid;
-use crate::entities::entity::Entity;
 use crate::enums::entity_type::EntityType;
 use crate::enums::source::Source;
 use crate::traits::entity::EntityLike;
 use crate::traits::storable::Storable;
 use crate::traits::trashable::Trashable;
+use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
+use std::path::PathBuf;
+use uuid::Uuid;
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Audio {
     pub id: Uuid,

@@ -23,7 +23,7 @@ pub enum Priority {
     High,
     Critical,
 }
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Task{
     pub id: Uuid,

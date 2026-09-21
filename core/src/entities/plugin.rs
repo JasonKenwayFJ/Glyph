@@ -1,10 +1,9 @@
-use serde::{Deserialize, Serialize};
-use uuid::Uuid;
-use crate::entities::entity::Entity;
 use crate::enums::entity_type::EntityType;
 use crate::traits::storable::Storable;
+use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
-#[derive(Clone,Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Serialize, Deserialize, PartialEq)]
 pub enum PluginTag {
     UI,
     Logic,
@@ -32,7 +31,7 @@ pub struct PluginManifest {
     pub entry_point: String,
     pub permissions: Vec<PluginPermission>,
 }
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize, PartialEq)]
 pub struct Plugin {
     pub id: Uuid,
     pub title: String,

@@ -1,9 +1,9 @@
-use std::path::PathBuf;
-use serde::Deserialize;
-use uuid::Uuid;
-use crate::entities::entity::{Characteristic, Entity, ExtraField};
+use crate::enums::entity::{Characteristic, Entity, ExtraField};
 use crate::enums::entity_type::EntityType;
 use crate::enums::source::Source;
+use serde::Deserialize;
+use std::path::PathBuf;
+use uuid::Uuid;
 
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]

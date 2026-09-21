@@ -1,5 +1,5 @@
+use crate::enums::entity::Entity;
 use std::sync::Mutex;
-use crate::entities::entity::Entity;
 
 pub struct TrashManager {
     entities: Mutex<Vec<Entity>>
