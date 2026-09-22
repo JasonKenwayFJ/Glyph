@@ -3,7 +3,9 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use crate::enums::entity_type::EntityType;
-use crate::traits::entity::EntityLike;
+use crate::Project;
+use crate::traits::entity_like::EntityLike;
+use crate::traits::trashable::Trashable;
 
 #[derive(Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -88,6 +90,28 @@ impl Task {
         }
     }
 }
+
+impl Trashable for Task {
+    fn is_deleted(&self) -> bool {
+        self.is_deleted
+    }
+
+    fn deleted_at(&self) -> Option<DateTime<Utc>> {
+        self.deleted_at
+    }
+
+    fn move_to_trash(&mut self) {
+        self.is_deleted = true;
+        self.deleted_at = Some(Utc::now());
+    }
+
+    fn restore(&mut self) {
+        self.is_deleted = false;
+        self.deleted_at = None;
+    }
+}
+
+
 #[typetag::serde]
 impl EntityLike for Task {
     fn id(&self) -> Uuid {self.id}

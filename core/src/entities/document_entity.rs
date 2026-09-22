@@ -2,10 +2,9 @@ use std::path::PathBuf;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use crate::entities::card_entity::Card;
 use crate::enums::entity_type::EntityType;
 use crate::enums::source::Source;
-use crate::traits::entity::EntityLike;
+use crate::traits::entity_like::EntityLike;
 use crate::traits::storable::Storable;
 use crate::traits::trashable::Trashable;
 //TODO: Добавить User в TS Enum, и перетащить Project на index[1]
@@ -108,21 +107,13 @@ impl Storable for Document{
     }
 }
 impl Trashable for Document{
-    fn trash_id(&self) -> Uuid {
-        self.id
+    fn is_deleted(&self) -> bool {
+        self.is_deleted
     }
 
-    fn trash_project_id(&self) -> Uuid {
-        self.project_id
+    fn deleted_at(&self) -> Option<DateTime<Utc>> {
+        self.deleted_at
     }
-
-    fn trash_user_id(&self) -> Uuid {
-        self.user_id
-    }
-
-    fn is_deleted(&self) -> bool {self.is_deleted}
-
-    fn deleted_at(&self) -> Option<DateTime<Utc>> {self.deleted_at}
 
     fn move_to_trash(&mut self) {
         self.is_deleted = true;

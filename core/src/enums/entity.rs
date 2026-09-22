@@ -1,7 +1,4 @@
-use std::path::PathBuf;
-use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 use crate::entities::audio_entity::Audio;
 use crate::entities::card_entity::Card;
 use crate::entities::document_entity::Document;
@@ -13,12 +10,7 @@ use crate::entities::task_entity::Task;
 use crate::entities::trash_entity::Trash;
 use crate::entities::user_entity::User;
 use crate::entities::video_entity::Video;
-use crate::enums::entity_type::EntityType;
-use crate::enums::source::Source;
 use crate::Project;
-use crate::traits::entity::EntityLike;
-use crate::traits::storable::Storable;
-use crate::traits::trashable::Trashable;
 //TODO: Добавить User в TS Enum, и перетащить Project на index[1]
 
 #[derive(Clone, Serialize, Deserialize)]

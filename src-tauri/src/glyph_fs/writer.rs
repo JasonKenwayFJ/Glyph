@@ -1,7 +1,6 @@
 use std::path::Path;
 use glh::functions::writer;
-use serde::Serialize;
-use glyph_core::traits::entity::EntityLike;
+use glyph_core::traits::entity_like::EntityLike;
 use crate::glyph_fs::paths::directory_for_type;
 
 pub async fn save_to_disk(

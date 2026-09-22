@@ -1,111 +1,208 @@
 .DataReceiverOverlay {
   position: fixed;
   inset: 0;
-  background-color: var(--overlay);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(3px);
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
-  animation: overlayFade 0.25s ease both;
+  z-index: 1000;
+
+  animation: overlayFadeIn 0.2s ease-out;
+
+  &.isClosing {
+    animation: overlayFadeOut 0.18s ease-in forwards;
+  }
 }
 
 .DataReceiverContainer {
-  position: relative;
-  background: var(--backgroundMain);
+  width: 420px;
+  max-width: calc(100vw - 40px);
+  background: #1b1f2a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
-  width: 40%;
-  min-height: 30vh;
-  padding: 20px;
-  border-radius: 16px;
-  gap: 22px;
-  box-shadow: 0 20px 60px var(--shadowElevated);
-  border: 1px solid var(--borderDefault);
-  animation: modalIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
-  overflow: hidden;
-}
+  gap: 18px;
 
-.DataReceiverContainer::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accentPrimary), transparent);
-  background-size: 200% 100%;
-  animation: shimmer 2.5s linear infinite;
-}
+  animation: containerPopIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 
-.DataReceiverButtonContainer{
-  display: flex;
-  justify-content: start
-;
-  gap: 10px;
-}
-
-.DataReceiverCancel{
-  background-color: var(--buttonSecondaryBorder);
+  &.isClosing {
+    animation: containerPopOut 0.18s ease-in forwards;
+  }
 }
 
 .DataReceiverTitle {
-  margin: 0;
-  font-size: 19px;
-  font-weight: 600;
-  color: var(--textPrimary);
-  letter-spacing: -0.2px;
+  margin: 0 0 4px;
+  font-size: 1.4rem;
+  color: #fff;
+  text-align: center;
 }
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes overlayFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes containerPopIn {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes containerPopOut {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.96) translateY(6px);
+  }
+}
+
+.ThumbnailPicker {
+  height: 120px;
+  border-radius: 12px;
+  border: 1.5px dashed rgba(255, 255, 255, 0.25);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.03);
+  }
+}
+
+.ThumbnailPickerHint {
+  opacity: 0.5;
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+// --- Floating label поля ---
 
 .FloatField {
   position: relative;
+  display: flex;
+  flex-direction: column;
+
+  label {
+    position: absolute;
+    left: 12px;
+    top: 14px;
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 1rem;
+    pointer-events: none;
+    transition: transform 0.18s ease, font-size 0.18s ease, color 0.18s ease;
+    transform-origin: left top;
+  }
 }
 
 .DataReceiverInput,
 .DataReceiverTextarea {
   width: 100%;
   box-sizing: border-box;
-  background: var(--backgroundDark);
-  border: 1px solid var(--inputBorder);
-  border-radius: 10px;
-  padding: 18px 12px 8px;
-  color: var(--inputText);
-  font: inherit;
-  font-size: 14px;
+  background: #12151d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 14px 12px 8px;
+  color: #fff;
+  font-size: 1rem;
   outline: none;
-  transition: border-color 0.2s ease;
+
+  &::placeholder {
+    color: transparent; // прячем нативный placeholder, чтобы им не мешать анимации лейбла
+  }
 }
 
 .DataReceiverTextarea {
-  min-height: 70px;
+  min-height: 80px;
   resize: vertical;
 }
 
-.FloatField label {
+// когда поле в фокусе ИЛИ в нём уже есть текст (placeholder-shown = пусто) — лейбл уезжает наверх
+.DataReceiverInput:focus + label,
+.DataReceiverInput:not(:placeholder-shown) + label,
+.DataReceiverTextarea:focus + label,
+.DataReceiverTextarea:not(:placeholder-shown) + label {
+  transform: translateY(-20px);
+  font-size: 0.75rem;
+  color: #5b9bff;
+}
+
+.FloatFieldLine {
   position: absolute;
-  left: 13px;
-  top: 15px;
-  font-size: 14px;
-  color: var(--inputPlaceholder);
-  pointer-events: none;
-  transform-origin: left top;
-  transition: transform 0.18s ease, color 0.18s ease, top 0.18s ease;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background: #5b9bff;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
 }
 
-.DataReceiverInput:not(:placeholder-shown) ~ label,
-.DataReceiverInput:focus ~ label,
-.DataReceiverTextarea:not(:placeholder-shown) ~ label,
-.DataReceiverTextarea:focus ~ label {
-  top: 6px;
-  transform: scale(0.78);
-  color: var(--accentPrimary);
+.DataReceiverInput:focus ~ .FloatFieldLine,
+.DataReceiverTextarea:focus ~ .FloatFieldLine {
+  transform: scaleX(1);
 }
 
-@media (max-width: 650px){
-  .DataReceiverContainer{
-    width: 70%;
-    margin-top: -10rem;
+// --- Кнопки ---
+
+.DataReceiverButtonContainer {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.DataReceiverSubmit,
+.DataReceiverCancel {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+
+  &:active {
+    transform: scale(0.97);
   }
+}
 
+.DataReceiverSubmit {
+  background: #3b82f6;
+  color: #fff;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.DataReceiverCancel {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
 }

@@ -15,6 +15,7 @@ use glyph_fs::loader;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+            .plugin(tauri_plugin_dialog::init())
         .manage(
             ApiClient::new("https://glyphserver.onrender.com")
                 .expect("Не удалось создать HTTP-клиент"),
@@ -36,27 +37,46 @@ pub fn run() {
             let app_handle = app.handle().clone();
 
             tauri::async_runtime::block_on(async move {
-                let storage_dir = app_handle
+                let app_data_dir = app
                     .path()
-                    .app_data_dir()
-                    .expect("no app data dir");
+                    .document_dir()
+                    .expect("no app data dir")
+                    .join("Glyph");
 
-                println!("Storage directory: {}", storage_dir.display());
+                println!("Storage directory: {}", app_data_dir.display());
                 let user_manager = app_handle.state::<UserManager>();
                 let project_manager = app_handle.state::<ProjectManager>();
                 let plugin_manager = app_handle.state::<PluginManager>();
 
-                match loader::preload_data(&storage_dir).await {
-                    Ok(loaded) => {
-                        user_manager.set_user(loaded.0);
-                        project_manager.set_projects(loaded.1);
-                        plugin_manager.add_plugins(loaded.3);
-                        println!("loaded user");
-                    }
-                    Err(e) => {
-                        eprintln!("Не получилось загрузить данные юзера: {e}")
-                    }
+
+                match loader::load_user(&app_data_dir).await {
+                    Ok(user) => user_manager.set_user(user),
+                    Err(e) => eprintln!("Не удалось загрузить юзера: {e}"),
                 }
+
+                match loader::load_projects(&app_data_dir).await {
+                    Ok(projects) => project_manager.set_projects(projects),
+                    Err(e) => eprintln!("Не удалось загрузить проекты: {e}"),
+                }
+
+                match loader::load_plugins(&app_data_dir).await {
+                    Ok(plugins) => plugin_manager.add_plugins(plugins),
+                    Err(e) => eprintln!("Не удалось загрузить плагины: {e}"),
+                }
+
+
+
+                // match loader::preload_data(&storage_dir).await {
+                //     Ok(loaded) => {
+                //         user_manager.set_user(loaded.0);
+                //         project_manager.set_projects(loaded.1);
+                //         plugin_manager.add_plugins(loaded.3);
+                //         println!("loaded user");
+                //     }
+                //     Err(e) => {
+                //         eprintln!("Не получилось загрузить данные юзера: {e}")
+                //     }
+                // }
             });
 
             Ok(())

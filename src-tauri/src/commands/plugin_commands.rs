@@ -1,11 +1,10 @@
-use crate::glyph_fs::{deleter, loader, writer};
+use crate::glyph_fs::{deleter, writer};
 use glyph_core::dto_entities::plugin_dto::PluginDto;
 use glyph_core::entities::plugin::Plugin;
 use glyph_core::managers::plugin_manager::PluginManager;
-use glyph_core::traits::storable::Storable;
 use tauri::{Emitter, Manager};
 use tokio::fs;
-use glyph_core::traits::entity::EntityLike;
+use glyph_core::traits::entity_like::EntityLike;
 
 #[tauri::command]
 pub async fn _get_plugins(

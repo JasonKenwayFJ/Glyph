@@ -7,7 +7,6 @@ use crate::entities::task_entity::Task;
 use crate::entities::trash_entity::Trash;
 use crate::entities::video_entity::Video;
 use crate::enums::entity_type::EntityType;
-use crate::traits::entity::EntityLike;
 use crate::traits::storable::Storable;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
@@ -15,6 +14,8 @@ use std::path::PathBuf;
 use uuid::Uuid;
 use crate::dto_entities::project_dto::ProjectDto;
 use crate::enums::source::Source;
+use crate::traits::entity_like::EntityLike;
+use crate::traits::trashable::Trashable;
 
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -105,6 +106,26 @@ impl Project {
             trash: None,
             image_source: None,
         }
+    }
+}
+
+impl Trashable for Project {
+    fn is_deleted(&self) -> bool {
+        self.is_deleted
+    }
+
+    fn deleted_at(&self) -> Option<DateTime<Utc>> {
+        self.deleted_at
+    }
+
+    fn move_to_trash(&mut self) {
+        self.is_deleted = true;
+        self.deleted_at = Some(Utc::now());
+    }
+
+    fn restore(&mut self) {
+        self.is_deleted = false;
+        self.deleted_at = None;
     }
 }
 

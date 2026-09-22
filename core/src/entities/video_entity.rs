@@ -1,6 +1,5 @@
 use crate::enums::entity_type::EntityType;
 use crate::enums::source::Source;
-use crate::traits::entity::EntityLike;
 use crate::traits::storable::Storable;
 use crate::traits::trashable::Trashable;
 use chrono::{DateTime, Utc};
@@ -8,6 +7,7 @@ use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use uuid::Uuid;
 use crate::entities::card_entity::Card;
+use crate::traits::entity_like::EntityLike;
 
 #[derive(Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -95,17 +95,7 @@ impl Storable for Video{
     }
 }
 impl Trashable for Video{
-    fn trash_id(&self) -> Uuid {
-        self.id
-    }
 
-    fn trash_project_id(&self) -> Uuid {
-        self.project_id
-    }
-
-    fn trash_user_id(&self) -> Uuid {
-        self.user_id
-    }
 
     fn is_deleted(&self) -> bool {self.is_deleted}
 

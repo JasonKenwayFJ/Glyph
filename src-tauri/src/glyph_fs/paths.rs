@@ -10,9 +10,9 @@ const PENDING_FILE_DIRECTORY: &str = "Entities/PendingFiles";
 pub const TRASH_DIRECTORY: &str = "Trash";
 pub async fn directory_for_type(storage_dir: &Path, entity_type: EntityType) -> Result<PathBuf, String> {
     let path = match entity_type {
-        EntityType::User => storage_dir.join(GLYPH_DIRECTORY).join(USERS_DIRECTORY),
-        EntityType::Project => storage_dir.join(GLYPH_DIRECTORY).join(PROJECTS_DIRECTORY),
-        EntityType::Plugin => storage_dir.join(GLYPH_DIRECTORY).join(PLUGIN_DIRECTORY),
+        EntityType::User => storage_dir.join(USERS_DIRECTORY),
+        EntityType::Project => storage_dir.join(PROJECTS_DIRECTORY),
+        EntityType::Plugin => storage_dir.join(PLUGIN_DIRECTORY),
         EntityType::Card => storage_dir.join(ENTITIES_DIRECTORY).join("Card"),
         EntityType::Document => storage_dir.join(ENTITIES_DIRECTORY).join("Document"),
         EntityType::Note => storage_dir.join(ENTITIES_DIRECTORY).join("Note"),

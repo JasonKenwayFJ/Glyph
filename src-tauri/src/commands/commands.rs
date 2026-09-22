@@ -2,9 +2,9 @@ use crate::glyph_fs::{deleter, loader, writer};
 use glyph_core::enums::entity_type::EntityType;
 use glyph_core::enums::CreateEntityRequest::CreateEntityRequest;
 use glyph_core::managers::user_manager::UserManager;
-use glyph_core::traits::entity::EntityLike;
 use glyph_core::ProjectManager;
 use tauri::{Emitter, Manager};
+use glyph_core::traits::entity_like::EntityLike;
 
 #[tauri::command]
 pub async fn get_entities(
@@ -21,10 +21,21 @@ pub async fn get_entities(
         .expect("no app data dir")
         .join("Glyph")
         .join(project.title);
-    let loaded = loader::load_entities(&app_data_dir).await?;
 
-    let result = project_state.get_entities(EntityType::Card);
-    Ok(result)
+    let local_data = project_state.get_entities(entity_type);
+    if !local_data.is_empty(){
+        return Ok(local_data)
+    }
+
+    let disk_data = loader::load_entities(&app_data_dir).await?;
+    if !disk_data.is_empty(){
+        project_state.set_entities(disk_data.clone());
+        return Ok(disk_data)
+    }
+
+
+    Ok(Vec::new())
+
 }
 
 #[tauri::command]
@@ -101,15 +112,11 @@ pub async fn soft_delete_entity(
         .join("Glyph")
         .join(project.title);
 
+    request.move_to_trash();
+
     deleter::_soft_delete(&app_data_dir, request.as_ref()).await?;
-
-    // TODO: сейчас файл переезжает в Trash, но сама сущность не помечается удалённой.
-    // Нужно: request.move_to_trash() (требует Trashable как supertrait EntityLike),
-    // затем перезаписать её на диске в Trash-папке и через project_state.update_entity(),
-    // иначе is_deleted/deleted_at останутся рассинхронизированы с фактическим положением файла.
-
-    project_state.remove_entity(request.id()); // временно: убираем из активного списка,
-    // хотя это не то же самое, что настоящий soft-delete
+    writer::update_on_disk(&app_data_dir.join("Trash"), request.as_ref()).await?;
+    project_state.update_entity(request.clone_box())?;
 
     app.emit("OnEntityMovedToTrash", request)
         .map_err(|e| e.to_string())

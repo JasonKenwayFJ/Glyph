@@ -1,8 +1,10 @@
 use std::path::PathBuf;
+use chrono::{DateTime, Utc};
 use crate::enums::entity_type::EntityType;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use crate::traits::entity::EntityLike;
+use crate::traits::entity_like::EntityLike;
+use crate::traits::trashable::Trashable;
 
 #[derive(Clone, Serialize, Deserialize, PartialEq)]
 pub enum PluginTag {
@@ -89,6 +91,25 @@ impl Plugin {
         }
     }
 }
+
+impl Trashable for Plugin {
+    fn is_deleted(&self) -> bool {
+        true
+    }
+
+    fn deleted_at(&self) -> Option<DateTime<Utc>> {
+        None
+    }
+
+    fn move_to_trash(&mut self) {
+        todo!()
+    }
+
+    fn restore(&mut self) {
+        todo!()
+    }
+}
+
 #[typetag::serde]
 impl EntityLike for Plugin{
     fn id(&self) -> Uuid {self.id}
@@ -103,3 +124,4 @@ impl EntityLike for Plugin{
         Box::new(self.clone())
     }
 }
+

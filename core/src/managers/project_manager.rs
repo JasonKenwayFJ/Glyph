@@ -2,7 +2,7 @@ use std::sync::Mutex;
 use uuid::Uuid;
 use crate::entities::project_entity::Project;
 use crate::enums::entity_type::EntityType;
-use crate::traits::entity::EntityLike;
+use crate::traits::entity_like::EntityLike;
 
 pub struct ProjectManager {
     current_project: Mutex<Option<Project>>,
