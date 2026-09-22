@@ -20,8 +20,10 @@ impl PluginDto {
     pub fn get_plugin(&self) -> Plugin {
         Plugin::new(
             Uuid::new_v4(),
+            Uuid::new_v4(),
             self.title.clone(),
             self.description.clone(),
+            None,
             self.version.clone(),
             self.author.clone(),
             self.tags.clone(),

@@ -1,16 +1,5 @@
-pub mod entity_commands;
 pub mod project_commands;
-pub mod user_commands;
 pub mod ai_chat_commands;
-pub mod task_commands;
-pub mod graph_commands;
-pub mod audio_commands;
-pub mod video_commands;
-pub mod table_commands;
-pub mod note_commands;
-pub mod trash_commands;
 pub mod plugin_commands;
 pub mod card_commands;
-pub mod document_commands;
-pub mod global_commands;
 pub mod commands;

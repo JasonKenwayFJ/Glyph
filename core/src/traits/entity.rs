@@ -2,15 +2,15 @@ use std::path::PathBuf;
 use uuid::Uuid;
 use crate::enums::entity_type::EntityType;
 #[typetag::serde(tag = "type")]
-pub trait EntityLike{
+pub trait EntityLike:Send + Sync {
     fn id(&self) -> Uuid;
     fn user_id(&self) -> Uuid;
     fn project_id(&self) -> Uuid;
     fn entity_type(&self) -> EntityType;
     fn thumbnail(&self) -> PathBuf;
+    fn file_name(&self) -> String;
     fn clone_box(&self) -> Box<dyn EntityLike>;
 }
-
 
 
 // это даёт Box<dyn EntityLike> обычный .clone()

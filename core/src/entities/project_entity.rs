@@ -108,14 +108,16 @@ impl Project {
     }
 }
 
-
+#[typetag::serde]
 impl EntityLike for Project{
     fn id(&self) -> Uuid {self.id}
     fn user_id(&self) -> Uuid {self.user_id}
     fn project_id(&self) -> Uuid {self.id}
     fn entity_type(&self) -> EntityType {self.entity_type}
-    fn thumbnail(&self) -> PathBuf { self.thumbnail.clone().unwrap_or_else(|| PathBuf::from("public/glyph-default-cover.svg")) }
-
+    fn thumbnail(&self) -> PathBuf { self.thumbnail.clone().unwrap_or_else(| | PathBuf::from("public/glyph-default-cover.svg")) }
+    fn file_name(&self) -> String {
+        self.title.clone()
+    }
     fn clone_box(&self) -> Box<dyn EntityLike> {
         Box::new(self.clone()) 
     }

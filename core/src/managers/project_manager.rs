@@ -36,7 +36,9 @@ impl ProjectManager {
             .push(Box::new(entity));
     }
 
-
+    pub fn add_boxed_entity(&self, entity: Box<dyn EntityLike>) {
+        self.entities.lock().unwrap().push(entity);
+    }
 
     pub fn update_entity(&self, entity: Box<dyn EntityLike>) -> Result<(), String> {
         let mut entities = self.entities.lock().unwrap();

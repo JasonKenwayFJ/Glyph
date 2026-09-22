@@ -1,9 +1,4 @@
 pub mod project_manager;
 pub mod user_manager;
-pub mod entity_manager;
 pub mod ai_chat_manager;
-pub mod trash_manager;
 pub mod plugin_manager;
-pub mod card_manager;
-pub mod document_manager;
-pub mod main_manager;

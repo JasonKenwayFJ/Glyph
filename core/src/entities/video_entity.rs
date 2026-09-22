@@ -58,6 +58,7 @@ impl Video {
         }
     }
 }
+#[typetag::serde]
 impl EntityLike for Video {
     fn id(&self) -> Uuid {
         self.id
@@ -76,7 +77,9 @@ impl EntityLike for Video {
             .clone()
             .unwrap_or_else(|| PathBuf::from("public/glyph-default-cover.svg"))
     }
-
+    fn file_name(&self) -> String {
+        self.title.clone()
+    }
     fn clone_box(&self) -> Box<dyn EntityLike> {
         Box::new(self.clone())
     }

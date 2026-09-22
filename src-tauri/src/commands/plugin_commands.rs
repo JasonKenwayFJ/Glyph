@@ -5,6 +5,7 @@ use glyph_core::managers::plugin_manager::PluginManager;
 use glyph_core::traits::storable::Storable;
 use tauri::{Emitter, Manager};
 use tokio::fs;
+use glyph_core::traits::entity::EntityLike;
 
 #[tauri::command]
 pub async fn _get_plugins(
@@ -55,7 +56,7 @@ pub async fn _create_plugins(
         .await
         .map_err(|e| e.to_string())?;
 
-    let file_path = document_folder.join(plugin.file_path());
+    let file_path = document_folder.join(plugin.file_name());
 
     plugin.size = fs::metadata(file_path)
         .await

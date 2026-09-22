@@ -89,6 +89,9 @@ impl EntityLike for Card {
             .clone()
             .unwrap_or_else(|| PathBuf::from("public/glyph-default-cover.svg"))
     }
+    fn file_name(&self) -> String {
+        self.title.clone()
+    }
 
     fn clone_box(&self) -> Box<dyn EntityLike> {
         Box::new(self.clone())

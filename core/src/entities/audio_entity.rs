@@ -1,3 +1,4 @@
+use crate::entities::card_entity::Card;
 use crate::enums::entity_type::EntityType;
 use crate::enums::source::Source;
 use crate::traits::entity::EntityLike;
@@ -7,7 +8,6 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use uuid::Uuid;
-use crate::entities::card_entity::Card;
 
 #[derive(Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -43,8 +43,8 @@ impl Audio {
         user_id: Uuid,
         title: String,
         file_path: String,
-        audio_source: Source) -> Self
-    {
+        audio_source: Source,
+    ) -> Self {
         Self {
             id: Uuid::new_v4(),
             project_id,
@@ -67,40 +67,33 @@ impl Audio {
         }
     }
 }
+#[typetag::serde]
 impl EntityLike for Audio {
-    fn id(&self) -> Uuid {
-        self.id
+    fn id(&self) -> Uuid {self.id}
+    fn user_id(&self) -> Uuid {self.user_id}
+    fn project_id(&self) -> Uuid {self.id}
+    fn entity_type(&self) -> EntityType {self.entity_type}
+    fn thumbnail(&self) -> PathBuf { self.thumbnail.clone().unwrap_or_else(| | PathBuf::from("public/glyph-default-cover.svg")) }
+    fn file_name(&self) -> String {
+        self.title.clone()
     }
-    fn user_id(&self) -> Uuid {
-        self.user_id
+    fn clone_box(&self) -> Box<dyn EntityLike> {
+        Box::new(self.clone())
     }
-    fn project_id(&self) -> Uuid {
+}
+impl Storable for Audio {
+    fn file_name(&self) -> String {
+        self.title.clone()
+    }
+
+    fn storage_id(&self) -> Uuid {
         self.id
     }
     fn entity_type(&self) -> EntityType {
         self.entity_type
     }
-    fn thumbnail(&self) -> PathBuf {
-        self.thumbnail
-            .clone()
-            .unwrap_or_else(|| PathBuf::from("public/glyph-default-cover.svg"))
-    }
-
-    fn clone_box(&self) -> Box<dyn EntityLike> {
-        Box::new(self.clone())
-    }
 }
-impl Storable for Audio{
-    fn file_name(&self) -> String {self.title.clone()}
-
-    fn storage_id(&self) -> Uuid{
-        self.id
-    }
-    fn entity_type(&self) -> EntityType{
-        self.entity_type
-    }
-}
-impl Trashable for Audio{
+impl Trashable for Audio {
     fn trash_id(&self) -> Uuid {
         self.id
     }
@@ -113,9 +106,13 @@ impl Trashable for Audio{
         self.user_id
     }
 
-    fn is_deleted(&self) -> bool {self.is_deleted}
+    fn is_deleted(&self) -> bool {
+        self.is_deleted
+    }
 
-    fn deleted_at(&self) -> Option<DateTime<Utc>> {self.deleted_at}
+    fn deleted_at(&self) -> Option<DateTime<Utc>> {
+        self.deleted_at
+    }
 
     fn move_to_trash(&mut self) {
         self.is_deleted = true;

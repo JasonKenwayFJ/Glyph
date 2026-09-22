@@ -1,7 +1,8 @@
+use std::path::PathBuf;
 use crate::enums::entity_type::EntityType;
-use crate::traits::storable::Storable;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use crate::traits::entity::EntityLike;
 
 #[derive(Clone, Serialize, Deserialize, PartialEq)]
 pub enum PluginTag {
@@ -34,9 +35,10 @@ pub struct PluginManifest {
 #[derive(Clone, Serialize, Deserialize, PartialEq)]
 pub struct Plugin {
     pub id: Uuid,
+    pub user_id: Uuid,
     pub title: String,
     pub description: String,
-
+    pub thumbnail: Option<PathBuf>,
     pub version: String,
     pub author: String,
 
@@ -53,8 +55,10 @@ pub struct Plugin {
 impl Plugin {
     pub fn new(
         id: Uuid,
+        user_id: Uuid,
         title: String,
         description: String,
+        thumbnail: Option<PathBuf>,
         version: String,
         author: String,
         tags: Vec<PluginTag>,
@@ -68,8 +72,10 @@ impl Plugin {
     ) -> Self {
         Plugin{
             id,
+            user_id,
             title,
             description,
+            thumbnail,
             version,
             author,
             tags,
@@ -83,13 +89,17 @@ impl Plugin {
         }
     }
 }
-impl Storable for Plugin{
-    fn file_name(&self) -> String {self.title.clone()}
-
-    fn storage_id(&self) -> Uuid{
-        self.id
+#[typetag::serde]
+impl EntityLike for Plugin{
+    fn id(&self) -> Uuid {self.id}
+    fn user_id(&self) -> Uuid {self.user_id}
+    fn project_id(&self) -> Uuid {self.id}
+    fn entity_type(&self) -> EntityType {self.entity_type}
+    fn thumbnail(&self) -> PathBuf { self.thumbnail.clone().unwrap_or_else(| | PathBuf::from("public/glyph-default-cover.svg")) }
+    fn file_name(&self) -> String {
+        self.title.clone()
     }
-    fn entity_type(&self) -> EntityType{
-        self.entity_type
+    fn clone_box(&self) -> Box<dyn EntityLike> {
+        Box::new(self.clone())
     }
 }

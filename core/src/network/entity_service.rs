@@ -1,83 +1,83 @@
-use crate::enums::entity::Entity;
-use crate::enums::entity_type::EntityType;
-use crate::network::api_client::{ApiClient, ApiResponse};
-
-fn define_path(entity_type: EntityType) -> String {
-    match entity_type {
-        EntityType::User => "api/user/".parse().unwrap(),
-        EntityType::Card => "api/card/".parse().unwrap(),
-        EntityType::Document => "api/document/".parse().unwrap(),
-        EntityType::Project => "api/project/".parse().unwrap(),
-        EntityType::Note => "api/note/".parse().unwrap(),
-        EntityType::Audio => "api/audio/".parse().unwrap(),
-        EntityType::Video => "api/video/".parse().unwrap(),
-        EntityType::Task => "api/task/".parse().unwrap(),
-        EntityType::Graph => "api/graph/".parse().unwrap(),
-        EntityType::Table => "api/table/".parse().unwrap(),
-        EntityType::Plugin => "api/plugin/".parse().unwrap(),
-        EntityType::Trash => "api/trash/".parse().unwrap(),
-    }
-}
-
-pub async fn get_entities<Res>(
-    client: &ApiClient,
-    entity_type: EntityType,
-) -> Result<ApiResponse<Res>, String>
-where
-    Res: serde::de::DeserializeOwned,
-{
-    let url = format!("{}getAll", define_path(entity_type));
-    let response = client.get::<Res>(url).await.map_err(|e| e.to_string())?;
-    Ok(response)
-}
-
-pub async fn get_entity_by_id<Res>(
-    client: &ApiClient,
-    entity: &Entity,
-) -> Result<ApiResponse<Res>, String>
-where
-    Res: serde::de::DeserializeOwned,
-{
-    let url = format!("{}getById/{}", define_path(entity.entity_type), entity.id);
-    let response = client.get::<Res>(url).await.map_err(|e| e.to_string())?;
-    Ok(response)
-}
-
-pub async fn create_entity<Res>(
-    client: &ApiClient,
-    entity: &Entity,
-) -> Result<ApiResponse<()>, String>
-where
-    Res: serde::de::DeserializeOwned,
-{
-    let url = format!("{}create", define_path(entity.entity_type));
-    let response = client
-        .post::<Entity, ()>(&url, entity)
-        .await
-        .map_err(|e| e.to_string())?;
-    Ok(response)
-}
-
-pub async fn update_entity<Res>(
-    client: &ApiClient,
-    entity: &Entity,
-) -> Result<ApiResponse<()>, String>
-where
-    Res: serde::de::DeserializeOwned,
-{
-    let url = format!("{}update", define_path(entity.entity_type));
-    let response = client
-        .post::<Entity, ()>(&url, entity)
-        .await
-        .map_err(|e| e.to_string())?;
-    Ok(response)
-}
-
-pub async fn delete_entity<Res>(
-    client: &ApiClient,
-    entity: &Entity,
-) -> Result<ApiResponse<()>, String> {
-    let url = format!("{}delete/{}", define_path(entity.entity_type), entity.id);
-    let response = client.delete(url).await.map_err(|e| e.to_string())?;
-    Ok(response)
-}
+// use crate::enums::entity::Entity;
+// use crate::enums::entity_type::EntityType;
+// use crate::network::api_client::{ApiClient, ApiResponse};
+//
+// fn define_path(entity_type: EntityType) -> String {
+//     match entity_type {
+//         EntityType::User => "api/user/".parse().unwrap(),
+//         EntityType::Card => "api/card/".parse().unwrap(),
+//         EntityType::Document => "api/document/".parse().unwrap(),
+//         EntityType::Project => "api/project/".parse().unwrap(),
+//         EntityType::Note => "api/note/".parse().unwrap(),
+//         EntityType::Audio => "api/audio/".parse().unwrap(),
+//         EntityType::Video => "api/video/".parse().unwrap(),
+//         EntityType::Task => "api/task/".parse().unwrap(),
+//         EntityType::Graph => "api/graph/".parse().unwrap(),
+//         EntityType::Table => "api/table/".parse().unwrap(),
+//         EntityType::Plugin => "api/plugin/".parse().unwrap(),
+//         EntityType::Trash => "api/trash/".parse().unwrap(),
+//     }
+// }
+//
+// pub async fn get_entities<Res>(
+//     client: &ApiClient,
+//     entity_type: EntityType,
+// ) -> Result<ApiResponse<Res>, String>
+// where
+//     Res: serde::de::DeserializeOwned,
+// {
+//     let url = format!("{}getAll", define_path(entity_type));
+//     let response = client.get::<Res>(url).await.map_err(|e| e.to_string())?;
+//     Ok(response)
+// }
+//
+// pub async fn get_entity_by_id<Res>(
+//     client: &ApiClient,
+//     entity: &Entity,
+// ) -> Result<ApiResponse<Res>, String>
+// where
+//     Res: serde::de::DeserializeOwned,
+// {
+//     let url = format!("{}getById/{}", define_path(entity.entity_type), entity.id);
+//     let response = client.get::<Res>(url).await.map_err(|e| e.to_string())?;
+//     Ok(response)
+// }
+//
+// pub async fn create_entity<Res>(
+//     client: &ApiClient,
+//     entity: &Entity,
+// ) -> Result<ApiResponse<()>, String>
+// where
+//     Res: serde::de::DeserializeOwned,
+// {
+//     let url = format!("{}create", define_path(entity.entity_type));
+//     let response = client
+//         .post::<Entity, ()>(&url, entity)
+//         .await
+//         .map_err(|e| e.to_string())?;
+//     Ok(response)
+// }
+//
+// pub async fn update_entity<Res>(
+//     client: &ApiClient,
+//     entity: &Entity,
+// ) -> Result<ApiResponse<()>, String>
+// where
+//     Res: serde::de::DeserializeOwned,
+// {
+//     let url = format!("{}update", define_path(entity.entity_type));
+//     let response = client
+//         .post::<Entity, ()>(&url, entity)
+//         .await
+//         .map_err(|e| e.to_string())?;
+//     Ok(response)
+// }
+//
+// pub async fn delete_entity<Res>(
+//     client: &ApiClient,
+//     entity: &Entity,
+// ) -> Result<ApiResponse<()>, String> {
+//     let url = format!("{}delete/{}", define_path(entity.entity_type), entity.id);
+//     let response = client.delete(url).await.map_err(|e| e.to_string())?;
+//     Ok(response)
+// }
