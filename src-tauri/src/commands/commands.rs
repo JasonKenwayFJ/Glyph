@@ -63,6 +63,7 @@ pub async fn create_entity(
     let entity: Box<dyn EntityLike> = match request {
         CreateEntityRequest::Project(dto) => Box::new(dto.into_entity(user_id)),
         CreateEntityRequest::Card(dto) => Box::new(dto.into_entity(project.id, user_id)),
+        _ => {todo!()}
     };
 
     writer::save_to_disk(&app_data_dir, entity.as_ref()).await?;

@@ -1,45 +1,47 @@
 use uuid::Uuid;
-use crate::network::api_client::{ApiClient, ApiResponse};
+use crate::network::api_client::ApiClient;
 use crate::Project;
 
-
+/// Забирает список проектов пользователя с сервера.
 pub async fn get_projects(client: &ApiClient, user_id: &Uuid) -> Result<Vec<Project>, String> {
-    let response = client
-        .get::<Vec<Project>>(format!("project/getAll/{}", user_id))
+    client
+        .get::<Vec<Project>>(format!("project/getAll/{user_id}"))
         .await
-        .map_err(|e| e.to_string())?;
-    if !response.success{
-        println!("Error getting user projects from server");
-        return Err(response.message)
-    }
+        .map_err(|error| {
+            println!("Не удалось получить проекты с сервера: {error}");
+            error
+        })
+}
 
-    response
-        .data
-        .ok_or_else(|| "Сервер не вернул список проектов".to_string())
-}
-pub async fn create_project(client: &ApiClient, project: &Project) 
-    -> Result<ApiResponse<()>, String> {
-    let response = client
-        .post::<Project, ()>("project/create", project)
+/// Отправляет проект на сервер.
+///
+/// Тело ответа принимаем как `serde_json::Value`, а не как `()`:
+/// `()` десериализуется только из литерала `null`, поэтому на `{}` или на
+/// пустом теле он падал бы с ошибкой. `Value` принимает любую JSON-форму,
+/// а содержимое ответа нам здесь не нужно — статус уже проверил клиент.
+pub async fn create_project(client: &ApiClient, project: &Project) -> Result<(), String> {
+    client
+        .post::<Project, serde_json::Value>("project/create", project)
         .await
-        .map_err(|e| e.to_string())?;
-    if !response.success {
-        println!("Error uploading a project");
-        return Err(response.message);
-    }
-    println!("Uploaded project {}", project.id);
-    Ok(response)
+        .map_err(|error| {
+            println!("Не удалось отправить проект на сервер: {error}");
+            error
+        })?;
+
+    println!("Проект {} отправлен на сервер", project.id);
+    Ok(())
 }
+
+/// Удаляет проект на сервере.
 pub async fn delete_project(client: &ApiClient, project: &Project) -> Result<(), String> {
-
-    let response = client
+    client
         .delete(format!("project/{}", project.id))
         .await
-        .map_err(|e| e.to_string())?;
-    if !response.success {
-        println!("Error deleting a project");
-        return Err(response.message);
-    }
-    println!("Deleted project {}", project.id);
+        .map_err(|error| {
+            println!("Не удалось удалить проект на сервере: {error}");
+            error
+        })?;
+
+    println!("Проект {} удалён на сервере", project.id);
     Ok(())
 }

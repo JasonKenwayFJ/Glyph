@@ -1,8 +1,7 @@
 mod commands;
 mod glyph_fs;
 
-use commands::project_commands::{create_project, get_project, get_projects, open_project};
-use commands::plugin_commands::*;
+
 use glyph_core::managers::user_manager::UserManager;
 use glyph_core::managers::ai_chat_manager::AiChatManager;
 use glyph_core::network::api_client::ApiClient;
@@ -10,7 +9,11 @@ use glyph_core::ProjectManager;
 use tauri::Manager;
 use glyph_core::managers::plugin_manager::PluginManager;
 use glyph_fs::loader;
+use crate::commands::ai_chat_commands::{clear_messages, get_messages, send_image, send_message};
 use crate::commands::commands::{create_entity, get_entities, hard_delete_entity, soft_delete_entity, update_entity};
+use crate::commands::plugin_commands::{activate_plugin, create_plugins, deactivate_plugin, delete_plugin, export_plugin, get_active_plugins, get_plugins};
+use crate::commands::project_commands::{create_project, get_project, get_projects, open_project};
+use crate::commands::user_commands::{authorization, delete_account, registration, verify_user};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -68,16 +71,35 @@ pub fn run() {
         })
 
         .invoke_handler(tauri::generate_handler![
+            
+            registration,
+            authorization,
+            verify_user,
+            delete_account,
+            
             create_project,
             open_project,
             get_projects,
             get_project,
+
+            get_plugins,
+            get_active_plugins,
+            create_plugins,
+            delete_plugin,
+            activate_plugin,
+            deactivate_plugin,
             export_plugin,
+
             get_entities,
             create_entity,
             update_entity,
             soft_delete_entity,
-            hard_delete_entity
+            hard_delete_entity,
+
+            send_message,
+            get_messages,
+            clear_messages,
+            send_image
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

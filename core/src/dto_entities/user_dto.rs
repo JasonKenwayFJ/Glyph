@@ -8,6 +8,7 @@ use crate::enums::source::Source;
 pub struct UserDto{
     pub user_name: String,
     pub email: String,
+    pub password: String,
     pub image_source: Option<Source>,
     pub thumbnail: Option<String>,
     pub entity_type: Entity,

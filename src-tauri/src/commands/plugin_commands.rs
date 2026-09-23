@@ -7,7 +7,7 @@ use tokio::fs;
 use glyph_core::traits::entity_like::EntityLike;
 
 #[tauri::command]
-pub async fn _get_plugins(
+pub async fn get_plugins(
     app: tauri::AppHandle,
     _manager: tauri::State<'_, PluginManager>,
 ) -> Result<Vec<Plugin>, String> {
@@ -18,9 +18,9 @@ pub async fn _get_plugins(
 }
 
 #[tauri::command]
-pub async fn _get_active_plugins(
+pub async fn get_active_plugins(
     app: tauri::AppHandle,
-    manager: PluginManager,
+    manager: tauri::State<'_, PluginManager>,
 ) -> Result<(), String> {
     let plugins = manager.get_active_plugins();
     app.emit("OnActivePluginGot", plugins)
@@ -40,7 +40,7 @@ pub async fn export_plugin(app: tauri::AppHandle, plugin_dto: PluginDto) -> Resu
         .map_err(|e| e.to_string())
 }
 #[tauri::command]
-pub async fn _create_plugins(
+pub async fn create_plugins(
     app: tauri::AppHandle,
     manager: tauri::State<'_, PluginManager>,
     plugin_dto: PluginDto,
@@ -68,7 +68,7 @@ pub async fn _create_plugins(
 }
 
 #[tauri::command]
-pub async fn _delete_plugins(
+pub async fn delete_plugin(
     app: tauri::AppHandle,
     manager: tauri::State<'_, PluginManager>,
     plugin: Plugin,
@@ -87,7 +87,7 @@ pub async fn _delete_plugins(
 }
 
 #[tauri::command]
-pub async fn _activate_plugin(
+pub async fn activate_plugin(
     app: tauri::AppHandle,
     manager: tauri::State<'_, PluginManager>,
     plugin: Plugin,
@@ -100,7 +100,7 @@ pub async fn _activate_plugin(
 }
 
 #[tauri::command]
-pub async fn _deactivate_plugin(
+pub async fn deactivate_plugin(
     app: tauri::AppHandle,
     manager: tauri::State<'_, PluginManager>,
     plugin: Plugin,

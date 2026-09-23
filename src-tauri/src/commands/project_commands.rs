@@ -50,14 +50,14 @@ pub async fn create_project(
         .join("Glyph");
 
     // println!("Sending project to server...");
-    // 
+    //
     // let response = project_service::create_project(_api_state.inner(), &project)
     //     .await
     //     .map_err(|error| {
     //         println!("ERROR: Server request failed: {}", error);
     //         error
     //     });
-    // 
+    //
     // if response.is_err() {
     //     project.is_pending = true;
     // }

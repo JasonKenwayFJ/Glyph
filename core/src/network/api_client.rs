@@ -1,14 +1,8 @@
-use serde::{Deserialize, Serialize};
+use serde::{Serialize};
 use serde::de::DeserializeOwned;
 use std::time::Duration;
-#[derive(Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub struct ApiResponse<T> {
-    pub success: bool,
-    pub message: String,
-    pub status: u16,
-    pub data: Option<T>,
-}
+
+
 
 pub struct ApiClient {
     base_url: String,
@@ -29,7 +23,7 @@ impl ApiClient {
         &self,
         path: &str,
         obj: &Req,
-    ) -> Result<ApiResponse<Res>, String>
+    ) -> Result<Res, String>
     where
         Req: Serialize, Res:DeserializeOwned
     {
@@ -62,7 +56,7 @@ impl ApiClient {
         }
 
         response
-            .json::<ApiResponse<Res>>()
+            .json::<Res>()
             .await
             .map_err(|err| err.to_string())
     }
@@ -70,7 +64,7 @@ impl ApiClient {
     pub async fn get<Res>(
         &self,
         path: String,
-    ) -> Result<ApiResponse<Res>, String>
+    ) -> Result<Res, String>
     where
         Res: DeserializeOwned,
     {
@@ -98,7 +92,7 @@ impl ApiClient {
         }
 
         response
-            .json::<ApiResponse<Res>>()
+            .json::<Res>()
             .await
             .map_err(|err| err.to_string())
     }
@@ -106,7 +100,7 @@ impl ApiClient {
     pub async fn delete(
         &self,
         path: String,
-    ) -> Result<ApiResponse<()>, String> {
+    ) -> Result<(), String> {
         let url = format!("{}/{}", self.base_url, path);
 
         let response = self.client
@@ -130,10 +124,10 @@ impl ApiClient {
             ));
         }
 
-        response
-            .json::<ApiResponse<()>>()
-            .await
-            .map_err(|err| err.to_string())
+        // Тело ответа намеренно не парсим: успешное удаление обычно приходит
+        // как 204 No Content или `{}`, а `json::<()>()` читает только литерал
+        // `null` — то есть успех выглядел бы как ошибка.
+        Ok(())
     }
 
     pub fn handle_response() {}

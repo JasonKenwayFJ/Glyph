@@ -16,6 +16,6 @@ export const useAccountStorage = create<AccountStorage>((set) => ({
     setUser: (user) => set({ user }),
     setToken: (token) => set({ token }),
     verifyUser: async (token) :  Promise<boolean> => {
-        return await invoke("verify", {token});
+        return await invoke("verify_user", {token});
     },
 }));
