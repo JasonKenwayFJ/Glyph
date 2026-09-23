@@ -29,6 +29,8 @@ impl ProjectManager {
             .collect()
     }
 
+    // FIXME: первым делом нужно проверить метод Add
+    // Issue: #1
     pub fn add_entity(&self, entity: impl EntityLike + 'static) {
         self.entities
             .lock()
