@@ -1,6 +1,6 @@
 import {Source} from "../enums/source.ts";
 
-export type ProjectDto = {
+export type ProjectDTO = {
     title: string;
     description: string;
     imageSource: Source | null;

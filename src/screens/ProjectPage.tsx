@@ -6,7 +6,7 @@ import { ProjectCreator } from "./Creators/ProjectCreator.tsx";
 import { useNavigate } from "react-router-dom";
 import {useProjectStorage} from "../Storage/projectStorage.ts";
 import {Project} from "../types/entities/project.ts";
-import {ProjectDto} from "../types/DTO/ProjectDTO.ts";
+import {ProjectDTO} from "../types/DTO/projectDTO.ts";
 
 const ProjectPage = () => {
     const navigate = useNavigate();
@@ -43,8 +43,8 @@ const ProjectPage = () => {
         navigate("/mainPage");
     }
 
-    // теперь принимает готовый ProjectDto из ProjectCreator, а не title/description по отдельности
-    async function submitProjectCreation(dto: ProjectDto) {
+    // теперь принимает готовый ProjectDTO из ProjectCreator, а не title/description по отдельности
+    async function submitProjectCreation(dto: ProjectDTO) {
         try {
             const created = await invoke<Project>("create_project", { project: dto });
             addProject(created);

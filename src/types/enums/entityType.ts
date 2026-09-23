@@ -1,8 +1,9 @@
 export enum EntityType {
     None = "None",
+    User = "User",
+    Project = "Project",
     Card = "Card",
     Document = "Document",
-    Project = "Project",
     Note = "Note",
     Audio = "Audio",
     Video = "Video",

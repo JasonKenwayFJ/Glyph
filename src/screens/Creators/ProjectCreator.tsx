@@ -1,13 +1,13 @@
 import {useState} from "react";
 import {open} from "@tauri-apps/plugin-dialog";
 import "./../MainStyles/Panels/ProjectCreator.scss";
-import {ProjectDto} from "../../types/DTO/ProjectDTO.ts";
+import {ProjectDTO} from "../../types/DTO/projectDTO.ts";
 
 
 
 type DataReceiverProps = {
     onClose: () => void;
-    onCreate: (dto: ProjectDto) => void; // теперь принимает готовый DTO, а не отдельные строки
+    onCreate: (dto: ProjectDTO) => void; // теперь принимает готовый DTO, а не отдельные строки
 };
 
 export const ProjectCreator = ({ onClose, onCreate }: DataReceiverProps) => {
@@ -43,7 +43,7 @@ export const ProjectCreator = ({ onClose, onCreate }: DataReceiverProps) => {
                     const title = (form.elements.namedItem("title") as HTMLInputElement).value;
                     const description = (form.elements.namedItem("description") as HTMLTextAreaElement).value;
 
-                    const dto: ProjectDto = {
+                    const dto: ProjectDTO = {
                         title,
                         description,
                         thumbnail,

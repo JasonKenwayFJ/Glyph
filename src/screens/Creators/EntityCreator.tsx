@@ -9,7 +9,7 @@ import ImageUploader from "../../components/Shared/ImageUploader/ImageUploader.t
 
 import {CreatorMode, Entity, EntityType} from "../../types/Entities.ts";
 import {invoke} from "@tauri-apps/api/core";
-import {EntityDTO} from "../../types/DTO/EntityDTO.ts";
+import {EntityDTO} from "../../types/DTO/entityDTO.ts";
 
 // type CharacteristicItem = {
 //     id: string;

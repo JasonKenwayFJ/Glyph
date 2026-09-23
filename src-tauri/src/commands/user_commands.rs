@@ -16,7 +16,11 @@ pub async fn registration(
     request: UserDto,
 ) -> Result<(), String>{
     let token =
-        authorization_service::registration(api_client.inner(),&request).await?;
+        authorization_service::registration(api_client.inner(),&request).await
+            .map_err(|error| {
+            eprintln!("Ошибка регистрации на сервере: {error}");
+            error
+        })?;
 
     let mut user = request.get_entity();
     user.token = Some(token);
@@ -43,9 +47,16 @@ pub async fn authorization(
 #[tauri::command]
 pub async fn verify_user(
     api_client: tauri::State<'_, ApiClient>,
-    request: String,
-) -> Result<bool, String>{
-    authorization_service::verify_user(api_client.inner(),request).await
+    user_state: tauri::State<'_, UserManager>,
+) -> Result<bool, String>
+{
+    let token = user_state.get_token().ok_or("Token not found").map_err(|error| {
+        eprintln!("Ошибка получения токена: {error}");
+        error
+    })?;
+    
+
+    authorization_service::verify_user(api_client.inner(),token).await
 }
 #[tauri::command]
 pub async fn delete_account(

@@ -63,7 +63,7 @@ pub async fn verify_user(
     data: String
 ) -> Result<bool, String>{
     let response = client
-        .post::<String, bool>("/api/auth/register", &data)
+        .post::<String, bool>("/api/auth/verify", &data)
         .await
         .map_err(|e| e.to_string())?;
 
