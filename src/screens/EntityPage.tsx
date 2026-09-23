@@ -10,6 +10,7 @@ import {invoke} from "@tauri-apps/api/core";
 import {listen} from "@tauri-apps/api/event";
 import {EntityType} from "../types/enums/entityType.ts";
 import {Entity} from "dexie";
+import {CreatorMode} from "../types/enums/creatorMode.ts";
 
 
 export const EntityPage = () => {
