@@ -4,7 +4,7 @@ import { router } from "./router/router";
 import {useEffect} from "react";
 import {Project} from "./types/entities/project.ts";
 import {invoke} from "@tauri-apps/api/core";
-import {useProjectStorage} from "./Storage/projectStorage.ts";
+import {useProjectStorage} from "./storage/projectStorage.ts";
 
 
 function App() {

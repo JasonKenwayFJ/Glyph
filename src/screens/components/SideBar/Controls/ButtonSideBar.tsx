@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import './ButtonSideBar.scss';
-import { ICON_MAP, SidebarButtonDescriptor } from '../../../../Storage/toolbarStorage.ts';
+import { ICON_MAP, SidebarButtonDescriptor } from '../../../../storage/toolbarStorage.ts';
 
 type ButtonSideBarProps = SidebarButtonDescriptor & { isCollapsed: boolean };
 

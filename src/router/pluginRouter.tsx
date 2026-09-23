@@ -1,5 +1,5 @@
 import {useParams} from 'react-router-dom'
-import {usePageStorage} from "../Storage/pageStorage.ts";
+import {usePageStorage} from "../storage/pageStorage.ts";
 
 export const PluginRouter = () => {
     const {pageId} = useParams<{ pageId: string }>();

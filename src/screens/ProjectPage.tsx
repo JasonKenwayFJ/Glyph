@@ -4,9 +4,10 @@ import { Searcher } from "./components/Shared/Searcher.tsx";
 import "./MainStyles/ProjectPageStyle.scss";
 import { ProjectCreator } from "./Creators/ProjectCreator.tsx";
 import { useNavigate } from "react-router-dom";
-import {useProjectStorage} from "../Storage/projectStorage.ts";
+import {useProjectStorage} from "../storage/projectStorage.ts";
 import {Project} from "../types/entities/project.ts";
 import {ProjectDTO} from "../types/DTO/projectDTO.ts";
+import {createProject} from "../apis/projectApi.ts";
 
 const ProjectPage = () => {
     const navigate = useNavigate();
@@ -43,10 +44,11 @@ const ProjectPage = () => {
         navigate("/mainPage");
     }
 
-    // теперь принимает готовый ProjectDTO из ProjectCreator, а не title/description по отдельности
     async function submitProjectCreation(dto: ProjectDTO) {
         try {
             const created = await invoke<Project>("create_project", { project: dto });
+            await createProject(dto)
+
             addProject(created);
             setCreator(false);
             await openProject(created);

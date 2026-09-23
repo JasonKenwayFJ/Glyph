@@ -1,4 +1,4 @@
-import {CreateEntityRequest} from "../types/CreateEntityRequest.ts";
+import {CreateEntityRequest} from "../types/createEntityRequest.ts";
 import {invoke} from "@tauri-apps/api/core";
 
 export async function registration(data: CreateEntityRequest) {

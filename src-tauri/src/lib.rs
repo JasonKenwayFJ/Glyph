@@ -46,7 +46,7 @@ pub fn run() {
                     .expect("no app data dir")
                     .join("Glyph");
 
-                println!("Storage directory: {}", app_data_dir.display());
+                println!("storage directory: {}", app_data_dir.display());
                 let user_manager = app_handle.state::<UserManager>();
                 let project_manager = app_handle.state::<ProjectManager>();
                 let plugin_manager = app_handle.state::<PluginManager>();

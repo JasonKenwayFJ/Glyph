@@ -3,6 +3,9 @@ use chrono::{DateTime, Utc};
 use crate::enums::entity_type::EntityType;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use crate::dto_entities::plugin_dto::PluginDto;
+use crate::entities::user_config::UserConfig;
+use crate::entities::user_entity::User;
 use crate::traits::entity_like::EntityLike;
 use crate::traits::trashable::Trashable;
 
@@ -91,7 +94,27 @@ impl Plugin {
         }
     }
 }
-
+impl From<&PluginDto> for Plugin {
+    fn from(dto: &PluginDto) -> Self {
+        Self {
+            id: Uuid::new_v4(),
+            user_id: Uuid::nil(),
+            title: dto.title.clone(),
+            description: dto.description.clone(),
+            thumbnail: None,
+            version: "1.0.0".to_string(),
+            author: dto.author.to_string(),
+            tags: dto.tags.clone(),
+            glyph_version: env!("CARGO_PKG_VERSION").to_string(),
+            size: 0,
+            enabled: false,
+            entity_type: EntityType::Plugin,
+            js_code: dto.js_code.clone(),
+            html_code: dto.html_code.clone(),
+            css_code: dto.css_code.clone(),
+        }
+    }
+}
 impl Trashable for Plugin {
     fn is_deleted(&self) -> bool {
         true

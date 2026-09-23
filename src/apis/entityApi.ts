@@ -1,5 +1,5 @@
 import {invoke} from "@tauri-apps/api/core";
-import {CreateEntityRequest} from "../types/CreateEntityRequest.ts";
+import {CreateEntityRequest} from "../types/createEntityRequest.ts";
 
 export async function preloadEntities(){
     await invoke('get_entities')

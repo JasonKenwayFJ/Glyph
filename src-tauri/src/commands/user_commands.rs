@@ -34,11 +34,11 @@ pub async fn authorization(
     app: tauri::AppHandle,
     user_state: tauri::State<'_, UserManager>,
     api_client: tauri::State<'_, ApiClient>,
-    request: UserDto,
+    data: UserDto,
 ) -> Result<(), String>{
 
     let response =
-        authorization_service::authorization(api_client.inner(),&request.email, &request.password).await?;
+        authorization_service::authorization(api_client.inner(),&data.email, &data.password).await?;
 
     user_state.set_user(response.clone());
     app.emit("OnUserAuthorized", "".to_string()).map_err(|e| e.to_string())
@@ -54,7 +54,7 @@ pub async fn verify_user(
         eprintln!("Ошибка получения токена: {error}");
         error
     })?;
-    
+
 
     authorization_service::verify_user(api_client.inner(),token).await
 }
@@ -64,9 +64,9 @@ pub async fn delete_account(
     user_state: tauri::State<'_, UserManager>,
     project_state: tauri::State<'_, ProjectManager>,
     api_client: tauri::State<'_, ApiClient>,
-    request: User,
+    data: User,
 ) -> Result<(), String> {
-    authorization_service::delete_account(api_client.inner(), &request).await?;
+    authorization_service::delete_account(api_client.inner(), &data).await?;
     let app_data_dir = app
         .path()
         .document_dir()
@@ -87,6 +87,6 @@ pub async fn delete_account(
     project_state.set_projects(Vec::new());
     project_state.close_project();
 
-    app.emit("OnUserDeleted", request.id)
+    app.emit("OnUserDeleted", data.id)
         .map_err(|e| e.to_string())
 }

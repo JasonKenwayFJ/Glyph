@@ -4,6 +4,8 @@ use glyph_core::entities::plugin::Plugin;
 use glyph_core::managers::plugin_manager::PluginManager;
 use tauri::{Emitter, Manager};
 use tokio::fs;
+use glyph_core::enums::CreateEntityRequest::CreateEntityRequest;
+use glyph_core::managers::user_manager::UserManager;
 use glyph_core::traits::entity_like::EntityLike;
 
 #[tauri::command]
@@ -43,14 +45,15 @@ pub async fn export_plugin(app: tauri::AppHandle, plugin_dto: PluginDto) -> Resu
 pub async fn create_plugins(
     app: tauri::AppHandle,
     manager: tauri::State<'_, PluginManager>,
-    plugin_dto: PluginDto,
+    user_manager: tauri::State<'_, UserManager>,
+    data: PluginDto,
 ) -> Result<(), String> {
     let document_folder = app
         .path()
         .document_dir()
         .map_err(|error| error.to_string())?;
-
-    let mut plugin = plugin_dto.get_plugin();
+    let mut plugin : Plugin = data.get_plugin();
+    plugin.user_id = user_manager.get_user().unwrap().id;
     writer::save_to_disk(&document_folder, &plugin)
         .await
         .map_err(|e| e.to_string())?;
@@ -71,18 +74,18 @@ pub async fn create_plugins(
 pub async fn delete_plugin(
     app: tauri::AppHandle,
     manager: tauri::State<'_, PluginManager>,
-    plugin: Plugin,
+    data: Plugin,
 ) -> Result<(), String> {
     let document_folder = app
         .path()
         .document_dir()
         .map_err(|error| error.to_string())?;
 
-    deleter::_hard_delete(&document_folder, &plugin)
+    deleter::_hard_delete(&document_folder, &data)
         .await
         .map_err(|e| e.to_string())?;
-    manager.delete_plugin(plugin.id)?;
-    app.emit("OnPluginDeleted", plugin)
+    manager.delete_plugin(data.id)?;
+    app.emit("OnPluginDeleted", data)
         .map_err(|e| e.to_string())
 }
 
@@ -90,12 +93,12 @@ pub async fn delete_plugin(
 pub async fn activate_plugin(
     app: tauri::AppHandle,
     manager: tauri::State<'_, PluginManager>,
-    plugin: Plugin,
+    data: Plugin,
 ) -> Result<(), String> {
     manager
-        .activate_plugin(plugin.id)
+        .activate_plugin(data.id)
         .map_err(|e| e.to_string())?;
-    app.emit("OnPluginActivated", plugin)
+    app.emit("OnPluginActivated", data)
         .map_err(|e| e.to_string())
 }
 
@@ -103,11 +106,11 @@ pub async fn activate_plugin(
 pub async fn deactivate_plugin(
     app: tauri::AppHandle,
     manager: tauri::State<'_, PluginManager>,
-    plugin: Plugin,
+    data: Plugin,
 ) -> Result<(), String> {
     manager
-        .deactivate_plugin(plugin.id)
+        .deactivate_plugin(data.id)
         .map_err(|e| e.to_string())?;
-    app.emit("OnPluginDeactivated", plugin)
+    app.emit("OnPluginDeactivated", data)
         .map_err(|e| e.to_string())
 }

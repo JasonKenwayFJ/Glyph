@@ -1,19 +1,23 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use crate::dto_entities::user_dto::UserDto;
+use crate::entities::helpers::data_object::DataObject;
 use crate::entities::plugin::{Plugin, PluginTag};
+use crate::entities::user_entity::User;
+use crate::enums::entity::Entity;
 
-#[derive(Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PluginDto {
-    title: String,
-    description: String,
-    version: String,
-    author: String,
-    tags: Vec<PluginTag>,
-    glyph_version: String,
-    js_code: String,
-    html_code: String,
-    css_code: String,
+    pub title: String,
+    pub description: String,
+    pub version: String,
+    pub author: String,
+    pub tags: Vec<PluginTag>,
+    pub glyph_version: String,
+    pub js_code: String,
+    pub html_code: String,
+    pub css_code: String,
 }
 
 impl PluginDto {
@@ -38,5 +42,16 @@ impl PluginDto {
 
     pub fn code(&self) -> (&str, &str, &str) {
         (&self.js_code, &self.html_code, &self.css_code)
+    }
+}
+impl DataObject for PluginDto{
+    type Entity = Plugin;
+
+    fn get_title(&self) -> String {self.title.clone()}
+
+    fn get_type(&self) -> Entity {todo!()}
+
+    fn get_entity(&self) -> Self::Entity {
+        Plugin::from(self)
     }
 }

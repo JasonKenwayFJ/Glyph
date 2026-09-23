@@ -1,6 +1,6 @@
 
 import Editor, { OnMount } from "@monaco-editor/react";
-import {glyphApiDeclarationSource} from "../../../Storage/glyphApi.ts";
+import {glyphApiDeclarationSource} from "../../../storage/glyphApi.ts";
 
 
 

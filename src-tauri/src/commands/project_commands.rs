@@ -1,15 +1,16 @@
+use crate::glyph_fs::writer;
+use glyph_core::dto_entities::project_dto::ProjectDto;
+use glyph_core::entities::helpers::data_object::DataObject;
 use glyph_core::entities::user_entity::User;
 use glyph_core::managers::user_manager::UserManager;
 use glyph_core::{Project, ProjectManager};
 use tauri::{Emitter, Manager};
-use glyph_core::dto_entities::project_dto::ProjectDto;
-use glyph_core::entities::helpers::data_object::DataObject;
-use crate::glyph_fs::{writer};
+use uuid::Uuid;
 
 #[tauri::command]
-pub fn open_project(app: tauri::AppHandle, state: tauri::State<ProjectManager>, project: Project) {
-    state.set_current_project(project.clone());
-    app.emit("OnProjectChanged", project).unwrap();
+pub fn open_project(app: tauri::AppHandle, state: tauri::State<ProjectManager>, data: Project) {
+    state.set_current_project(data.clone());
+    app.emit("OnProjectSelected", data).unwrap();
 }
 
 #[tauri::command]
@@ -28,18 +29,15 @@ pub async fn create_project(
     app: tauri::AppHandle,
     state: tauri::State<'_, ProjectManager>,
     user_state: tauri::State<'_, UserManager>,
-    project: ProjectDto,
-) -> Result<Project, String> {
+    data: ProjectDto,
+) -> Result<(), String> {
     println!("=== CREATE PROJECT ===");
-    println!("Project: {}", project.title);
+    println!("Project: {}", data.title);
 
-    let user: User = user_state
-        .get_user()
-        .ok_or("Cannot get the user: Create_project::Command".to_string())?;
+    let user_id: Uuid = user_state.get_user_id().ok_or("Not found active User")?;
 
-    let project = project.get_entity();
-
-    // project.user_id = user.id;
+    let mut project = data.get_entity();
+    project.user_id = user_id;
 
     println!("Project: {}", project.user_id);
 
@@ -83,5 +81,5 @@ pub async fn create_project(
     }
 
     println!("=== CREATE PROJECT SUCCESS ===");
-    Ok(project)
+    app.emit("OnProjectCreated", project).map_err(|e| e.to_string())
 }

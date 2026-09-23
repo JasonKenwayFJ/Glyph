@@ -1,9 +1,9 @@
 import {CodeEditor} from "./components/CodeEditorPage/CodeEditor.tsx";
 import {useState} from "react";
-import {useSidebarStorage} from "../Storage/toolbarStorage.ts";
+import {useSidebarStorage} from "../storage/toolbarStorage.ts";
 import {runPluginCode} from "../pluginRuntime.ts";
 import "./MainStyles/CodeEditorPage.scss"
-import {usePageStorage} from "../Storage/pageStorage.ts";
+import {usePageStorage} from "../storage/pageStorage.ts";
 import {IconDeviceFloppy, IconDeviceIpadCode, IconNewSection} from "@tabler/icons-react";
 import {invoke} from "@tauri-apps/api/core";
 import {PluginDto} from "../types/DTO/PluginDto.ts";

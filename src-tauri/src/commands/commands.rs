@@ -43,7 +43,7 @@ pub async fn create_entity(
     app: tauri::AppHandle,
     project_state: tauri::State<'_, ProjectManager>,
     user_state: tauri::State<'_, UserManager>,
-    request: CreateEntityRequest,
+    data: CreateEntityRequest,
 ) -> Result<(), String> {
     let project = project_state
         .get_project()
@@ -60,7 +60,7 @@ pub async fn create_entity(
         .join("Glyph")
         .join(project.title);
 
-    let entity: Box<dyn EntityLike> = match request {
+    let entity: Box<dyn EntityLike> = match data {
         CreateEntityRequest::Project(dto) => Box::new(dto.into_entity(user_id)),
         CreateEntityRequest::Card(dto) => Box::new(dto.into_entity(project.id, user_id)),
         _ => {todo!()}
@@ -80,7 +80,7 @@ pub async fn create_entity(
 pub async fn update_entity(
     app: tauri::AppHandle,
     project_state: tauri::State<'_, ProjectManager>,
-    request: Box<dyn EntityLike>,
+    data: Box<dyn EntityLike>,
 ) -> Result<(), String> {
     let project = project_state
         .get_project()
@@ -91,9 +91,9 @@ pub async fn update_entity(
         .expect("no app data dir")
         .join("Glyph")
         .join(project.title);
-    writer::update_on_disk(&app_data_dir, request.as_ref()).await?;
-    project_state.update_entity(request.clone_box())?;
-    app.emit("OnEntityUpdated", request)
+    writer::update_on_disk(&app_data_dir, data.as_ref()).await?;
+    project_state.update_entity(data.clone_box())?;
+    app.emit("OnEntityUpdated", data)
         .map_err(|e| e.to_string())
 }
 
@@ -101,7 +101,7 @@ pub async fn update_entity(
 pub async fn soft_delete_entity(
     app: tauri::AppHandle,
     project_state: tauri::State<'_, ProjectManager>,
-    mut request: Box<dyn EntityLike>,
+    mut data: Box<dyn EntityLike>,
 ) -> Result<(), String> {
     let project = project_state
         .get_project()
@@ -113,13 +113,13 @@ pub async fn soft_delete_entity(
         .join("Glyph")
         .join(project.title);
 
-    request.move_to_trash();
+    data.move_to_trash();
 
-    deleter::_soft_delete(&app_data_dir, request.as_ref()).await?;
-    writer::update_on_disk(&app_data_dir.join("Trash"), request.as_ref()).await?;
-    project_state.update_entity(request.clone_box())?;
+    deleter::_soft_delete(&app_data_dir, data.as_ref()).await?;
+    writer::update_on_disk(&app_data_dir.join("Trash"), data.as_ref()).await?;
+    project_state.update_entity(data.clone_box())?;
 
-    app.emit("OnEntityMovedToTrash", request)
+    app.emit("OnEntityMovedToTrash", data)
         .map_err(|e| e.to_string())
 }
 
@@ -127,7 +127,7 @@ pub async fn soft_delete_entity(
 pub async fn hard_delete_entity(
     app: tauri::AppHandle,
     project_state: tauri::State<'_, ProjectManager>,
-    request: Box<dyn EntityLike>,
+    data: Box<dyn EntityLike>,
 ) -> Result<(), String> {
     let project = project_state
         .get_project()
@@ -138,10 +138,10 @@ pub async fn hard_delete_entity(
         .expect("no app data dir")
         .join("Glyph")
         .join(project.title);
-    deleter::_hard_delete(&app_data_dir, request.as_ref()).await?;
+    deleter::_hard_delete(&app_data_dir, data.as_ref()).await?;
 
-    project_state.remove_entity(request.id());
+    project_state.remove_entity(data.id());
 
-    app.emit("OnEntityDeleted", request)
+    app.emit("OnEntityDeleted", data)
         .map_err(|e| e.to_string())
 }
