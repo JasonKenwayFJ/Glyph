@@ -1,4 +1,4 @@
-import {EntityType} from "./Entities.ts";
+import {EntityType} from "../Entities.ts";
 
 export interface Project {
     id: string;

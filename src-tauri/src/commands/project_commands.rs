@@ -3,7 +3,7 @@ use glyph_core::managers::user_manager::UserManager;
 use glyph_core::{Project, ProjectManager};
 use tauri::{Emitter, Manager};
 use glyph_core::dto_entities::project_dto::ProjectDto;
-use glyph_core::entities::helpers::dto::DataObject;
+use glyph_core::entities::helpers::data_object::DataObject;
 use crate::glyph_fs::{writer};
 
 #[tauri::command]

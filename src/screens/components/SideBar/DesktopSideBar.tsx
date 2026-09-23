@@ -3,7 +3,7 @@ import {IconChevronLeft, IconChevronRight, IconSettings} from '@tabler/icons-rea
 import {useEffect, useState} from 'react';
 import {useMemo} from 'react';
 import {ButtonSideBar} from './Controls/ButtonSideBar.tsx';
-import {useSidebarStorage} from '../../../Storage/ToolbarStorage.ts';
+import {useSidebarStorage} from '../../../Storage/toolbarStorage.ts';
 import {useNavigate} from "react-router-dom";
 import {Project} from "../../../types/Project.ts";
 import {listen} from "@tauri-apps/api/event";

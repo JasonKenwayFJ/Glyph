@@ -1,14 +1,13 @@
+use std::path::PathBuf;
 use serde::Deserialize;
 use uuid::Uuid;
-use crate::entities::document_entity::{Characteristic, ExtraField};
-use crate::entities::card_entity::Card; 
+use crate::entities::document_entity::{Characteristic, Document, ExtraField};
 use crate::enums::entity_type::EntityType;
 use crate::enums::source::Source;
-use std::path::PathBuf;
 
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct CardDto {
+pub struct DocumentDto {
     pub title: String,
     pub description: String,
     pub content: String,
@@ -21,9 +20,9 @@ pub struct CardDto {
     pub is_pending: bool,
 }
 
-impl CardDto {
-    pub fn into_entity(self, project_id: Uuid, user_id: Uuid) -> Card {
-        Card::new(
+impl DocumentDto {
+    pub fn into_entity(self, project_id: Uuid, user_id: Uuid) -> Document {
+        Document::new(
             project_id,
             user_id,
             &self.title,
@@ -39,4 +38,3 @@ impl CardDto {
         )
     }
 }
-

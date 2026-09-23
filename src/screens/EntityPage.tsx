@@ -3,12 +3,13 @@ import {CardContent} from "./components/EntityPage/CardContent.tsx";
 import {DocumentContent} from "./components/EntityPage/DocumentContent.tsx";
 import {Searcher} from "./components/Shared/Searcher.tsx";
 import "./MainStyles/EntityPageStyle.scss"
-import {CreatorMode, Entity, EntityType} from "../types/Entities.ts";
 import {useEffect, useState} from "react";
 import EntityCreator from "./Creators/EntityCreator.tsx";
 
 import {invoke} from "@tauri-apps/api/core";
 import {listen} from "@tauri-apps/api/event";
+import {EntityType} from "../types/enums/entityType.ts";
+import {Entity} from "dexie";
 
 
 export const EntityPage = () => {

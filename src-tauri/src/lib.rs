@@ -1,4 +1,3 @@
-// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 mod commands;
 mod glyph_fs;
 
@@ -11,6 +10,7 @@ use glyph_core::ProjectManager;
 use tauri::Manager;
 use glyph_core::managers::plugin_manager::PluginManager;
 use glyph_fs::loader;
+use crate::commands::commands::{create_entity, get_entities, hard_delete_entity, soft_delete_entity, update_entity};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -48,7 +48,6 @@ pub fn run() {
                 let project_manager = app_handle.state::<ProjectManager>();
                 let plugin_manager = app_handle.state::<PluginManager>();
 
-
                 match loader::load_user(&app_data_dir).await {
                     Ok(user) => user_manager.set_user(user),
                     Err(e) => eprintln!("Не удалось загрузить юзера: {e}"),
@@ -63,31 +62,23 @@ pub fn run() {
                     Ok(plugins) => plugin_manager.add_plugins(plugins),
                     Err(e) => eprintln!("Не удалось загрузить плагины: {e}"),
                 }
-
-
-
-                // match loader::preload_data(&storage_dir).await {
-                //     Ok(loaded) => {
-                //         user_manager.set_user(loaded.0);
-                //         project_manager.set_projects(loaded.1);
-                //         plugin_manager.add_plugins(loaded.3);
-                //         println!("loaded user");
-                //     }
-                //     Err(e) => {
-                //         eprintln!("Не получилось загрузить данные юзера: {e}")
-                //     }
-                // }
             });
 
             Ok(())
         })
+
         .invoke_handler(tauri::generate_handler![
             create_project,
             open_project,
             get_projects,
             get_project,
             export_plugin,
+            get_entities,
+            create_entity,
+            update_entity,
+            soft_delete_entity,
+            hard_delete_entity
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
-}
+            }

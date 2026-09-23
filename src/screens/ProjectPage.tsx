@@ -1,14 +1,17 @@
-import { useEffect, useRef, useState } from "react";
-import { Project } from "../types/Project.ts";
+import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { Searcher } from "./components/Shared/Searcher.tsx";
 import "./MainStyles/ProjectPageStyle.scss";
-import { ProjectCreator, ProjectDto } from "./Creators/ProjectCreator.tsx";
+import { ProjectCreator } from "./Creators/ProjectCreator.tsx";
 import { useNavigate } from "react-router-dom";
+import {useProjectStorage} from "../Storage/projectStorage.ts";
+import {Project} from "../types/entities/project.ts";
+import {ProjectDto} from "../types/DTO/ProjectDTO.ts";
 
 const ProjectPage = () => {
     const navigate = useNavigate();
-
+    const projects = useProjectStorage((state) => state.projects);
+    const addProject = useProjectStorage((state) => state.addProject);
     function handleTilt(e: React.MouseEvent<HTMLDivElement>) {
         const card = e.currentTarget;
         const rect = card.getBoundingClientRect();
@@ -27,35 +30,16 @@ const ProjectPage = () => {
         setCreator(value);
     }
 
-    function setFilter(value: string) {
-        setFiltered(projects.filter((x) => x.title == value));
-    }
 
-    const [projects, setProjects] = useState<Project[]>([]);
-    const [filtered, setFiltered] = useState<Project[]>([]);
+
+
     const [isCreator, setCreator] = useState<boolean>(false);
 
-    const hasLoaded = useRef(false);
 
-    useEffect(() => {
-        if (hasLoaded.current) return;
-        hasLoaded.current = true;
-
-        async function load() {
-            try {
-                const data = await invoke<Project[]>("get_projects");
-                setProjects(data ?? []);
-                setFiltered(data ?? []);
-            } catch (e) {
-                console.error(e);
-            }
-        }
-
-        load();
-    }, []);
 
     async function openProject(project: Project) {
         await invoke("open_project", { project });
+        addProject(project);
         navigate("/mainPage");
     }
 
@@ -63,8 +47,7 @@ const ProjectPage = () => {
     async function submitProjectCreation(dto: ProjectDto) {
         try {
             const created = await invoke<Project>("create_project", { project: dto });
-            setProjects((prev) => [...prev, created]);
-            setFiltered((prev) => [...prev, created]);
+            addProject(created);
             setCreator(false);
             await openProject(created);
         } catch (e) {
@@ -87,7 +70,7 @@ const ProjectPage = () => {
                 </div>
             </div>
 
-            <Searcher placeholder={"Поиск проекта..."} value={""} setSearch={setFilter} />
+            <Searcher placeholder={"Поиск проекта..."} value={""} setSearch={()=>{}} />
 
             <div className="ProjectGrid">
                 <div className="ProjectCardNew" onClick={() => toggleCreator(!isCreator)}>
@@ -95,7 +78,7 @@ const ProjectPage = () => {
                     <p>Создать проект</p>
                 </div>
 
-                {filtered.map((project, i) => (
+                {projects.map((project, i) => (
                     <div
                         key={project.id}
                         className="ProjectCard"

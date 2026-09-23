@@ -1,6 +1,6 @@
 use serde::Deserialize;
 use uuid::Uuid;
-use crate::entities::helpers::dto::DataObject;
+use crate::entities::helpers::data_object::DataObject;
 use crate::enums::entity::Entity;
 use crate::enums::entity_type::EntityType;
 use crate::enums::source::Source;

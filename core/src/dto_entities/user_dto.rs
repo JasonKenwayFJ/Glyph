@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use crate::entities::helpers::dto::DataObject;
+use crate::entities::helpers::data_object::DataObject;
 use crate::entities::user_entity::User;
 use crate::enums::entity::Entity;
 use crate::enums::source::Source;
