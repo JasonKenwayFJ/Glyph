@@ -7,9 +7,11 @@ import "../../index.scss";
 import Dropdown from "../../components/Shared/Dropdown/Dropdown.tsx";
 import ImageUploader from "../../components/Shared/ImageUploader/ImageUploader.tsx";
 
-import {CreatorMode, Entity, EntityType} from "../../types/Entities.ts";
 import {invoke} from "@tauri-apps/api/core";
 import {EntityDTO} from "../../types/DTO/entityDTO.ts";
+import {CreatorMode} from "../../types/enums/creatorMode.ts";
+import {EntityType} from "../../types/enums/entityType.ts";
+import {BaseEntity} from "../../types/entities/baseEntity.ts";
 
 // type CharacteristicItem = {
 //     id: string;
@@ -26,7 +28,7 @@ type EntityCreatorProp<T> = {
     onSaved: () => void;
 };
 
-const EntityCreator = (props: EntityCreatorProp<Entity>) => {
+const EntityCreator = (props: EntityCreatorProp<>) => {
 
     const [isLoading, setLoading] = useState<boolean>(false)
 
@@ -96,7 +98,7 @@ const EntityCreator = (props: EntityCreatorProp<Entity>) => {
         setLoading(true)
         const entity = {...form}
         try{
-            await invoke<Entity>("create_entity", {entity});
+            await invoke<BaseEntity>("create_entity", {entity});
             props.onSaved()
         }catch (e) {
             console.error(e)
