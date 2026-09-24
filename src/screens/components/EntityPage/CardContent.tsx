@@ -1,22 +1,29 @@
-import "./../EntityPage/Styles/CardContent.scss"
+import "./../EntityPage/Styles/CardContent.scss";
 import Card from "../Shared/Card/Card.tsx";
-import {CreatorMode} from "../../../types/Entities.ts";
-import {EntityPageContentProp} from "../../../types/LocalProps.ts";
+import { CreatorMode } from "../../../types/enums/creatorMode.ts";
+import { EntityType } from "../../../types/enums/entityType.ts";
+import { useEntityStorage } from "../../../storage/entity_storage.ts";
 
-export const CardContent = (props : EntityPageContentProp) => {
+type CardContentProps = {
+    invokeCreator: (mode: CreatorMode, entity?: any) => void;
+    searchText: string;
+};
+
+export const CardContent = ({ invokeCreator, searchText }: CardContentProps) => {
+    const cards = useEntityStorage((state) => state.getEntities(EntityType.Card));
+
+    const filtered = searchText
+        ? cards.filter((c) => c.title.toLowerCase().includes(searchText.toLowerCase()))
+        : cards;
 
     return (
         <div className={"CardListContainer"}>
             <main className="EntityContent">
-                <Card onClick={() => props.invokeCreator(CreatorMode.Creating)} />
-                {props.filteredEntities.length === 0
-                    ? props.entities.map((card) => (
-                        <Card key={card.id} data={card} onClick={() => props.invokeCreator(CreatorMode.Creating)} />
-                    ))
-                    : props.filteredEntities.map((card) => (
-                        <Card key={card.id} data={card} onClick={() => props.invokeCreator(CreatorMode.Creating)} />
-                    ))}
+                <Card onClick={() => invokeCreator(CreatorMode.Creating)} />
+                {filtered.map((card) => (
+                    <Card key={card.id} data={card} onClick={() => invokeCreator(CreatorMode.Creating, card)} />
+                ))}
             </main>
         </div>
-    )
-}
+    );
+};

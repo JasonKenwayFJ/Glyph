@@ -2,10 +2,10 @@ import Editor from "../components/Shared/Editor/Editor.tsx";
 import EntityCreator from "./Creators/EntityCreator.tsx";
 // import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {EntityType} from "../types/Entities.ts";
 // import {invoke} from "@tauri-apps/api/core";
 // import {invoke} from "@tauri-apps/api/core";
 import "./MainStyles/MainPageStyle.scss"
+import {EntityType} from "../types/enums/entityType.ts";
 const MainPage = () => {
     // const {id} = useParams()
 

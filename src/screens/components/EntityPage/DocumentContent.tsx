@@ -1,8 +1,11 @@
-import {EntityPageContentProp} from "../../../types/LocalProps.ts";
+
 import DocumentTemplate from "../Shared/Document/Document.tsx";
-import {CreatorMode} from "../../../types/Entities.ts";
 import {useNavigate} from "react-router-dom";
 import "./Styles/DocumentContent.scss"
+import {CreatorMode} from "../../../types/enums/creatorMode.ts";
+
+
+
 export const DocumentContent = (props: EntityPageContentProp) => {
     const navigate = useNavigate()
 

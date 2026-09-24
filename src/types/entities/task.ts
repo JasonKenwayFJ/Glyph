@@ -1,13 +1,10 @@
-import {EntityType} from "../Entities.ts";
+import {BaseEntity} from "./baseEntity.ts";
+import {EntityType} from "../enums/entityType.ts";
 
-export type Task = {
-    id: string;
-    userId: string;
-    projectId: string;
+export type Task = BaseEntity &{
     parentTaskId: string | null;
     thumbnail: string | null;
     entityType: EntityType;
-    title: string;
     description: string;
 
     status: TaskStatus;
