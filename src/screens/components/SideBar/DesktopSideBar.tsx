@@ -1,25 +1,16 @@
 import './../../MainStyles/Panels/ToolbarStyle.scss';
 import {IconChevronLeft, IconChevronRight, IconSettings} from '@tabler/icons-react';
-import {useEffect, useState} from 'react';
+import { useState} from 'react';
 import {useMemo} from 'react';
 import {ButtonSideBar} from './Controls/ButtonSideBar.tsx';
 import {useSidebarStorage} from '../../../storage/toolbarStorage.ts';
 import {useNavigate} from "react-router-dom";
-import {Project} from "../../../types/Project.ts";
-import {listen} from "@tauri-apps/api/event";
+import {useProjectStorage} from "../../../storage/projectStorage.ts";
 
 export const DesktopSideBar = () => {
     const navigate = useNavigate();
-    const [project, setProject] = useState<Project | null>(null);
-    useEffect(() => {
-        const unlisten = listen<Project>('OnProjectChanged', (event) => {
-            setProject(event.payload)
-        })
+    const storage = useProjectStorage();
 
-        return () =>{
-            unlisten.then((fn) => fn())
-        }
-    })
     const [isCollapsed, setCollapsed] = useState(false);
     const [dropDown, setDropDown] = useState(false);
     const rawButtons = useSidebarStorage((state) => state.buttons);
@@ -38,7 +29,7 @@ export const DesktopSideBar = () => {
                             <span className="AppName" onClick={toggleDropDown}>Glyph</span>
 
                             <button className="ProjectName">
-                                {project?.title}
+                                {storage.currentProject?.title ? storage.currentProject?.title : "Выберите проект"}
                             </button>
 
                             {dropDown && <div className="ProjectDropdown">

@@ -1,16 +1,19 @@
 import "./../EntityPage/Styles/CardContent.scss";
 import Card from "../Shared/Card/Card.tsx";
-import { CreatorMode } from "../../../types/enums/creatorMode.ts";
-import { EntityType } from "../../../types/enums/entityType.ts";
-import { useEntityStorage } from "../../../storage/entity_storage.ts";
+import {CreatorMode} from "../../../types/enums/creatorMode.ts";
+import {EntityType} from "../../../types/enums/entityType.ts";
+import {useEntityStorage} from "../../../storage/entity_storage.ts";
+import {useMemo} from "react";
 
-type CardContentProps = {
+export type EntityContentProps = {
     invokeCreator: (mode: CreatorMode, entity?: any) => void;
     searchText: string;
 };
 
-export const CardContent = ({ invokeCreator, searchText }: CardContentProps) => {
-    const cards = useEntityStorage((state) => state.getEntities(EntityType.Card));
+export const CardContent = ({ invokeCreator, searchText }: EntityContentProps) => {
+    const entities = useEntityStorage((state) => state.entities);
+    const cards = useMemo(() => entities.filter((e) => e.entityType === EntityType.Card), [entities]);
+    // const cards = useEntityStorage((state) => state.getEntities(EntityType.Card));
 
     const filtered = searchText
         ? cards.filter((c) => c.title.toLowerCase().includes(searchText.toLowerCase()))

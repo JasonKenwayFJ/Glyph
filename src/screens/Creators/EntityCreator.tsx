@@ -28,7 +28,7 @@ type EntityCreatorProp<T> = {
     onSaved: () => void;
 };
 
-const EntityCreator = (props: EntityCreatorProp<>) => {
+const EntityCreator = (props: EntityCreatorProp<BaseEntity>) => {
 
     const [isLoading, setLoading] = useState<boolean>(false)
 

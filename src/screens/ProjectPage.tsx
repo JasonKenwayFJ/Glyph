@@ -38,9 +38,9 @@ const ProjectPage = () => {
 
 
 
-    async function openProject(project: Project) {
-        await invoke("open_project", { project });
-        addProject(project);
+    async function openProject(data: Project) {
+        await invoke("open_project", { data });
+        addProject(data);
         navigate("/mainPage");
     }
 

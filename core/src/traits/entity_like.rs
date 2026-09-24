@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+ use std::path::PathBuf;
 use uuid::Uuid;
 use crate::enums::entity_type::EntityType;
 use crate::traits::trashable::Trashable;
