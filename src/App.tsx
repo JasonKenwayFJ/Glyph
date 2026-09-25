@@ -1,11 +1,11 @@
-import "./App.css";
+
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router/router";
 import {useEffect} from "react";
 import {Project} from "./types/entities/project.ts";
 import {invoke} from "@tauri-apps/api/core";
 import {useProjectStorage} from "./storage/projectStorage.ts";
-
+import "./index.scss"
 
 function App() {
 
@@ -17,7 +17,7 @@ function App() {
 
 
     return (
-        <main className="App">
+        <main>
             <RouterProvider router={router} />
         </main>
     );

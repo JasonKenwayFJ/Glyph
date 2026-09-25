@@ -1,13 +1,14 @@
 import "./../MainStyles/Panels/EntityCreator.scss";
-import { useState } from "react";
-import { invoke } from "@tauri-apps/api/core";
+import {useState} from "react";
+import {invoke} from "@tauri-apps/api/core";
 import Dropdown from "../../components/Shared/Dropdown/Dropdown.tsx";
-import { CreatorMode } from "../../types/enums/creatorMode.ts";
-import { EntityType } from "../../types/enums/entityType.ts";
-import { BaseEntity } from "../../types/entities/baseEntity.ts";
+import {CreatorMode} from "../../types/enums/creatorMode.ts";
+import {EntityType} from "../../types/enums/entityType.ts";
+import {BaseEntity} from "../../types/entities/baseEntity.ts";
 import {CreateEntityRequest, defaultRequest} from "../../types/createEntityRequest.ts";
 import {CardCreator} from "../components/entityCreatorPage/CardCreator.tsx";
 import {DocumentCreator} from "../components/entityCreatorPage/DocumentCreator.tsx";
+import {useParams} from "react-router-dom";
 
 
 type EntityCreatorProps = {
@@ -19,6 +20,12 @@ type EntityCreatorProps = {
 };
 
 const EntityCreator = (props: EntityCreatorProps) => {
+    const { entity_type } = useParams<{ entity_type: EntityType }>();
+
+
+
+
+
     const [isLoading, setLoading] = useState(false);
 
     const [form, setForm] = useState<CreateEntityRequest>(() =>
@@ -67,8 +74,8 @@ const EntityCreator = (props: EntityCreatorProps) => {
                 </div>
 
                 <div className="EntityCreatorBody">
-                    {form.type === "Card" && <CardCreator value={form} onChange={patch} />}
-                    {form.type === "Document" && <DocumentCreator value={form} onChange={patch} />}
+                    {entity_type === EntityType.Card && <CardCreator />}
+                    {entity_type === EntityType.Document && <DocumentCreator />}
 
                     <div className="EntityCreatorButtonHandler">
                         <div>
