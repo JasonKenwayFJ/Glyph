@@ -4,7 +4,6 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub enum Source {
-    None(),
     File(PathBuf),
     Url(String),
 }

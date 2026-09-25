@@ -16,12 +16,12 @@ export type CardDto = {
 }
 export function defaultCardDto(): CardDto {
     return {
-        entityType: EntityType.Card,
         title: "",
         description: "",
         content: "",
-        thumbnailSource: "None",
-        thumbnail: null,
+        thumbnailSource: null,
+        thumbnail: "",
+        entityType: EntityType.Card,
         categories: [],
         tags: [],
         extraFields: []

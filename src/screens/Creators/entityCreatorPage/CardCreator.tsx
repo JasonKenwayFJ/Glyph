@@ -1,25 +1,22 @@
 import ImageUploader from "../../../components/Shared/ImageUploader/ImageUploader.tsx";
-import { useState } from "react";
-import { CardDto, defaultCardDto } from "../../../types/DTO/cardDto.ts";
+import {CardDto} from "../../../types/DTO/cardDto.ts";
 
-export const CardCreator = () => {
-    const [dto, setDto] = useState<CardDto>(defaultCardDto);
 
-    function onChange(values: Partial<CardDto>) {
-        setDto(prev => ({
-            ...prev,
-            ...values,
-        }));
-    }
+type CardCreatorProps = {
+    value: CardDto;
+    onChange: (patch: Partial<CardDto>) => void;
+};
 
+export const CardCreator = ({ value, onChange }: CardCreatorProps) => {
     return (
         <>
             <div className="EntityCreatorBodyFooter">
                 <ImageUploader
-                    imagePath={dto.thumbnail}
+                    imagePath={value.thumbnail}
                     onUpload={(file) =>
                         onChange({
                             thumbnail: file?.name ?? null,
+                            thumbnailSource: file ? { File: file.name } : null,
                         })
                     }
                 />
@@ -29,10 +26,9 @@ export const CardCreator = () => {
                         className="EntityCreatorInputTitle"
                         type="text"
                         placeholder="Название сущности"
-                        value={dto.title}
+                        value={value.title}
                         onChange={(e) => onChange({ title: e.target.value })}
                     />
-
                     <div className="TagHandler">
                         {/* теги — подключим, когда решим Category/Tag компоненты */}
                     </div>
@@ -45,7 +41,7 @@ export const CardCreator = () => {
                     type="text"
                     required
                     placeholder="Пара строк для превью и карточки..."
-                    value={dto.description}
+                    value={value.description}
                     onChange={(e) => onChange({ description: e.target.value })}
                 />
             </div>
@@ -54,7 +50,7 @@ export const CardCreator = () => {
                 <p>Содержание</p>
                 <textarea
                     placeholder="Основной текст: механика, лор, сценарий — что угодно..."
-                    value={dto.content}
+                    value={value.content}
                     required
                     onChange={(e) => onChange({ content: e.target.value })}
                 />
@@ -77,18 +73,14 @@ export const CardCreator = () => {
             <div className="EntityCreatorExtraFields">
                 <div className="EntityCreatorExtraFieldsHeader">
                     <span>Дополнительные поля</span>
-
                     <button
                         type="button"
                         className="EntityCreatorExtraFieldAdd"
                         onClick={() =>
                             onChange({
                                 extraFields: [
-                                    ...dto.extraFields,
-                                    {
-                                        id: crypto.randomUUID(),
-                                        title: "",
-                                    },
+                                    ...value.extraFields,
+                                    { id: crypto.randomUUID(), title: "" },
                                 ],
                             })
                         }
@@ -97,37 +89,24 @@ export const CardCreator = () => {
                     </button>
                 </div>
 
-                {dto.extraFields.map((field, index) => (
-                    <div
-                        className="EntityCreatorExtraFieldRow"
-                        key={field.id}
-                    >
+                {value.extraFields.map((field, index) => (
+                    <div className="EntityCreatorExtraFieldRow" key={field.id}>
                         <input
                             required
                             placeholder="Название поля"
                             value={field.title}
                             onChange={(e) => {
-                                const updated = [...dto.extraFields];
-
-                                updated[index] = {
-                                    ...updated[index],
-                                    title: e.target.value,
-                                };
-
-                                onChange({
-                                    extraFields: updated,
-                                });
+                                const updated = [...value.extraFields];
+                                updated[index] = { ...updated[index], title: e.target.value };
+                                onChange({ extraFields: updated });
                             }}
                         />
-
                         <button
                             type="button"
                             className="EntityCreatorExtraFieldRemove"
                             onClick={() =>
                                 onChange({
-                                    extraFields: dto.extraFields.filter(
-                                        (_, idx) => idx !== index
-                                    ),
+                                    extraFields: value.extraFields.filter((_, idx) => idx !== index),
                                 })
                             }
                         >

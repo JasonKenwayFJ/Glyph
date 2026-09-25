@@ -3,11 +3,9 @@ use crate::enums::entity_type::EntityType;
 use crate::enums::source::Source;
 use crate::traits::storable::Storable;
 use crate::traits::trashable::Trashable;
-use crate::Project;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
-use ts_rs::TS;
 use uuid::Uuid;
 use crate::traits::entity_like::EntityLike;
 
@@ -20,7 +18,7 @@ pub struct Card {
     pub title: String,
     pub description: String,
     pub content: String,
-    pub thumbnail_source: Source,
+    pub thumbnail_source: Option<Source>,
     pub thumbnail: Option<PathBuf>,
     pub entity_type: EntityType,
     pub created_at: DateTime<Utc>,
@@ -40,13 +38,12 @@ impl Card {
         title: &str,
         description: &str,
         content: &str,
-        thumbnail_source: Source,
+        thumbnail_source: Option<Source>,
         thumbnail: Option<PathBuf>,
         entity_type: EntityType,
         categories: Vec<Characteristic>,
         tags: Vec<Characteristic>,
-        extra_fields: Vec<ExtraField>,
-        is_pending: bool,
+        extra_fields: Vec<ExtraField>
     ) -> Self {
         let now = Utc::now();
         Card {
@@ -64,7 +61,7 @@ impl Card {
             categories,
             tags,
             extra_fields,
-            is_pending,
+            is_pending: false,
             is_deleted: false,
             deleted_at: None,
         }

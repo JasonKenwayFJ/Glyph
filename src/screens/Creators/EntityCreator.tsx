@@ -1,14 +1,14 @@
 import "./../MainStyles/Panels/EntityCreator.scss";
-import {useState} from "react";
-import {invoke} from "@tauri-apps/api/core";
+import { useState } from "react";
+import { invoke } from "@tauri-apps/api/core";
 import Dropdown from "../../components/Shared/Dropdown/Dropdown.tsx";
-import {CreatorMode} from "../../types/enums/creatorMode.ts";
-import {EntityType} from "../../types/enums/entityType.ts";
-import {BaseEntity} from "../../types/entities/baseEntity.ts";
+import { CreatorMode } from "../../types/enums/creatorMode.ts";
+import { EntityType } from "../../types/enums/entityType.ts";
+import { BaseEntity } from "../../types/entities/baseEntity.ts";
 import {CreateEntityRequest, defaultRequest} from "../../types/createEntityRequest.ts";
-import {CardCreator} from "../components/entityCreatorPage/CardCreator.tsx";
-import {DocumentCreator} from "../components/entityCreatorPage/DocumentCreator.tsx";
-import {useParams} from "react-router-dom";
+import {CardCreator} from "./entityCreatorPage/CardCreator.tsx";
+import {DocumentCreator} from "./entityCreatorPage/DocumentCreator.tsx";
+import {createEntity} from "../../apis/entityApi.ts";
 
 
 type EntityCreatorProps = {
@@ -20,17 +20,11 @@ type EntityCreatorProps = {
 };
 
 const EntityCreator = (props: EntityCreatorProps) => {
-    const { entity_type } = useParams<{ entity_type: EntityType }>();
-
-
-
-
-
     const [isLoading, setLoading] = useState(false);
 
     const [form, setForm] = useState<CreateEntityRequest>(() =>
         props.data
-            ? ({type: props.data.entityType, ...props.data} as unknown as CreateEntityRequest)
+            ? ({ type: props.data.entityType, ...props.data } as CreateEntityRequest)
             : defaultRequest(props.entityType)
     );
 
@@ -46,7 +40,7 @@ const EntityCreator = (props: EntityCreatorProps) => {
     async function submit() {
         setLoading(true);
         try {
-            await invoke<BaseEntity>("create_entity", { request: form });
+            await invoke<BaseEntity>("create_entity", { data: form });
             props.onSaved();
         } catch (e) {
             console.error(e);
@@ -74,8 +68,8 @@ const EntityCreator = (props: EntityCreatorProps) => {
                 </div>
 
                 <div className="EntityCreatorBody">
-                    {entity_type === EntityType.Card && <CardCreator />}
-                    {entity_type === EntityType.Document && <DocumentCreator />}
+                    {form.type === "Card" && <CardCreator value={form} onChange={patch} />}
+                    {form.type === "Document" && <DocumentCreator value={form} onChange={patch} />}
 
                     <div className="EntityCreatorButtonHandler">
                         <div>

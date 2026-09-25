@@ -1,1 +1,4 @@
-export type Source =  "None" | "Url" | "File";
+// types/enums/source.ts
+export type Source =
+    | { File: string }
+    | { Url: string };

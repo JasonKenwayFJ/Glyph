@@ -19,7 +19,7 @@ export function defaultDocumentDto(): DocumentDto {
     return {
         entityType: EntityType.Document,
         thumbnail: "",
-        thumbnailSource: "None",
+        thumbnailSource: "file",
         title: "",
         description: "",
         content: "",

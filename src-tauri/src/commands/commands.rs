@@ -45,7 +45,8 @@ pub async fn create_entity(
     user_state: tauri::State<'_, UserManager>,
     data: CreateEntityRequest,
 ) -> Result<(), String> {
-    let project = project_state
+
+    let mut project = project_state
         .get_project()
         .ok_or("No active project found".to_string())?;
     let user_id = user_state
@@ -58,7 +59,8 @@ pub async fn create_entity(
         .document_dir()
         .expect("no app data dir")
         .join("Glyph")
-        .join(project.title);
+        .join("Projects")
+        .join(&project.title);
 
     let entity: Box<dyn EntityLike> = match data {
         CreateEntityRequest::Project(dto) => Box::new(dto.into_entity(user_id)),
@@ -72,9 +74,16 @@ pub async fn create_entity(
     project_state.add_boxed_entity(entity.clone_box());
     println!("Сущность успешно добавлена локально");
 
+    project.weight += 1;
+    project_state.update_project(project).map_err(|e| e.to_string())?;
+
+
+
+
     app.emit("OnEntityCreated", entity)
         .map_err(|e| e.to_string())
 }
+
 
 #[tauri::command]
 pub async fn update_entity(
