@@ -10,7 +10,7 @@
 
 .EntityCreatorForm {
   background: var(--backgroundMain);
-  border: 1px solid var(--borderDefault);
+  border: 1px solid var(--backgroundAccent);
   border-radius: 12px;
   padding: 1.5rem;
   width: 35rem;
@@ -23,7 +23,7 @@
   input,
   textarea {
     background: var(--backgroundLight);
-    border: 1px solid var(--borderDefault);
+    border: 1px solid var(--backgroundAccent);
     border-radius: 7px;
     padding: 9px 11px;
     color: var(--textPrimary);

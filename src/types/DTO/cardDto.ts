@@ -7,12 +7,24 @@ export type CardDto = {
     title: string;
     description: string;
     content: string;
-    thumbnailSource: Source;
+    thumbnailSource: Source | null;
     thumbnail: string | null;
     entityType: EntityType;
     categories: Characteristic[];
     tags: Characteristic[];
     extraFields: ExtraField[];
-    isPending: boolean;
+}
+export function defaultCardDto(): CardDto {
+    return {
+        entityType: EntityType.Card,
+        title: "",
+        description: "",
+        content: "",
+        thumbnailSource: "None",
+        thumbnail: null,
+        categories: [],
+        tags: [],
+        extraFields: []
+    };
 }
 

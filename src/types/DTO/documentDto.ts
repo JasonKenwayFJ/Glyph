@@ -1,4 +1,3 @@
-
 import {EntityType} from "../enums/entityType.ts";
 import {Characteristic} from "../entities/partials/characteristics.ts";
 import {ExtraField} from "../entities/partials/extraFields.ts";
@@ -14,5 +13,18 @@ export type DocumentDto = {
     categories: Characteristic[];
     tags: Characteristic[];
     extraFields: ExtraField[];
-    isPending: boolean;
+}
+
+export function defaultDocumentDto(): DocumentDto {
+    return {
+        entityType: EntityType.Document,
+        thumbnail: "",
+        thumbnailSource: "None",
+        title: "",
+        description: "",
+        content: "",
+        categories: [],
+        tags: [],
+        extraFields: []
+    };
 }

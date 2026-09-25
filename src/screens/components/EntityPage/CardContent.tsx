@@ -13,7 +13,6 @@ export type EntityContentProps = {
 export const CardContent = ({ invokeCreator, searchText }: EntityContentProps) => {
     const entities = useEntityStorage((state) => state.entities);
     const cards = useMemo(() => entities.filter((e) => e.entityType === EntityType.Card), [entities]);
-    // const cards = useEntityStorage((state) => state.getEntities(EntityType.Card));
 
     const filtered = searchText
         ? cards.filter((c) => c.title.toLowerCase().includes(searchText.toLowerCase()))

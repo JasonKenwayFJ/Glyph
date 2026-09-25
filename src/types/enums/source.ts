@@ -1,1 +1,1 @@
-export type Source = "Url" | "File"; 
+export type Source =  "None" | "Url" | "File";
