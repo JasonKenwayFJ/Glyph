@@ -11,13 +11,12 @@ pub struct DocumentDto {
     pub title: String,
     pub description: String,
     pub content: String,
-    pub thumbnail_source: Source,
+    pub thumbnail_source: Option<Source>,
     pub thumbnail: Option<PathBuf>,
     pub entity_type: EntityType,
     pub categories: Vec<Characteristic>,
     pub tags: Vec<Characteristic>,
     pub extra_fields: Vec<ExtraField>,
-    pub is_pending: bool,
 }
 
 impl DocumentDto {
@@ -34,7 +33,6 @@ impl DocumentDto {
             self.categories,
             self.tags,
             self.extra_fields,
-            self.is_pending,
         )
     }
 }

@@ -8,7 +8,6 @@ import { BaseEntity } from "../../types/entities/baseEntity.ts";
 import {CreateEntityRequest, defaultRequest} from "../../types/createEntityRequest.ts";
 import {CardCreator} from "./entityCreatorPage/CardCreator.tsx";
 import {DocumentCreator} from "./entityCreatorPage/DocumentCreator.tsx";
-import {createEntity} from "../../apis/entityApi.ts";
 
 
 type EntityCreatorProps = {
@@ -40,7 +39,6 @@ const EntityCreator = (props: EntityCreatorProps) => {
     async function submit() {
         setLoading(true);
         try {
-            await createEntity<BaseEntity>(form);
             await invoke<BaseEntity>("create_entity", { data: form });
             props.onSaved();
         } catch (e) {

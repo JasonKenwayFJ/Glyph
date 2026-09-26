@@ -18,7 +18,7 @@ pub struct Document {
     pub title: String,
     pub description: String,
     pub content: String,
-    pub thumbnail_source: Source,
+    pub thumbnail_source: Option<Source>,
     pub thumbnail: Option<PathBuf>,
     pub entity_type: EntityType,
     pub created_at: DateTime<Utc>,
@@ -37,13 +37,12 @@ impl Document {
         title: &str,
         description: &str,
         content: &str,
-        thumbnail_source: Source,
+        thumbnail_source: Option<Source>,
         thumbnail: Option<PathBuf>,
         entity_type: EntityType,
         categories: Vec<Characteristic>,
         tags: Vec<Characteristic>,
         extra_fields: Vec<ExtraField>,
-        is_pending: bool
     ) -> Self{
         let now = Utc::now();
         Document {
@@ -61,7 +60,7 @@ impl Document {
             categories,
             tags,
             extra_fields,
-            is_pending,
+            is_pending: false,
             is_deleted: false,
             deleted_at: None,
         }

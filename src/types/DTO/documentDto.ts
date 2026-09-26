@@ -7,7 +7,7 @@ export type DocumentDto = {
     title: string;
     description: string;
     content: string;
-    thumbnailSource: Source;
+    thumbnailSource: Source | null;
     thumbnail: string | null;
     entityType: EntityType;
     categories: Characteristic[];
@@ -19,7 +19,7 @@ export function defaultDocumentDto(): DocumentDto {
     return {
         entityType: EntityType.Document,
         thumbnail: "",
-        thumbnailSource: "file",
+        thumbnailSource: null,
         title: "",
         description: "",
         content: "",

@@ -65,7 +65,8 @@ pub async fn create_entity(
     let entity: Box<dyn EntityLike> = match data {
         CreateEntityRequest::Project(dto) => Box::new(dto.into_entity(user_id)),
         CreateEntityRequest::Card(dto) => Box::new(dto.into_entity(project.id, user_id)),
-        _ => {todo!()}
+        CreateEntityRequest::Document(dto) => Box::new(dto.into_entity(project.id, user_id)),
+        _ => return Err("Создание этого типа сущности пока не реализовано".to_string()),
     };
 
     writer::save_to_disk(&app_data_dir, entity.as_ref()).await?;
