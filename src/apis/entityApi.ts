@@ -5,9 +5,8 @@ export async function preloadEntities(){
     await invoke('get_entities')
 }
 
-export async function createEntity<T>(entity: T, entity_type: string){
-    let data = {type: entity_type, entity}
-    await invoke('create_entity', {data})
+export async function createEntity<T>(data: CreateEntityRequest){
+    await invoke<T>('create_entity', {data})
 }
 
 //TODO: Заменить CreateEntityRequest на какой-нить дженерик

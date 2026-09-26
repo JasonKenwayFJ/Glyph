@@ -40,6 +40,7 @@ const EntityCreator = (props: EntityCreatorProps) => {
     async function submit() {
         setLoading(true);
         try {
+            await createEntity<BaseEntity>(form);
             await invoke<BaseEntity>("create_entity", { data: form });
             props.onSaved();
         } catch (e) {
