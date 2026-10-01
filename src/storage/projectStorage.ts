@@ -6,7 +6,6 @@ type ProjectStorage = {
     projects: Project[];
     currentProject: Project | null;
     setProjects: (projects: Project[]) => void;
-    addProject: (project: Project) => void;
     setCurrentProject: (project: Project) => void;
 }
 
@@ -21,11 +20,15 @@ export const useProjectStorage = create<ProjectStorage>((set) => {
         console.log("Project Created")
     }).catch((error) => console.error("Не удалось подписаться на OnProjectCreated:", error));
 
+    void listen<Project>("OnProjectDeleted", (event) => {
+        set((state) => ({ projects: state.projects.filter((p) => p.id !== event.payload.id) }));
+        console.log("Project Deleted")
+    }).catch((error) => console.error("Не удалось подписаться на OnProjectDeleted:", error));
+
     return {
         projects: [],
         currentProject: null,
         setProjects: (projects) => set({ projects }),
-        addProject: (project) => set((state) => ({ projects: [...state.projects, project] })),
         setCurrentProject: (project) => set({ currentProject: project }),
     };
 });

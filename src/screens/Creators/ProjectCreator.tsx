@@ -47,7 +47,7 @@ export const ProjectCreator = ({ onClose, onCreate }: DataReceiverProps) => {
                         title,
                         description,
                         thumbnail,
-                        imageSource: thumbnail ? "File" : null
+                        imageSource: thumbnail ? "file" : null, // если есть обложка, то источник локальный
                     };
 
                     onCreate(dto);

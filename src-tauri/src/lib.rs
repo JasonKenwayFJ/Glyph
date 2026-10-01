@@ -12,7 +12,7 @@ use glyph_fs::loader;
 use crate::commands::ai_chat_commands::{clear_messages, get_messages, send_image, send_message};
 use crate::commands::commands::{create_entity, get_entities, hard_delete_entity, soft_delete_entity, update_entity};
 use crate::commands::plugin_commands::{activate_plugin, create_plugins, deactivate_plugin, delete_plugin, export_plugin, get_active_plugins, get_plugins};
-use crate::commands::project_commands::{create_project, get_project, get_projects, open_project};
+use crate::commands::project_commands::{create_project, update_project, delete_project, get_project, get_projects, open_project};
 use crate::commands::user_commands::{authorization, delete_account, registration, verify_user};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -78,6 +78,8 @@ pub fn run() {
             delete_account,
             
             create_project,
+            update_project,
+            delete_project,
             open_project,
             get_projects,
             get_project,

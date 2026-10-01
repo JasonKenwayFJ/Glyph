@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Copy, PartialEq, Serialize, Deserialize, Default)]
+#[derive(Clone, Copy, PartialEq, Serialize, Deserialize, Default, Debug)]
 pub enum EntityType{
     #[default]
     User,

@@ -52,7 +52,7 @@ impl ProjectDto {
             id: Uuid::new_v4(),
             user_id,
             title: self.title,
-            entity_type: Default::default(),
+            entity_type: EntityType::Project,
             description: "".to_string(),
             thumbnail: None,
             created_at: Default::default(),

@@ -1,4 +1,6 @@
-import {Characteristic, EntityType, ExtraField} from "../Entities.ts";
+import {Characteristic} from "../entities/partials/characteristics.ts";
+import {ExtraField} from "../entities/partials/extraFields.ts";
+import {EntityType} from "../enums/entityType.ts";
 
 export interface EntityDTO{
     entityType:EntityType,

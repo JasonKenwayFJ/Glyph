@@ -29,7 +29,7 @@ impl DocumentDto {
             &self.content,
             self.thumbnail_source,
             self.thumbnail,
-            self.entity_type,
+            EntityType::Document,
             self.categories,
             self.tags,
             self.extra_fields,

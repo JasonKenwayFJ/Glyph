@@ -1,7 +1,6 @@
 use crate::glyph_fs::writer;
 use glyph_core::dto_entities::project_dto::ProjectDto;
 use glyph_core::entities::helpers::data_object::DataObject;
-use glyph_core::entities::user_entity::User;
 use glyph_core::managers::user_manager::UserManager;
 use glyph_core::{Project, ProjectManager};
 use tauri::{Emitter, Manager};
@@ -23,14 +22,47 @@ pub async fn get_projects(
 ) -> Result<Vec<Project>, String> {
     Ok(project_state.get_projects())
 }
+#[tauri::command]
+pub async fn update_project(
+    app: tauri::AppHandle,
+    state: tauri::State<'_, ProjectManager>,
+    data: Project,
+) -> Result<(), String> {
+    let mut project = state
+        .get_project_id(data.id)
+        .ok_or("No active project found".to_string())?;
 
+    project.title = data.title.clone();
+    project.description = data.description.clone();
+    project.thumbnail = data.thumbnail.clone();
+
+    state.update_project(project.clone())?;
+
+    app.emit("OnProjectUpdated", &project)
+        .map_err(|e| e.to_string())
+}
+#[tauri::command]
+pub async fn delete_project(
+    app: tauri::AppHandle,
+    state: tauri::State<'_, ProjectManager>,
+    data: Project,
+) -> Result<(), String> {
+    let project = state
+        .get_project_id(data.id)
+        .ok_or("No active project found".to_string())?;
+
+    state.delete_project(project.id);
+
+    app.emit("OnProjectDeleted", &project)
+        .map_err(|e| e.to_string())
+}
 #[tauri::command]
 pub async fn create_project(
     app: tauri::AppHandle,
     state: tauri::State<'_, ProjectManager>,
     user_state: tauri::State<'_, UserManager>,
     data: ProjectDto,
-) -> Result<(), String> {
+) -> Result<Project, String> {
     println!("=== CREATE PROJECT ===");
     println!("Project: {}", data.title);
 
@@ -71,6 +103,7 @@ pub async fn create_project(
 
     println!("Updating ProjectManager state...");
 
+    state.add_project(project.clone())?;
     state.set_current_project(project.clone());
 
     println!("Emitting OnProjectCreated event...");
@@ -81,5 +114,7 @@ pub async fn create_project(
     }
 
     println!("=== CREATE PROJECT SUCCESS ===");
-    app.emit("OnProjectCreated", project).map_err(|e| e.to_string())
+    app.emit("OnProjectCreated", &project)
+        .map_err(|e| e.to_string())?;
+    Ok(project)
 }

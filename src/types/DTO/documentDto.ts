@@ -1,7 +1,6 @@
-import {EntityType} from "../enums/entityType.ts";
-import {Characteristic} from "../entities/partials/characteristics.ts";
-import {ExtraField} from "../entities/partials/extraFields.ts";
-import {Source} from "../enums/source.ts";
+import { Source } from "../enums/source.ts";
+import { Characteristic } from "../entities/partials/characteristics.ts";
+import { ExtraField } from "../entities/partials/extraFields.ts";
 
 export type DocumentDto = {
     title: string;
@@ -9,22 +8,20 @@ export type DocumentDto = {
     content: string;
     thumbnailSource: Source | null;
     thumbnail: string | null;
-    entityType: EntityType;
     categories: Characteristic[];
     tags: Characteristic[];
     extraFields: ExtraField[];
-}
+};
 
 export function defaultDocumentDto(): DocumentDto {
     return {
-        entityType: EntityType.Document,
-        thumbnail: "",
-        thumbnailSource: null,
         title: "",
         description: "",
         content: "",
+        thumbnailSource: null,
+        thumbnail: null,
         categories: [],
         tags: [],
-        extraFields: []
+        extraFields: [],
     };
 }

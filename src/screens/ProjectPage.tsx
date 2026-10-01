@@ -12,7 +12,8 @@ import {createProject} from "../apis/projectApi.ts";
 const ProjectPage = () => {
     const navigate = useNavigate();
     const projects = useProjectStorage((state) => state.projects);
-    const addProject = useProjectStorage((state) => state.addProject);
+
+
     function handleTilt(e: React.MouseEvent<HTMLDivElement>) {
         const card = e.currentTarget;
         const rect = card.getBoundingClientRect();
@@ -39,17 +40,13 @@ const ProjectPage = () => {
 
 
     async function openProject(data: Project) {
-        await invoke("open_project", { data });
-        addProject(data);
+        await invoke<Project>("open_project", { data });
         navigate("/mainPage");
     }
 
     async function submitProjectCreation(dto: ProjectDTO) {
         try {
-            const created = await invoke<Project>("create_project", { project: dto });
-            await createProject(dto)
-
-            addProject(created);
+            let created = await createProject(dto)
             setCreator(false);
             await openProject(created);
         } catch (e) {

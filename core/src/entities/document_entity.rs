@@ -77,7 +77,7 @@ impl EntityLike for Document {
         self.user_id
     }
     fn project_id(&self) -> Uuid {
-        self.id
+        self.project_id
     }
     fn entity_type(&self) -> EntityType {
         self.entity_type
