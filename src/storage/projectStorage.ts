@@ -1,6 +1,6 @@
 import {create} from 'zustand'
-import {Project} from "../types/entities/project.ts";
 import {listen} from "@tauri-apps/api/event";
+import {Project} from "../types/entities/baseEntity.ts";
 
 type ProjectStorage = {
     projects: Project[];
@@ -24,6 +24,10 @@ export const useProjectStorage = create<ProjectStorage>((set) => {
         set((state) => ({ projects: state.projects.filter((p) => p.id !== event.payload.id) }));
         console.log("Project Deleted")
     }).catch((error) => console.error("Не удалось подписаться на OnProjectDeleted:", error));
+
+    void listen<Project[]>("OnProjectsLoaded", (event) => {
+        set({ projects: event.payload });
+    }).catch((error) => console.error("Не удалось подписаться на OnProjectsLoaded:", error));
 
     return {
         projects: [],

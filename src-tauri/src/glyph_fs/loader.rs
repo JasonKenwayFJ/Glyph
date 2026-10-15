@@ -1,9 +1,7 @@
 use crate::glyph_fs::paths::directory_for_type;
-use futures::future::BoxFuture;
-use futures::FutureExt;
 use glh::functions::{reader, writer};
-use glyph_core::entities::card_entity::Card; // добавил — нужен конкретный тип для карточек
-use glyph_core::entities::document_entity::Document; // добавил — нужен конкретный тип для документов, "Entity" больше не используется
+use glyph_core::entities::card_entity::Card;
+use glyph_core::entities::document_entity::Document;
 use glyph_core::entities::plugin::Plugin;
 use glyph_core::entities::user_entity::User;
 use glyph_core::enums::entity_type::EntityType;
@@ -13,19 +11,9 @@ use serde::de::DeserializeOwned;
 use std::path::Path;
 use tokio::fs;
 
-pub async fn preload_data(
-    storage_dir: &Path,
-) -> Result<(User, Vec<Project>, Vec<Box<dyn EntityLike>>, Vec<Plugin>), String> {
-    let user = load_user(storage_dir).await?;
-    let projects = load_projects(storage_dir).await?;
-    let entities = load_entities(storage_dir).await?;
-    let plugins = load_plugins(storage_dir).await?;
-    Ok((user, projects, entities, plugins))
-}
 
 pub async fn load_plugins(storage_dir: &Path) -> Result<Vec<Plugin>, String> {
     load_files::<Plugin>(
-        // добавил явный turbofish — без него компилятор не поймёт, что читать
         directory_for_type(storage_dir, EntityType::Plugin)
             .await?
             .as_path(),
@@ -69,11 +57,8 @@ pub async fn load_projects(storage_dir: &Path) -> Result<Vec<Project>, String> {
         .await
         .map_err(|e| e.to_string())?;
 
-    println!("projects_dir: {:?}", projects_dir);
-
     while let Some(entry) = entries.next_entry().await.map_err(|e| e.to_string())? {
         let project_dir = entry.path();
-        println!("project_dir: {:?}", project_dir);
         if !project_dir.is_dir() {continue}
         let mut project_entries = fs::read_dir(&project_dir)
             .await
@@ -85,7 +70,6 @@ pub async fn load_projects(storage_dir: &Path) -> Result<Vec<Project>, String> {
             .map_err(|e| e.to_string())?
         {
             let path = entry.path();
-            println!("path: {:?}", path);
             if !path.is_file() || path.extension().and_then(|e| e.to_str()) != Some("glh") {
                 continue;
             }
@@ -107,6 +91,14 @@ pub async fn load_entities(storage_dir: &Path) -> Result<Vec<Box<dyn EntityLike>
         load_files::<Document>(&directory_for_type(storage_dir, EntityType::Document).await?)
             .await?;
 
+    println!(
+        "Loaded {} cards and {} documents from disk",
+        cards.len(),
+        documents.len()
+    );
+    println!("card path: {:?}", &directory_for_type(storage_dir, EntityType::Card).await?);
+    println!("document path: {:?}", &directory_for_type(storage_dir, EntityType::Document).await?);
+    
     let cards_boxed = cards
         .into_iter()
         .map(|c| Box::new(c) as Box<dyn EntityLike>);

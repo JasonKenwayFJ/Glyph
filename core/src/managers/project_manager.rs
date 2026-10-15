@@ -19,12 +19,12 @@ impl ProjectManager {
         }
     }
 
-    pub fn get_entities(&self, entity_type: EntityType) -> Vec<Box<dyn EntityLike>> {
+    pub fn get_entities(&self, entity_type: Option<EntityType>) -> Vec<Box<dyn EntityLike>> {
         self.entities
             .lock()
             .unwrap()
             .iter()
-            .filter(|e| e.entity_type() == entity_type)
+            .filter(|e| entity_type.map_or(true, |t| e.entity_type() == t))
             .cloned()
             .collect()
     }
@@ -242,7 +242,7 @@ mod tests {
         manager.add_entity(make_card(project_id, "Карта 1"));
         manager.add_entity(make_card(project_id, "Карта 2"));
 
-        let cards = manager.get_entities(EntityType::Card);
+        let cards = manager.get_entities(Some(EntityType::Card));
         assert_eq!(cards.len(), 2);
     }
 
@@ -251,7 +251,7 @@ mod tests {
         let manager = ProjectManager::new();
         manager.add_entity(make_card(Uuid::new_v4(), "Карта"));
 
-        let documents = manager.get_entities(EntityType::Document);
+        let documents = manager.get_entities(Some(EntityType::Document));
         assert!(documents.is_empty());
     }
 
@@ -264,7 +264,7 @@ mod tests {
 
         manager.remove_entity(card_id);
 
-        assert!(manager.get_entities(EntityType::Card).is_empty());
+        assert!(manager.get_entities(Some(EntityType::Card)).is_empty());
     }
 
     #[test]
@@ -279,7 +279,7 @@ mod tests {
         updated_card.id = entity_id; // тот же id, иначе update_entity его не найдёт
         manager.update_entity(Box::new(updated_card)).unwrap();
 
-        let cards = manager.get_entities(EntityType::Card);
+        let cards = manager.get_entities(Some(EntityType::Card));
         assert_eq!(cards.len(), 1);
         assert_eq!(cards[0].file_name(), "После");
     }
@@ -304,6 +304,6 @@ mod tests {
         ];
         manager.set_entities(fresh);
 
-        assert_eq!(manager.get_entities(EntityType::Card).len(), 2);
+        assert_eq!(manager.get_entities(Some(EntityType::Card)).len(), 2);
     }
 }

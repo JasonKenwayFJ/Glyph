@@ -1,5 +1,8 @@
 import * as React from "react";
 import "./ImageUploader.css"
+
+
+
 type ImageUploaderProps = {
     placeholder?: string
     onUpload: (file: File) => void;
@@ -24,6 +27,7 @@ const ImageUploader = ({placeholder, onUpload, imagePath} : ImageUploaderProps) 
             />
 
             <img className={imagePath ? "ImageUploaderWithUserImage" : "ImageUploaderEmpty"} src={imagePath ?? "/favicon.svg"} alt="" />
+
             {!imagePath && <span>{placeholder ? placeholder : "Выберите изображение"}</span>}
         </label>
     )

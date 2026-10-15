@@ -1,4 +1,4 @@
-import {Source} from "../enums/source.ts";
+import {Source} from "../entities/partials/source.ts";
 
 export type ProjectDTO = {
     title: string;

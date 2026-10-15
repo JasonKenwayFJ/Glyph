@@ -1,13 +1,13 @@
 import {invoke} from "@tauri-apps/api/core";
-import {Project} from "../types/entities/project.ts";
 import {ProjectDTO} from "../types/DTO/projectDTO.ts";
+import {Project} from "../types/entities/baseEntity.ts";
 
 
 export async function getProjects(){
-    await invoke('get_projects')
+    return await invoke('get_projects')
 }
 export async function getCurrentProject(){
-    await invoke('get_project')
+    return await invoke('get_project')
 }
 export async function openProject(data: Project) {
     await invoke('open_project', {data})

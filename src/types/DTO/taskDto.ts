@@ -1,5 +1,5 @@
 import {EntityType} from "../enums/entityType.ts";
-import {Priority} from "../entities/task.ts";
+import {Priority} from "../enums/priority.ts";
 
 export type TaskDto = {
     id: string;

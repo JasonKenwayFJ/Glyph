@@ -1,4 +1,5 @@
-import {EntityType} from "../Entities.ts";
+import {EntityType} from "../enums/entityType.ts";
+
 
 export type User = {
     id: string,

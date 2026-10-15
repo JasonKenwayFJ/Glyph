@@ -1,5 +1,5 @@
 import {EntityType} from "../enums/entityType.ts";
-import {Source} from "../enums/source.ts";
+import {Source} from "../entities/partials/source.ts";
 
 export type UserDto ={
     userName: String,

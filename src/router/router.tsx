@@ -1,12 +1,12 @@
 import { createHashRouter } from "react-router-dom";
 
 import MainLayout from "../layout/MainLayout";
-import ProjectPage from "../screens/ProjectPage.tsx"
-import MainPage from "../screens/MainPage.tsx";
-import EntityPage from "../screens/EntityPage.tsx";
-import LoginPage from "../screens/LoginPage.tsx";
-import {AccountPage} from "../screens/AccountPage.tsx";
-import {CodeEditorPage} from "../screens/CodeEditorPage.tsx";
+import ProjectPage from "../screens/pages/Project/ProjectPage.tsx"
+import MainPage from "../screens/pages/Main/MainPage.tsx";
+import EntityPage from "../screens/pages/Entity/EntityPage.tsx";
+import LoginPage from "../screens/pages/Login/LoginPage.tsx";
+import {AccountPage} from "../screens/pages/Account/AccountPage.tsx";
+import {CodeEditorPage} from "../screens/pages/CodeEditor/CodeEditorPage.tsx";
 import {PluginRouter} from "./pluginRouter.tsx";
 
 

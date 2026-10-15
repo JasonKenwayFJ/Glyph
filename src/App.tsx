@@ -1,18 +1,26 @@
 
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router/router";
-import {useEffect} from "react";
-import {Project} from "./types/entities/project.ts";
+import "./index.scss"
+import {Project} from "./types/entities/baseEntity.ts";
 import {invoke} from "@tauri-apps/api/core";
 import {useProjectStorage} from "./storage/projectStorage.ts";
-import "./index.scss"
+import {useEffect} from "react";
 
 function App() {
 
     useEffect(() => {
-        invoke<Project[]>("get_projects").then((projects) => {
-            useProjectStorage.getState().setProjects(projects);
-        })
+        const loadProjects = async () => {
+            try{
+                const projects = await invoke<Project[]>("get_projects");
+                console.log("Loaded projects:", projects);
+                useProjectStorage.getState().setProjects(projects);
+            }
+            catch (e) {
+                console.error("Failed to load projects:", e);
+            }
+        }
+        loadProjects();
     }, []);
 
 

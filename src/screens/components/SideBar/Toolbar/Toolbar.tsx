@@ -1,24 +1,12 @@
 import "./../../../MainStyles/Panels/ToolbarStyle.scss"
-import {useEffect, useRef, useState} from "react";
+import {useRef, useState} from "react";
 import {router} from "../../../../router/router.tsx";
-import {listen} from '@tauri-apps/api/event'
-import {Project} from "../../../../types/Project.ts";
+import {useProjectStorage} from "../../../../storage/projectStorage.ts";
 
 
 export const Toolbar = (isCollapsed : boolean) => {
 
-    const [project, setProject] = useState<Project>();
-
-    useEffect(() => {
-        const unlisten = listen<Project>('OnProjectChanged', (event) => {
-            console.log('Проект изменился:', event.payload)
-            setProject(event.payload)
-        })
-
-        return () => {
-            unlisten.then(fn => fn()) // отписка при размонтировании компонента
-        }
-    }, [])
+    const project_storage = useProjectStorage();
 
 
     const [isOpen, setOpen] = useState<boolean>(false)
@@ -55,7 +43,7 @@ export const Toolbar = (isCollapsed : boolean) => {
 
             <div className="WindowTitle" ref={ref} onClick={() => toggleMainButton(!isOpen)}>
                 <label style={{display: "block", margin: 0}}>Glyph</label>
-                <p style={{display: "block", marginTop: 0, width: 100}}>{project?.title ?? "Без проекта"}</p>
+                <p style={{display: "block", marginTop: 0, width: 100}}>{project_storage.currentProject?.title ?? "Без проекта"}</p>
                 {isOpen &&
                     <div className="dropDownPanel">
                         <button className="dropDownButton">

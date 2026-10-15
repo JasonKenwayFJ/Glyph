@@ -2,14 +2,15 @@ use crate::glyph_fs::{deleter, loader, writer};
 use glyph_core::enums::entity_type::EntityType;
 use glyph_core::enums::CreateEntityRequest::CreateEntityRequest;
 use glyph_core::managers::user_manager::UserManager;
-use glyph_core::ProjectManager;
-use tauri::{Emitter, Manager};
 use glyph_core::traits::entity_like::EntityLike;
+use glyph_core::ProjectManager;
+use std::thread::current;
+use tauri::{Emitter, Manager};
 
 #[tauri::command]
 pub async fn get_entities(
     app: tauri::AppHandle,
-    entity_type: EntityType,
+    entity_type: Option<EntityType>,
     project_state: tauri::State<'_, ProjectManager>,
 ) -> Result<Vec<Box<dyn EntityLike>>, String> {
     let project = project_state
@@ -22,20 +23,19 @@ pub async fn get_entities(
         .join("Glyph")
         .join(project.title);
 
+    println!("Getting entities from app data dir: {:?}", app_data_dir);
     let local_data = project_state.get_entities(entity_type);
-    if !local_data.is_empty(){
-        return Ok(local_data)
+    if !local_data.is_empty() {
+        return Ok(local_data);
     }
 
     let disk_data = loader::load_entities(&app_data_dir).await?;
-    if !disk_data.is_empty(){
+    if !disk_data.is_empty() {
         project_state.set_entities(disk_data.clone());
-        return Ok(disk_data)
+        return Ok(disk_data);
     }
 
-
     Ok(Vec::new())
-
 }
 
 #[tauri::command]
@@ -45,24 +45,37 @@ pub async fn create_entity(
     user_state: tauri::State<'_, UserManager>,
     data: CreateEntityRequest,
 ) -> Result<Box<dyn EntityLike>, String> {
-    let user_id = user_state.get_user().ok_or("No active user found".to_string())?.id;
-    let base_dir = app.path().document_dir().expect("no app data dir").join("Glyph");
+    let user_id = user_state
+        .get_user()
+        .ok_or("No active user found".to_string())?
+        .id;
+    let mut base_dir = app
+        .path()
+        .document_dir()
+        .expect("no app data dir")
+        .join("Glyph");
 
     let entity: Box<dyn EntityLike> = match data {
         CreateEntityRequest::Project(dto) => {
             let project = dto.into_entity(user_id);
 
             writer::save_to_disk(&base_dir, &project).await?;
-            project_state.add_project(project.clone()).map_err(|e| e.to_string())?;
+            project_state
+                .add_project(project.clone())
+                .map_err(|e| e.to_string())?;
 
-            Box::new(project) 
+            Box::new(project)
         }
         CreateEntityRequest::Card(dto) => {
-            let current_project = project_state.get_project().ok_or("No active project found".to_string())?;
+            let current_project = project_state
+                .get_project()
+                .ok_or("No active project found".to_string())?;
             Box::new(dto.into_entity(current_project.id, user_id))
         }
         CreateEntityRequest::Document(dto) => {
-            let current_project = project_state.get_project().ok_or("No active project found".to_string())?;
+            let current_project = project_state
+                .get_project()
+                .ok_or("No active project found".to_string())?;
             Box::new(dto.into_entity(current_project.id, user_id))
         }
         _ => return Err("Создание этого типа сущности пока не реализовано".to_string()),
@@ -70,7 +83,9 @@ pub async fn create_entity(
 
     if entity.entity_type() != EntityType::Project {
         println!("Creating entity of type: {:?}", entity.entity_type());
-        let mut project = project_state.get_project().ok_or("No active project found".to_string())?;
+        let mut project = project_state
+            .get_project()
+            .ok_or("No active project found".to_string())?;
 
         let app_data_dir = base_dir.join(&project.title);
 
@@ -78,12 +93,18 @@ pub async fn create_entity(
         project_state.add_boxed_entity(entity.clone_box());
 
         project.weight += 1;
-        project_state.update_project(project).map_err(|e| e.to_string())?;
+        project_state
+            .update_project(project)
+            .map_err(|e| e.to_string())?;
     }
 
     match entity.entity_type() {
-        EntityType::Project => app.emit("OnProjectCreated", entity.clone_box()).map_err(|e| e.to_string()),
-        _ => app.emit("OnEntityCreated", entity.clone_box()).map_err(|e| e.to_string()),
+        EntityType::Project => app
+            .emit("OnProjectCreated", entity.clone_box())
+            .map_err(|e| e.to_string()),
+        _ => app
+            .emit("OnEntityCreated", entity.clone_box())
+            .map_err(|e| e.to_string()),
     }?;
     Ok(entity)
 }
@@ -105,8 +126,7 @@ pub async fn update_entity(
         .join(project.title);
     writer::update_on_disk(&app_data_dir, data.as_ref()).await?;
     project_state.update_entity(data.clone_box())?;
-    app.emit("OnEntityUpdated", data)
-        .map_err(|e| e.to_string())
+    app.emit("OnEntityUpdated", data).map_err(|e| e.to_string())
 }
 
 #[tauri::command]
@@ -154,6 +174,5 @@ pub async fn hard_delete_entity(
 
     project_state.remove_entity(data.id());
 
-    app.emit("OnEntityDeleted", data)
-        .map_err(|e| e.to_string())
+    app.emit("OnEntityDeleted", data).map_err(|e| e.to_string())
 }
