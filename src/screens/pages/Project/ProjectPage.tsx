@@ -1,11 +1,11 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Searcher } from "../../components/Shared/Searcher.tsx";
 import "./ProjectPageStyle.scss";
 import { useNavigate } from "react-router-dom";
 import {useProjectStorage} from "../../../storage/projectStorage.ts";
 import {ProjectDTO} from "../../../types/DTO/projectDTO.ts";
 import {createProject, openProject} from "../../../apis/projectApi.ts";
-import { Project} from "../../../types/entities/baseEntity.ts";
+import { ProjectEntity} from "../../../types/entities/baseEntity.ts";
 import {ProjectCreator} from "../../Panels/Creators/ProjectCreator.tsx";
 import {getEntities} from "../../../apis/entityApi.ts";
 import {useEntityStorage} from "../../../storage/entity_storage.ts";
@@ -41,7 +41,7 @@ const ProjectPage = () => {
 
 
 
-    async function open(data: Project) {
+    async function open(data: ProjectEntity) {
         await openProject(data);
         useEntityStorage.getState().setEntities(await getEntities(EntityType.Project));
         navigate("/mainPage");

@@ -35,6 +35,29 @@ type EditorProps = {
     initialContent?: string; // JSON-строка сохранённых блоков
     onChange: (content: string) => void;
 };
+export function blocksToPlainText(raw: string): string {
+    try {
+        const blocks = JSON.parse(raw);
+
+        const walk = (list: any[]): string[] =>
+            list.flatMap((block) => {
+                const own = Array.isArray(block.content)
+                    ? block.content
+                        .map((c: any) =>
+                            c.type === "link"
+                                ? c.content.map((x: any) => x.text).join("")
+                                : c.text ?? ""
+                        )
+                        .join("")
+                    : "";
+                return [own, ...walk(block.children ?? [])];
+            });
+
+        return walk(blocks).filter(Boolean).join("\n");
+    } catch {
+        return raw;   // если там не JSON, а обычный текст, показываем как есть
+    }
+}
 const Editor = ({ initialContent, onChange }: EditorProps) => {
     const editor = useCreateBlockNote({
         initialContent: initialContent

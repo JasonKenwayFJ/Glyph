@@ -1,5 +1,6 @@
 import "./DocumentStyle.scss";
 import {DocumentEntity} from "../../types/entities/baseEntity.ts";
+import {blocksToPlainText} from "../../components/Shared/Editor/Editor.tsx";
 
 
 type DocumentProps = {
@@ -46,7 +47,7 @@ const DocumentTemplate = ({ data, linksCount = 0, onClick }: DocumentProps) => {
                 <h3 className="DocumentTitle">{data.title}</h3>
 
                 <p className="DocumentExcerpt">
-                    {data.content || "Пока пусто — откройте, чтобы начать писать"}
+                    {blocksToPlainText(data.content) ?? "Пока пусто — откройте, чтобы начать писать"}
                 </p>
 
                 <div className="DocumentTags">

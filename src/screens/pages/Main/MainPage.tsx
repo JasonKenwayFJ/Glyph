@@ -1,5 +1,5 @@
 import Editor from "../../../components/Shared/Editor/Editor.tsx";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import "./MainPageStyle.scss"
 import {EntityType} from "../../../types/enums/entityType.ts";
 import EntityCreator from "../../Panels/Creators/EntityCreator.tsx";
@@ -7,81 +7,71 @@ import {BaseEntity, DocumentEntity} from "../../../types/entities/baseEntity.ts"
 import {invoke} from "@tauri-apps/api/core";
 import {useEntityStorage} from "../../../storage/entity_storage.ts";
 import {useParams} from "react-router-dom";
+import {updateEntity} from "../../../apis/entityApi.ts";
+
 const MainPage = () => {
     const {id} = useParams()
 
+    const handleSave = async () => {
+        console.log("Saving document with content:", content);
+        if (document) {
+            document.content = content;
+            await updateEntity(document);
+            console.log("Document saved:", document);
+        } else {
+            setShowCreator(true);
+        }
+    };
+
+    const saveRef = useRef(handleSave);
+    saveRef.current = handleSave;
+
     useEffect(() => {
-        const handleKeyDown = async (event: KeyboardEvent) => {
-            if ((event.ctrlKey || event.metaKey) && event.key === "s"){
-                event.preventDefault()
-                if (content){
-                    await handleSave()
-                }
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if ((event.ctrlKey || event.metaKey) && event.key === "s") {
+                event.preventDefault();
+                saveRef.current();
             }
         };
-
         window.addEventListener("keydown", handleKeyDown);
-        return () => {
-            window.removeEventListener("keydown", handleKeyDown)
-        }
+        return () => window.removeEventListener("keydown", handleKeyDown);
     }, []);
     useEffect(() => {
         const loadEntities = async () => {
-            try{
+            try {
                 const entities = await invoke<BaseEntity[]>('get_entities');
                 console.log("Loaded entities:", entities);
                 useEntityStorage.getState().setEntities(entities);
-            }
-            catch (e) {
+            } catch (e) {
                 console.error("Error loading entities:", e);
             }
         }
         loadEntities()
     }, []);
-    const entity = useEntityStorage((state) => state.entities.find((e) => e.id === id)) as DocumentEntity;
 
+    const document = useEntityStorage((state) => state.entities.find((e) => e.id === id)) as DocumentEntity;
     const [content, setContent] = useState<string>("");
     const [showCreator, setShowCreator] = useState(false);
 
-    useEffect(() => {
-        if (entity) {
-            setContent(entity.content);
-        } else {
-            setContent("");
-        }
-    }, []);
-    const handleSave = async () => {
-        // if (document) {
-        //     document.id = id!;
-        //     document.content = content;
-        //     await invoke('UpdateDocument', document);
-        // } else {
-        //     setShowCreator(true);
-        // }
-    };
 
-    // const handleCreated = (created: Entity) => {
-    //     setDocument(created);
-    //     setShowCreator(false);
-    //     navigate(`/mainPage/${created.id}`, {replace: true}); //Хз что за реплейс, предположу, что это замена документа, но свойства replace ниде нет
-    // };
 
-    return(
+
+    return (
         <div className={"MainPageContainer"}>
             <div className="MainPageHeader">
-                <h2>{entity?.title ?? "Новый документ"}</h2>
+                <h2>{document?.title ?? "Новый документ"}</h2>
             </div>
 
             <div className="Editor">
-                <Editor initialContent={content} onChange={setContent}/>
+                <Editor initialContent={document?.content ?? ""} onChange={setContent}/>
 
                 {showCreator && (
                     <EntityCreator
                         onClose={() => setShowCreator(false)}
                         entityType={EntityType.Document}
-                        prefillContent={content} onSaved={function (): void {
+                        prefillContent={document?.content ?? ""} onSaved={function (): void {
                         throw new Error("Function not implemented.");
-                    }}                    />
+                    }}/>
                 )}
 
             </div>

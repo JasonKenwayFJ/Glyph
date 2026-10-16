@@ -14,7 +14,7 @@ export async function createEntity<T>(data: CreateEntityRequest){
     await invoke<T>('create_entity', {data})
 }
 
-export async function updateEntity(data: CreateEntityRequest){
+export async function updateEntity(data: BaseEntity){
     await invoke('update_entity', {data})
 }
 export async function softDelete(data: CreateEntityRequest){
