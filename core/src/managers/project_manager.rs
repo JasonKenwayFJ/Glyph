@@ -59,6 +59,9 @@ impl ProjectManager {
             .unwrap()
             .retain(|e| e.id() != entity_id);
     }
+    pub fn clear_entities(&self) {
+        self.entities.lock().unwrap().clear();
+    }
 
     pub fn get_project(&self) -> Option<Project> {
         self.current_project.lock().unwrap().clone()

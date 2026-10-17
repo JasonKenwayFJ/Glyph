@@ -2,13 +2,17 @@ use crate::glyph_fs::writer;
 use glyph_core::dto_entities::project_dto::ProjectDto;
 use glyph_core::entities::helpers::data_object::DataObject;
 use glyph_core::managers::user_manager::UserManager;
-use glyph_core::{Project, ProjectManager};
+use glyph_core::{managers, Project, ProjectManager};
 use tauri::{Emitter, Manager};
 use uuid::Uuid;
 
 #[tauri::command]
-pub fn open_project(app: tauri::AppHandle, state: tauri::State<ProjectManager>, data: Project) {
+pub fn open_project(
+    app: tauri::AppHandle,
+    state: tauri::State<ProjectManager>,
+    data: Project) {
     state.set_current_project(data.clone());
+    state.clear_entities();
     app.emit("OnProjectSelected", data).unwrap();
 }
 
