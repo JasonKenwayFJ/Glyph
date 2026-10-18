@@ -30,6 +30,7 @@ const EntityCreator = (props: EntityCreatorProps) => {
             ? ({type: props.data.entityType, ...props.data} as any as CreateEntityRequest)
             : defaultRequest(props.entityType)
     );
+    const [entity, _setEntity] = useState<BaseEntity | null>(props.data || null);
 
     function patch(update: Partial<CreateEntityRequest>) {
         setForm((prev) => ({ ...prev, ...update }) as CreateEntityRequest);
@@ -46,7 +47,11 @@ const EntityCreator = (props: EntityCreatorProps) => {
             await invoke<BaseEntity>("create_entity", { data: form });
             switch (props.mode) {
                 case CreatorMode.Editing:
-                    await updateEntity(props.data!);
+                    if (!entity) {
+                        console.error("No entity to update");
+                        return;
+                    }
+                    await updateEntity(entity);
                     console.log("Entity updated");
                     break;
                 case CreatorMode.Creating:
