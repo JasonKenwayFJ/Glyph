@@ -1,13 +1,15 @@
 import ImageUploader from "../../../../../components/Shared/ImageUploader/ImageUploader.tsx";
 import {CardDto} from "../../../../../types/DTO/cardDto.ts";
+import {CardEntity, DocumentEntity} from "../../../../../types/entities/baseEntity.ts";
 
 
 type CardCreatorProps = {
-    value: CardDto;
+    value: CardDto | CardEntity | DocumentEntity;
     onChange: (patch: Partial<CardDto>) => void;
 };
 
 export const CardCreator = ({ value, onChange }: CardCreatorProps) => {
+
     return (
         <>
             <div className="EntityCreatorBodyFooter">

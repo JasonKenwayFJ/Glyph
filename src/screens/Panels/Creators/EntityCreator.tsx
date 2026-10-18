@@ -87,6 +87,7 @@ const EntityCreator = (props: EntityCreatorProps) => {
                 </div>
 
                 <div className="EntityCreatorBody">
+
                     {form.type === "Card" && <CardCreator value={form} onChange={patch} />}
                     {form.type === "Document" && <DocumentCreator value={form} onChange={patch} />}
 
