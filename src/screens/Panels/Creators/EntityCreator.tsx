@@ -1,6 +1,6 @@
 import "./Styles/EntityCreator.scss";
-import { useState } from "react";
-import { invoke } from "@tauri-apps/api/core";
+import {useState} from "react";
+import {invoke} from "@tauri-apps/api/core";
 
 import {CardCreator} from "./entityCreatorPage/Card/CardCreator.tsx";
 import {DocumentCreator} from "./entityCreatorPage/Document/DocumentCreator.tsx";
@@ -9,6 +9,7 @@ import {CreatorMode} from "../../../types/enums/creatorMode.ts";
 import {BaseEntity} from "../../../types/entities/baseEntity.ts";
 import {CreateEntityRequest, defaultRequest} from "../../../types/createEntityRequest.ts";
 import Dropdown from "../../../components/Shared/Dropdown/Dropdown.tsx";
+import {createEntity, updateEntity} from "../../../apis/entityApi.ts";
 
 
 type EntityCreatorProps = {
@@ -23,9 +24,10 @@ type EntityCreatorProps = {
 const EntityCreator = (props: EntityCreatorProps) => {
     const [isLoading, setLoading] = useState(false);
 
+
     const [form, setForm] = useState<CreateEntityRequest>(() =>
         props.data
-            ? ({type: props.data.entityType, ...props.data} as unknown as CreateEntityRequest)
+            ? ({type: props.data.entityType, ...props.data} as any as CreateEntityRequest)
             : defaultRequest(props.entityType)
     );
 
@@ -42,6 +44,17 @@ const EntityCreator = (props: EntityCreatorProps) => {
         setLoading(true);
         try {
             await invoke<BaseEntity>("create_entity", { data: form });
+            switch (props.mode) {
+                case CreatorMode.Editing:
+                    await updateEntity(props.data!);
+                    console.log("Entity updated");
+                    break;
+                case CreatorMode.Creating:
+                    await createEntity(form);
+                    break;
+                default:
+                    console.error("Invalid mode");
+            }
             props.onSaved();
         } catch (e) {
             console.error(e);

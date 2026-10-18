@@ -5,6 +5,8 @@ import {TaskDto} from "./DTO/taskDto.ts";
 import {UserDto} from "./DTO/userDto.ts";
 import {PluginDto} from "./DTO/PluginDto.ts";
 import {EntityType} from "./enums/entityType.ts";
+import {CardEntity, DocumentEntity, ProjectEntity, TaskEntity} from "./entities/baseEntity.ts";
+import {User} from "./entities/user.ts";
 
 export type CreateEntityRequest =
     | ({ type: "User" } & UserDto)
@@ -14,6 +16,12 @@ export type CreateEntityRequest =
     | ({ type: "Document" } & DocumentDto)
     | ({ type: "Task" } & TaskDto);
 
+export type UpdateEntityRequest =
+    | ({ type: "User" } & User)
+    | ({ type: "Project" } & ProjectEntity)
+    | ({ type: "Card" } & CardEntity)
+    | ({ type: "Document" } & DocumentEntity)
+    | ({ type: "Task" } & TaskEntity);
 export function defaultRequest(entityType: EntityType): CreateEntityRequest {
     switch (entityType) {
         case EntityType.Document:
@@ -21,5 +29,15 @@ export function defaultRequest(entityType: EntityType): CreateEntityRequest {
         case EntityType.Card:
         default:
             return { type: "Card", ...defaultCardDto() };
+    }
+}
+
+export function defaultUpdateRequest(entityType: EntityType, data: any): UpdateEntityRequest {
+    switch (entityType) {
+        case EntityType.Document:
+            return { type: "Document", ...data };
+        case EntityType.Card:
+        default:
+            return { type: "Card", ...data };
     }
 }
