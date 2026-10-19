@@ -42,7 +42,16 @@ export interface TaskEntity extends BaseEntity{
     position: number;
     estimatedMinutes: number | null;
 }
-export type CardEntity = BaseEntity & {
+export type CardEntity = {
+    id: string;
+    title: string;
+    description: string;
+    entityType: EntityType;
+    isPending: boolean;
+    isDeleted: boolean;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
     content: string;
     thumbnailSource: Source;
     thumbnail: string | null;
@@ -53,7 +62,16 @@ export type CardEntity = BaseEntity & {
     extraFields: Field[];
 
 }
-export type DocumentEntity = BaseEntity & {
+export type DocumentEntity = {
+    id: string;
+    title: string;
+    description: string;
+    entityType: EntityType;
+    isPending: boolean;
+    isDeleted: boolean;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
     content: string;
     thumbnailSource: Source;
     thumbnail: string | null;

@@ -17,10 +17,10 @@ export const EntityPage = () => {
     const [mode, setMode] = useState<CreatorMode>(CreatorMode.None);
     const [searchText, setSearchText] = useState("");
 
-    function toggleCreator(mode: CreatorMode, _entityType: EntityType, entity?: BaseEntity) {
-        setCreator(true);
+    function toggleCreator(mode: CreatorMode, entity?: BaseEntity) {
         setEntity(entity);
         setMode(mode);
+        setCreator(true);
     }
 
     function onSave() {
