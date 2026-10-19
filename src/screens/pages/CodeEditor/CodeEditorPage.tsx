@@ -86,7 +86,7 @@ NameClass {
 
         setError(result.ok ? null : result.error!);
     };
-    const [showMetaForm, setShowMetaForm] = useState(false);
+    const [_showMetaForm, setShowMetaForm] = useState(false);
 
     const handleSaveClick = () => {
         if (scriptInfo) {

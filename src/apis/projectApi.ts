@@ -1,6 +1,6 @@
 import {invoke} from "@tauri-apps/api/core";
 import {ProjectDTO} from "../types/DTO/projectDTO.ts";
-import {Project} from "../types/entities/baseEntity.ts";
+import {ProjectEntity} from "../types/entities/baseEntity.ts";
 
 
 export async function getProjects(){
@@ -9,21 +9,21 @@ export async function getProjects(){
 export async function getCurrentProject(){
     return await invoke('get_project')
 }
-export async function openProject(data: Project) {
+export async function openProject(data: ProjectEntity) {
     await invoke('open_project', {data})
 }
 export async function createProject(dto: ProjectDTO) {
-    return await invoke<Project>("create_entity", {
+    return await invoke<ProjectEntity>("create_entity", {
         data: { type: "Project", ...dto },
     });
 }
-export async function updateProject(data: Project) {
+export async function updateProject(data: ProjectEntity) {
     await invoke('update_project', {data})
 }
-export async function saveProject(data: Project) {
+export async function saveProject(data: ProjectEntity) {
     await invoke('save_project', {data})
 }
-export async function deleteProject(data: Project) {
+export async function deleteProject(data: ProjectEntity) {
     await invoke('delete_project', {data})
 }
 
