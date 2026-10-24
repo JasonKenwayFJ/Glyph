@@ -1,7 +1,6 @@
 use std::path::Path;
 use tokio::fs;
 use glyph_core::traits::entity_like::EntityLike;
-use glyph_core::traits::storable::Storable;
 use crate::glyph_fs::paths::{directory_for_type, TRASH_DIRECTORY};
 
 pub async fn _soft_delete(storage_dir: &Path, item: &dyn EntityLike) -> Result<(), String> {

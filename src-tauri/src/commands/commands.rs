@@ -50,7 +50,7 @@ pub async fn create_entity(
         .get_user()
         .ok_or("No active user found".to_string())?
         .id;
-    let mut base_dir = app
+    let base_dir = app
         .path()
         .document_dir()
         .expect("no app data dir")

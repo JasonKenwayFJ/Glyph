@@ -70,10 +70,8 @@ pub async fn create_project(
     println!("=== CREATE PROJECT ===");
     println!("Project: {}", data.title);
 
-    let user_id: Uuid = user_state.get_user_id().ok_or("Not found active User")?;
 
-    let mut project = data.get_entity();
-    project.user_id = user_id;
+    let mut project = data.into_entity(user_state.get_user_id().ok_or("Not found active User")?);
 
     println!("Project: {}", project.user_id);
 
