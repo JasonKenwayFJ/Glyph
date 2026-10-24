@@ -21,6 +21,7 @@ pub async fn get_entities(
         .document_dir()
         .expect("no app data dir")
         .join("Glyph")
+        .join("Projects")
         .join(project.title);
 
     println!("Getting entities from app data dir: {:?}", app_data_dir);
