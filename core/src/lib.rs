@@ -4,6 +4,7 @@ pub mod network;
 pub mod traits;
 pub mod dto_entities;
 pub mod enums;
+mod tests;
 
 pub use managers::project_manager::ProjectManager;
 pub use entities::project_entity::Project;

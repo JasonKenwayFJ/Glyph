@@ -32,6 +32,29 @@ pub struct Card {
 }
 
 impl Card {
+    pub fn default(
+    ) -> Card {
+        let now = Utc::now();
+        Card {
+            id: Uuid::new_v4(),
+            project_id: Uuid::new_v4(),
+            user_id: Uuid::new_v4(),
+            title: "New Card".to_string(),
+            description: "".to_string(),
+            content: "".to_string(),
+            thumbnail_source: None,
+            thumbnail: None,
+            entity_type: EntityType::Card,
+            created_at: now,
+            updated_at: now,
+            categories: Vec::new(),
+            tags: Vec::new(),
+            extra_fields: Vec::new(),
+            is_pending: false,
+            is_deleted: false,
+            deleted_at: None,
+        }
+    }
     pub fn new(
         project_id: Uuid,
         user_id: Uuid,

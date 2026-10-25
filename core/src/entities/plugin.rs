@@ -4,8 +4,6 @@ use crate::enums::entity_type::EntityType;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use crate::dto_entities::plugin_dto::PluginDto;
-use crate::entities::user_config::UserConfig;
-use crate::entities::user_entity::User;
 use crate::traits::entity_like::EntityLike;
 use crate::traits::trashable::Trashable;
 

@@ -3,7 +3,6 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use crate::enums::entity_type::EntityType;
-use crate::Project;
 use crate::traits::entity_like::EntityLike;
 use crate::traits::trashable::Trashable;
 

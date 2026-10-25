@@ -1,9 +1,7 @@
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use crate::dto_entities::user_dto::UserDto;
 use crate::entities::helpers::data_object::DataObject;
 use crate::entities::plugin::{Plugin, PluginTag};
-use crate::entities::user_entity::User;
 use crate::enums::entity::Entity;
 
 #[derive(Clone, Serialize, Deserialize)]

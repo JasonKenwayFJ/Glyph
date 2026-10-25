@@ -6,7 +6,6 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use uuid::Uuid;
-use crate::entities::card_entity::Card;
 use crate::traits::entity_like::EntityLike;
 
 #[derive(Clone, Serialize, Deserialize, PartialEq)]

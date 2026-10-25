@@ -1,10 +1,7 @@
 use crate::glyph_fs::writer;
-use glyph_core::dto_entities::project_dto::ProjectDto;
-use glyph_core::entities::helpers::data_object::DataObject;
-use glyph_core::managers::user_manager::UserManager;
-use glyph_core::{managers, Project, ProjectManager};
+use glyph_core::dto_entities::project_dto::ProjectDto;use glyph_core::managers::user_manager::UserManager;
+use glyph_core::{ Project, ProjectManager};
 use tauri::{Emitter, Manager};
-use uuid::Uuid;
 
 #[tauri::command]
 pub fn open_project(
@@ -71,7 +68,7 @@ pub async fn create_project(
     println!("Project: {}", data.title);
 
 
-    let mut project = data.into_entity(user_state.get_user_id().ok_or("Not found active User")?);
+    let project = data.into_entity(user_state.get_user_id().ok_or("Not found active User")?);
 
     println!("Project: {}", project.user_id);
 

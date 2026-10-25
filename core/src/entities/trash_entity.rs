@@ -1,8 +1,6 @@
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use crate::enums::entity_type::EntityType;
-use crate::traits::storable::Storable;
-use crate::traits::trashable::Trashable;
 
 #[derive(Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]

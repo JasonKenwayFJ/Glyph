@@ -1,10 +1,9 @@
 use crate::glyph_fs::{deleter, loader, writer};
 use glyph_core::enums::entity_type::EntityType;
-use glyph_core::enums::CreateEntityRequest::CreateEntityRequest;
+use glyph_core::enums::create_entity_request::CreateEntityRequest;
 use glyph_core::managers::user_manager::UserManager;
 use glyph_core::traits::entity_like::EntityLike;
 use glyph_core::ProjectManager;
-use std::thread::current;
 use tauri::{Emitter, Manager};
 
 #[tauri::command]

@@ -3,9 +3,7 @@ use glyph_core::dto_entities::plugin_dto::PluginDto;
 use glyph_core::entities::plugin::Plugin;
 use glyph_core::managers::plugin_manager::PluginManager;
 use tauri::{Emitter, Manager};
-use tokio::fs;
-use glyph_core::enums::CreateEntityRequest::CreateEntityRequest;
-use glyph_core::managers::user_manager::UserManager;
+use tokio::fs;use glyph_core::managers::user_manager::UserManager;
 use glyph_core::traits::entity_like::EntityLike;
 
 #[tauri::command]
