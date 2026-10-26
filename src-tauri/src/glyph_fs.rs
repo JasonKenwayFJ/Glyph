@@ -22,11 +22,22 @@ mod tests {
 
     #[tokio::test]
     async fn test_deleter() {
-        // deleter::какая_то_функция();
+        let user = Card::default();
+        let app_data_dir = temp_dir().join("Glyph");
+        std::fs::create_dir_all(&app_data_dir).expect("Failed to create test directory");
+        let result = writer::save_to_disk(&app_data_dir, &user).await;
+        assert!(result.is_ok());
+        let result = deleter::_hard_delete(&app_data_dir, &user).await;
+        assert!(result.is_ok());
     }
 
     #[tokio::test]
     async fn test_loader() {
+        let user = Card::default();
+        let app_data_dir = temp_dir().join("Glyph");
+        std::fs::create_dir_all(&app_data_dir).expect("Failed to create test directory");
+        let result = writer::save_to_disk(&app_data_dir, &user).await;
+        assert!(result.is_ok());
         // loader::какая_то_функция();
     }
 

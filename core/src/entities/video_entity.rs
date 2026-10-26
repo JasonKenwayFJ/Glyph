@@ -1,24 +1,25 @@
 use crate::enums::entity_type::EntityType;
 use crate::enums::source::Source;
+use crate::traits::entity_like::EntityLike;
 use crate::traits::storable::Storable;
 use crate::traits::trashable::Trashable;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use uuid::Uuid;
-use crate::traits::entity_like::EntityLike;
 
 #[derive(Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
-pub struct Video{
+pub struct Video {
     pub id: Uuid,
     pub project_id: Uuid,
     pub user_id: Uuid,
     pub entity_type: EntityType,
     pub title: String,
-    pub file_path: String,
+    pub file_path: Option<PathBuf>,
     pub video_source: Source,
     pub thumbnail: Option<PathBuf>,
+
     pub duration: u64,
     pub height: u32,
     pub width: u32,
@@ -34,7 +35,7 @@ impl Video {
         project_id: Uuid,
         user_id: Uuid,
         title: String,
-        file_path: String,
+        file_path: Option<PathBuf>,
         video_source: Source,
     ) -> Self {
         Self {
@@ -62,6 +63,11 @@ impl EntityLike for Video {
     fn id(&self) -> Uuid {
         self.id
     }
+
+    fn get_path(&self) -> PathBuf {
+        self.file_path.clone().unwrap()
+    }
+
     fn user_id(&self) -> Uuid {
         self.user_id
     }
@@ -83,22 +89,26 @@ impl EntityLike for Video {
         Box::new(self.clone())
     }
 }
-impl Storable for Video{
-    fn file_name(&self) -> String {self.title.clone()}
+impl Storable for Video {
+    fn file_name(&self) -> String {
+        self.title.clone()
+    }
 
-    fn storage_id(&self) -> Uuid{
+    fn storage_id(&self) -> Uuid {
         self.id
     }
-    fn entity_type(&self) -> EntityType{
+    fn entity_type(&self) -> EntityType {
         self.entity_type
     }
 }
-impl Trashable for Video{
+impl Trashable for Video {
+    fn is_deleted(&self) -> bool {
+        self.is_deleted
+    }
 
-
-    fn is_deleted(&self) -> bool {self.is_deleted}
-
-    fn deleted_at(&self) -> Option<DateTime<Utc>> {self.deleted_at}
+    fn deleted_at(&self) -> Option<DateTime<Utc>> {
+        self.deleted_at
+    }
 
     fn move_to_trash(&mut self) {
         self.is_deleted = true;

@@ -28,11 +28,12 @@ impl CardDto {
             &self.title,
             &self.description,
             &self.content,
-            self.thumbnail_source,
             self.thumbnail,
+            self.thumbnail_source,
+            None,
             self.entity_type,
-            self.categories,
             self.tags,
+            self.categories,
             self.extra_fields,
         )
     }

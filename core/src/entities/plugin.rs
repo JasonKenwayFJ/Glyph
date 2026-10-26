@@ -1,11 +1,11 @@
-use std::path::PathBuf;
-use chrono::{DateTime, Utc};
-use crate::enums::entity_type::EntityType;
-use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 use crate::dto_entities::plugin_dto::PluginDto;
+use crate::enums::entity_type::EntityType;
 use crate::traits::entity_like::EntityLike;
 use crate::traits::trashable::Trashable;
+use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
+use std::path::PathBuf;
+use uuid::Uuid;
 
 #[derive(Clone, Serialize, Deserialize, PartialEq)]
 pub enum PluginTag {
@@ -14,7 +14,7 @@ pub enum PluginTag {
     Window,
     Automation,
 }
-#[derive(Clone,Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Serialize, Deserialize, PartialEq)]
 pub enum PluginPermission {
     Filesystem,
     Network,
@@ -71,9 +71,8 @@ impl Plugin {
         js_code: String,
         html_code: String,
         css_code: String,
-        
     ) -> Self {
-        Plugin{
+        Plugin {
             id,
             user_id,
             title,
@@ -88,7 +87,7 @@ impl Plugin {
             js_code,
             html_code,
             css_code,
-            entity_type: EntityType::Plugin
+            entity_type: EntityType::Plugin,
         }
     }
 }
@@ -132,12 +131,30 @@ impl Trashable for Plugin {
 }
 
 #[typetag::serde]
-impl EntityLike for Plugin{
-    fn id(&self) -> Uuid {self.id}
-    fn user_id(&self) -> Uuid {self.user_id}
-    fn project_id(&self) -> Uuid {self.id}
-    fn entity_type(&self) -> EntityType {self.entity_type}
-    fn thumbnail(&self) -> PathBuf { self.thumbnail.clone().unwrap_or_else(| | PathBuf::from("public/glyph-default-cover.svg")) }
+impl EntityLike for Plugin {
+    fn id(&self) -> Uuid {
+        self.id
+    }
+
+    fn get_path(&self) -> PathBuf {
+        todo!()
+    }
+
+    fn user_id(&self) -> Uuid {
+        self.user_id
+    }
+    fn project_id(&self) -> Uuid {
+        self.id
+    }
+
+    fn entity_type(&self) -> EntityType {
+        self.entity_type
+    }
+    fn thumbnail(&self) -> PathBuf {
+        self.thumbnail
+            .clone()
+            .unwrap_or_else(|| PathBuf::from("public/glyph-default-cover.svg"))
+    }
     fn file_name(&self) -> String {
         self.title.clone()
     }
@@ -145,4 +162,3 @@ impl EntityLike for Plugin{
         Box::new(self.clone())
     }
 }
-

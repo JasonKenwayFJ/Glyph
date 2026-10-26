@@ -55,6 +55,7 @@ impl ProjectDto {
             entity_type: EntityType::Project,
             description: "".to_string(),
             thumbnail: None,
+            file_path: None,
             created_at: Default::default(),
             updated_at: Default::default(),
             weight: 0,

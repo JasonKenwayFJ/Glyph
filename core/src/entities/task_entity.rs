@@ -1,14 +1,14 @@
-use std::path::PathBuf;
-use chrono::{DateTime, Utc};
-use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 use crate::enums::entity_type::EntityType;
 use crate::traits::entity_like::EntityLike;
 use crate::traits::trashable::Trashable;
+use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
+use std::path::PathBuf;
+use uuid::Uuid;
 
 #[derive(Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
-pub enum TaskStatus{
+pub enum TaskStatus {
     Todo,
     InProgress,
     Blocked,
@@ -26,7 +26,7 @@ pub enum Priority {
 }
 #[derive(Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
-pub struct Task{
+pub struct Task {
     pub id: Uuid,
     pub user_id: Uuid,
     pub project_id: Uuid,
@@ -35,6 +35,8 @@ pub struct Task{
     pub entity_type: EntityType,
     pub title: String,
     pub description: String,
+
+    pub file_path: Option<PathBuf>,
 
     pub status: TaskStatus,
 
@@ -49,7 +51,6 @@ pub struct Task{
     pub updated_at: DateTime<Utc>,
     pub deleted_at: Option<DateTime<Utc>>,
     pub completed_at: Option<DateTime<Utc>>,
-
 }
 impl Task {
     pub fn new(
@@ -57,6 +58,7 @@ impl Task {
         project_id: Uuid,
         title: String,
         description: String,
+        file_path: Option<PathBuf>,
         priority: Priority,
         parent_task_id: Option<Uuid>,
         thumbnail: Option<PathBuf>,
@@ -72,7 +74,7 @@ impl Task {
             thumbnail,
             title,
             description,
-
+            file_path,
             status: TaskStatus::Todo,
 
             is_pending: false,
@@ -110,19 +112,34 @@ impl Trashable for Task {
     }
 }
 
-
 #[typetag::serde]
 impl EntityLike for Task {
-    fn id(&self) -> Uuid {self.id}
-    fn user_id(&self) -> Uuid {self.user_id}
-    fn project_id(&self) -> Uuid {self.id}
-    fn entity_type(&self) -> EntityType {self.entity_type}
-    fn thumbnail(&self) -> PathBuf { self.thumbnail.clone().unwrap_or_else(| | PathBuf::from("public/glyph-default-cover.svg")) }
+    fn id(&self) -> Uuid {
+        self.id
+    }
+
+    fn get_path(&self) -> PathBuf {
+        self.file_path.clone().unwrap()
+    }
+
+    fn user_id(&self) -> Uuid {
+        self.user_id
+    }
+    fn project_id(&self) -> Uuid {
+        self.project_id
+    }
+    fn entity_type(&self) -> EntityType {
+        self.entity_type
+    }
+    fn thumbnail(&self) -> PathBuf {
+        self.thumbnail
+            .clone()
+            .unwrap_or_else(|| PathBuf::from("public/glyph-default-cover.svg"))
+    }
     fn file_name(&self) -> String {
         self.title.clone()
     }
     fn clone_box(&self) -> Box<dyn EntityLike> {
         Box::new(self.clone())
     }
-
 }

@@ -1,8 +1,8 @@
-use std::path::PathBuf;
-use serde::Deserialize;
-use uuid::Uuid;
 use crate::entities::task_entity::{Priority, Task};
 use crate::enums::entity_type::EntityType;
+use serde::Deserialize;
+use std::path::PathBuf;
+use uuid::Uuid;
 
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -23,8 +23,10 @@ impl TaskDto {
             project_id,
             self.title,
             self.description,
+            None,
             self.priority,
             self.parent_task_id,
-            self.thumbnail)
+            self.thumbnail,
+        )
     }
 }

@@ -1,13 +1,13 @@
 use crate::entities::document_entity::{Characteristic, ExtraField};
 use crate::enums::entity_type::EntityType;
 use crate::enums::source::Source;
+use crate::traits::entity_like::EntityLike;
 use crate::traits::storable::Storable;
 use crate::traits::trashable::Trashable;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use uuid::Uuid;
-use crate::traits::entity_like::EntityLike;
 
 #[derive(Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -18,6 +18,7 @@ pub struct Card {
     pub title: String,
     pub description: String,
     pub content: String,
+    pub file_path: Option<PathBuf>,
     pub thumbnail_source: Option<Source>,
     pub thumbnail: Option<PathBuf>,
     pub entity_type: EntityType,
@@ -32,8 +33,7 @@ pub struct Card {
 }
 
 impl Card {
-    pub fn default(
-    ) -> Card {
+    pub fn default() -> Card {
         let now = Utc::now();
         Card {
             id: Uuid::new_v4(),
@@ -42,6 +42,7 @@ impl Card {
             title: "New Card".to_string(),
             description: "".to_string(),
             content: "".to_string(),
+            file_path: None,
             thumbnail_source: None,
             thumbnail: None,
             entity_type: EntityType::Card,
@@ -61,12 +62,13 @@ impl Card {
         title: &str,
         description: &str,
         content: &str,
+        file_path: Option<PathBuf>,
         thumbnail_source: Option<Source>,
         thumbnail: Option<PathBuf>,
         entity_type: EntityType,
         categories: Vec<Characteristic>,
         tags: Vec<Characteristic>,
-        extra_fields: Vec<ExtraField>
+        extra_fields: Vec<ExtraField>,
     ) -> Self {
         let now = Utc::now();
         Card {
@@ -76,6 +78,7 @@ impl Card {
             title: title.to_string(),
             description: description.to_string(),
             content: content.to_string(),
+            file_path,
             thumbnail_source,
             thumbnail,
             entity_type,
@@ -99,7 +102,7 @@ impl EntityLike for Card {
         self.user_id
     }
     fn project_id(&self) -> Uuid {
-        self.id
+        self.project_id
     }
     fn entity_type(&self) -> EntityType {
         self.entity_type
@@ -111,6 +114,11 @@ impl EntityLike for Card {
     }
     fn file_name(&self) -> String {
         self.title.clone()
+    }
+    fn get_path(&self) -> PathBuf {
+        self.file_path
+            .clone()
+            .unwrap_or_else(|| PathBuf::from("public/glyph-default-cover.svg"))
     }
 
     fn clone_box(&self) -> Box<dyn EntityLike> {
@@ -131,7 +139,6 @@ impl Storable for Card {
     }
 }
 impl Trashable for Card {
-
     fn is_deleted(&self) -> bool {
         self.is_deleted
     }

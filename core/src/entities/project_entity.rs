@@ -1,3 +1,4 @@
+use crate::dto_entities::project_dto::ProjectDto;
 use crate::entities::audio_entity::Audio;
 use crate::entities::card_entity::Card;
 use crate::entities::document_entity::Document;
@@ -7,15 +8,14 @@ use crate::entities::task_entity::Task;
 use crate::entities::trash_entity::Trash;
 use crate::entities::video_entity::Video;
 use crate::enums::entity_type::EntityType;
+use crate::enums::source::Source;
+use crate::traits::entity_like::EntityLike;
 use crate::traits::storable::Storable;
+use crate::traits::trashable::Trashable;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use uuid::Uuid;
-use crate::dto_entities::project_dto::ProjectDto;
-use crate::enums::source::Source;
-use crate::traits::entity_like::EntityLike;
-use crate::traits::trashable::Trashable;
 
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -26,6 +26,7 @@ pub struct Project {
     pub entity_type: EntityType,
     pub description: String,
     pub thumbnail: Option<PathBuf>,
+    pub file_path: Option<PathBuf>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
     pub weight: i32,
@@ -45,18 +46,19 @@ pub struct Project {
     pub videos: Option<Vec<Video>>,
     pub trash: Option<Vec<Trash>>,
 
-    pub image_source: Option<Source>
+    pub image_source: Option<Source>,
 }
-impl From<&ProjectDto> for Project{
+impl From<&ProjectDto> for Project {
     fn from(value: &ProjectDto) -> Self {
-        Self{
+        Self {
             id: Uuid::new_v4(),
             user_id: Default::default(),
             title: value.title.to_string(),
             entity_type: EntityType::Project,
             description: value.description.to_string(),
             thumbnail: None,
-            created_at:  Utc::now(),
+            file_path: None,
+            created_at: Utc::now(),
             updated_at: Default::default(),
             weight: 0,
             is_pending: false,
@@ -81,7 +83,9 @@ impl Project {
         title: &str,
         description: &str,
         thumbnail: Option<PathBuf>,
-        is_pending: bool) -> Self {
+        file_path: Option<PathBuf>,
+        is_pending: bool,
+    ) -> Self {
         let now = Utc::now();
         Project {
             id: Uuid::new_v4(),
@@ -90,6 +94,7 @@ impl Project {
             entity_type: EntityType::Project,
             description: description.to_string(),
             thumbnail,
+            file_path,
             created_at: now,
             updated_at: now,
             weight: 0,
@@ -130,26 +135,45 @@ impl Trashable for Project {
 }
 
 #[typetag::serde]
-impl EntityLike for Project{
-    fn id(&self) -> Uuid {self.id}
-    fn user_id(&self) -> Uuid {self.user_id}
-    fn project_id(&self) -> Uuid {self.id}
-    fn entity_type(&self) -> EntityType {self.entity_type}
-    fn thumbnail(&self) -> PathBuf { self.thumbnail.clone().unwrap_or_else(| | PathBuf::from("public/glyph-default-cover.svg")) }
+impl EntityLike for Project {
+    fn id(&self) -> Uuid {
+        self.id
+    }
+
+    fn get_path(&self) -> PathBuf {
+        self.file_path.clone().unwrap()
+    }
+
+    fn user_id(&self) -> Uuid {
+        self.user_id
+    }
+    fn project_id(&self) -> Uuid {
+        self.id
+    }
+    fn entity_type(&self) -> EntityType {
+        self.entity_type
+    }
+    fn thumbnail(&self) -> PathBuf {
+        self.thumbnail
+            .clone()
+            .unwrap_or_else(|| PathBuf::from("public/glyph-default-cover.svg"))
+    }
     fn file_name(&self) -> String {
         self.title.clone()
     }
     fn clone_box(&self) -> Box<dyn EntityLike> {
-        Box::new(self.clone()) 
+        Box::new(self.clone())
     }
 }
-impl Storable for Project{
-    fn file_name(&self) -> String {self.title.clone()}
+impl Storable for Project {
+    fn file_name(&self) -> String {
+        self.title.clone()
+    }
 
-    fn storage_id(&self) -> Uuid{
+    fn storage_id(&self) -> Uuid {
         self.id
     }
-    fn entity_type(&self) -> EntityType{
+    fn entity_type(&self) -> EntityType {
         self.entity_type
     }
 }

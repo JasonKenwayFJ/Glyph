@@ -2,6 +2,7 @@ use crate::glyph_fs::writer;
 use glyph_core::dto_entities::project_dto::ProjectDto;use glyph_core::managers::user_manager::UserManager;
 use glyph_core::{ Project, ProjectManager};
 use tauri::{Emitter, Manager};
+use crate::glyph_fs;
 
 #[tauri::command]
 pub fn open_project(
@@ -29,17 +30,17 @@ pub async fn update_project(
     state: tauri::State<'_, ProjectManager>,
     data: Project,
 ) -> Result<(), String> {
-    let mut project = state
-        .get_project_id(data.id)
-        .ok_or("No active project found".to_string())?;
 
-    project.title = data.title.clone();
-    project.description = data.description.clone();
-    project.thumbnail = data.thumbnail.clone();
 
-    state.update_project(project.clone())?;
-
-    app.emit("OnProjectUpdated", &project)
+    state.update_project(data.clone())?;
+    let result = glyph_fs::writer::update_on_disk(
+        &app.path().document_dir().expect("no app data dir").join("Glyph"),
+        &data,
+    ).await;
+    if let Err(error) = result {
+        return Err(error.to_string());
+    }
+    app.emit("OnProjectUpdated", &data)
         .map_err(|e| e.to_string())
 }
 #[tauri::command]
@@ -53,7 +54,24 @@ pub async fn delete_project(
         .ok_or("No active project found".to_string())?;
 
     state.delete_project(project.id);
-
+    
+    let entities = state.get_project_entities(project.id);
+    for entity in entities {
+        let result = glyph_fs::deleter::_hard_delete(
+            &app.path().document_dir().expect("no app data dir").join("Glyph"),
+            &*entity,
+        ).await;
+        if let Err(error) = result {
+            return Err(error.to_string());
+        }
+    }
+    let result = glyph_fs::deleter::_hard_delete(
+        &app.path().document_dir().expect("no app data dir").join("Glyph"),
+        &project,
+    ).await;
+    if let Err(error) = result {
+        return Err(error.to_string());
+    }
     app.emit("OnProjectDeleted", &project)
         .map_err(|e| e.to_string())
 }

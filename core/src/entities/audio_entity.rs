@@ -1,12 +1,12 @@
 use crate::enums::entity_type::EntityType;
 use crate::enums::source::Source;
+use crate::traits::entity_like::EntityLike;
 use crate::traits::storable::Storable;
 use crate::traits::trashable::Trashable;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use uuid::Uuid;
-use crate::traits::entity_like::EntityLike;
 
 #[derive(Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -17,7 +17,7 @@ pub struct Audio {
     pub entity_type: EntityType,
 
     pub title: String,
-    pub file_path: String,
+    pub file_path: Option<PathBuf>,
     pub audio_source: Source,
 
     pub thumbnail: Option<PathBuf>,
@@ -41,7 +41,7 @@ impl Audio {
         project_id: Uuid,
         user_id: Uuid,
         title: String,
-        file_path: String,
+        file_path: Option<PathBuf>,
         audio_source: Source,
     ) -> Self {
         Self {
@@ -68,11 +68,28 @@ impl Audio {
 }
 #[typetag::serde]
 impl EntityLike for Audio {
-    fn id(&self) -> Uuid {self.id}
-    fn user_id(&self) -> Uuid {self.user_id}
-    fn project_id(&self) -> Uuid {self.id}
-    fn entity_type(&self) -> EntityType {self.entity_type}
-    fn thumbnail(&self) -> PathBuf { self.thumbnail.clone().unwrap_or_else(| | PathBuf::from("public/glyph-default-cover.svg")) }
+    fn id(&self) -> Uuid {
+        self.id
+    }
+
+    fn get_path(&self) -> PathBuf {
+        self.file_path.clone().unwrap()
+    }
+
+    fn user_id(&self) -> Uuid {
+        self.user_id
+    }
+    fn project_id(&self) -> Uuid {
+        self.id
+    }
+    fn entity_type(&self) -> EntityType {
+        self.entity_type
+    }
+    fn thumbnail(&self) -> PathBuf {
+        self.thumbnail
+            .clone()
+            .unwrap_or_else(|| PathBuf::from("public/glyph-default-cover.svg"))
+    }
     fn file_name(&self) -> String {
         self.title.clone()
     }
@@ -93,7 +110,6 @@ impl Storable for Audio {
     }
 }
 impl Trashable for Audio {
-
     fn is_deleted(&self) -> bool {
         self.is_deleted
     }

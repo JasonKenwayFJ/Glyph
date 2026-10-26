@@ -1,8 +1,8 @@
-use std::sync::Mutex;
-use uuid::Uuid;
 use crate::entities::project_entity::Project;
 use crate::enums::entity_type::EntityType;
 use crate::traits::entity_like::EntityLike;
+use std::sync::Mutex;
+use uuid::Uuid;
 
 pub struct ProjectManager {
     current_project: Mutex<Option<Project>>,
@@ -18,7 +18,15 @@ impl ProjectManager {
             entities: Mutex::new(Vec::new()),
         }
     }
-
+    pub fn get_project_entities(&self, project_id: Uuid) -> Vec<Box<dyn EntityLike>> {
+        self.entities
+            .lock()
+            .unwrap()
+            .iter()
+            .filter(|e| e.project_id() == project_id)
+            .cloned()
+            .collect()
+    }
     pub fn get_entities(&self, entity_type: Option<EntityType>) -> Vec<Box<dyn EntityLike>> {
         self.entities
             .lock()
@@ -32,10 +40,7 @@ impl ProjectManager {
     // FIXME: первым делом нужно проверить метод Add
     // Issue: #1
     pub fn add_entity(&self, entity: impl EntityLike + 'static) {
-        self.entities
-            .lock()
-            .unwrap()
-            .push(Box::new(entity));
+        self.entities.lock().unwrap().push(Box::new(entity));
     }
 
     pub fn add_boxed_entity(&self, entity: Box<dyn EntityLike>) {
@@ -123,23 +128,14 @@ mod tests {
     use std::path::PathBuf;
 
     fn make_project(title: &str) -> Project {
-        Project::new(Uuid::new_v4(), title, "описание", None, false)
+        Project::new(Uuid::new_v4(), title, "описание", None, None, false)
     }
 
     fn make_card(project_id: Uuid, title: &str) -> Card {
-        Card::new(
-            project_id,
-            Uuid::new_v4(),
-            title,
-            "краткое описание",
-            "содержание",
-            Some(Source::File(PathBuf::from("thumb.png"))), // было без Some(...)
-            None,
-            EntityType::Card,
-            vec![],
-            vec![],
-            vec![]
-        )
+        let mut card = Card::default();
+        card.project_id = project_id;
+        card.title = title.to_string();
+        card
     }
 
     // --- Projects ---

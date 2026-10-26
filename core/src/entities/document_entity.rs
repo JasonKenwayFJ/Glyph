@@ -18,6 +18,7 @@ pub struct Document {
     pub title: String,
     pub description: String,
     pub content: String,
+    pub file_path: Option<PathBuf>,
     pub thumbnail_source: Option<Source>,
     pub thumbnail: Option<PathBuf>,
     pub entity_type: EntityType,
@@ -37,6 +38,7 @@ impl Document {
         title: &str,
         description: &str,
         content: &str,
+        file_path: Option<PathBuf>,
         thumbnail_source: Option<Source>,
         thumbnail: Option<PathBuf>,
         entity_type: EntityType,
@@ -52,6 +54,7 @@ impl Document {
             title: title.to_string(),
             description: description.to_string(),
             content: content.to_string(),
+            file_path,
             thumbnail_source,
             thumbnail,
             entity_type,
@@ -72,6 +75,11 @@ impl Document {
 impl EntityLike for Document {
     fn id(&self) -> Uuid {
         self.id
+    }
+    fn get_path(&self) -> PathBuf {
+        self.file_path
+            .clone()
+            .unwrap()
     }
     fn user_id(&self) -> Uuid {
         self.user_id

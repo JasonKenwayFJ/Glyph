@@ -6,6 +6,7 @@ use crate::traits::trashable::Trashable;
 #[typetag::serde(tag = "type")]
 pub trait EntityLike:Send + Sync + Trashable{
     fn id(&self) -> Uuid;
+    fn get_path(&self) -> PathBuf;
     fn user_id(&self) -> Uuid;
     fn project_id(&self) -> Uuid;
     fn entity_type(&self) -> EntityType;
