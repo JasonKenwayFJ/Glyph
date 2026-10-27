@@ -1,12 +1,12 @@
-use std::path::PathBuf;
-use chrono::{DateTime, Utc};
-use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 use crate::enums::entity_type::EntityType;
 use crate::enums::source::Source;
 use crate::traits::entity_like::EntityLike;
 use crate::traits::storable::Storable;
 use crate::traits::trashable::Trashable;
+use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
+use std::path::PathBuf;
+use uuid::Uuid;
 //TODO: Добавить User в TS Enum, и перетащить Project на index[1]
 
 #[derive(Clone, Serialize, Deserialize, PartialEq)]
@@ -45,7 +45,7 @@ impl Document {
         categories: Vec<Characteristic>,
         tags: Vec<Characteristic>,
         extra_fields: Vec<ExtraField>,
-    ) -> Self{
+    ) -> Self {
         let now = Utc::now();
         Document {
             id: Uuid::new_v4(),
@@ -68,27 +68,20 @@ impl Document {
             deleted_at: None,
         }
     }
-
-
 }
 #[typetag::serde]
 impl EntityLike for Document {
+    fn entity_type(&self) -> EntityType {
+        self.entity_type
+    }
     fn id(&self) -> Uuid {
         self.id
-    }
-    fn get_path(&self) -> PathBuf {
-        self.file_path
-            .clone()
-            .unwrap()
     }
     fn user_id(&self) -> Uuid {
         self.user_id
     }
     fn project_id(&self) -> Uuid {
         self.project_id
-    }
-    fn entity_type(&self) -> EntityType {
-        self.entity_type
     }
     fn thumbnail(&self) -> PathBuf {
         self.thumbnail
@@ -98,22 +91,33 @@ impl EntityLike for Document {
     fn file_name(&self) -> String {
         self.title.clone()
     }
+    fn get_path(&self) -> PathBuf {
+        self.file_path
+            .clone()
+            .unwrap_or_else(|| PathBuf::from("public/glyph-default-cover.svg"))
+    }
+
+    fn set_path(&mut self, path: PathBuf) -> Result<(), String> {
+        self.file_path = Some(path);
+        Ok(())
+    }
     fn clone_box(&self) -> Box<dyn EntityLike> {
         Box::new(self.clone())
     }
 }
+impl Storable for Document {
+    fn file_name(&self) -> String {
+        self.title.clone()
+    }
 
-impl Storable for Document{
-    fn file_name(&self) -> String {self.title.clone()}
-
-    fn storage_id(&self) -> Uuid{
+    fn storage_id(&self) -> Uuid {
         self.id
     }
-    fn entity_type(&self) -> EntityType{
+    fn entity_type(&self) -> EntityType {
         self.entity_type
     }
 }
-impl Trashable for Document{
+impl Trashable for Document {
     fn is_deleted(&self) -> bool {
         self.is_deleted
     }

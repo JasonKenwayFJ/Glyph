@@ -28,14 +28,14 @@ pub async fn get_projects(
 pub async fn update_project(
     app: tauri::AppHandle,
     state: tauri::State<'_, ProjectManager>,
-    data: Project,
+    mut data: Project,
 ) -> Result<(), String> {
 
 
     state.update_project(data.clone())?;
-    let result = glyph_fs::writer::update_on_disk(
+    let result = writer::update_on_disk(
         &app.path().document_dir().expect("no app data dir").join("Glyph"),
-        &data,
+        &mut data,
     ).await;
     if let Err(error) = result {
         return Err(error.to_string());
@@ -86,7 +86,7 @@ pub async fn create_project(
     println!("Project: {}", data.title);
 
 
-    let project = data.into_entity(user_state.get_user_id().ok_or("Not found active User")?);
+    let mut project = data.into_entity(user_state.get_user_id().ok_or("Not found active User")?);
 
     println!("Project: {}", project.user_id);
 
@@ -111,7 +111,7 @@ pub async fn create_project(
 
     println!("Saving project to disk...");
 
-    if let Err(error) = writer::save_to_disk(&app_data_dir, &project).await {
+    if let Err(error) = writer::save_to_disk(&app_data_dir, &mut project).await {
         println!("ERROR: Failed to save project to disk: {}", error);
         return Err(error);
     }
@@ -131,7 +131,5 @@ pub async fn create_project(
     }
 
     println!("=== CREATE PROJECT SUCCESS ===");
-    app.emit("OnProjectCreated", &project)
-        .map_err(|e| e.to_string())?;
     Ok(project)
 }

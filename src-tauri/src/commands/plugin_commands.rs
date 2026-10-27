@@ -34,8 +34,8 @@ pub async fn export_plugin(app: tauri::AppHandle, plugin_dto: PluginDto) -> Resu
         .document_dir()
         .map_err(|error| error.to_string())?;
 
-    let plugin = plugin_dto.get_plugin();
-    writer::save_to_disk(&document_folder, &plugin)
+    let mut plugin = plugin_dto.get_plugin();
+    writer::save_to_disk(&document_folder, &mut plugin)
         .await
         .map_err(|e| e.to_string())
 }
@@ -52,7 +52,7 @@ pub async fn create_plugins(
         .map_err(|error| error.to_string())?;
     let mut plugin : Plugin = data.get_plugin();
     plugin.user_id = user_manager.get_user().unwrap().id;
-    writer::save_to_disk(&document_folder, &plugin)
+    writer::save_to_disk(&document_folder, &mut plugin)
         .await
         .map_err(|e| e.to_string())?;
 

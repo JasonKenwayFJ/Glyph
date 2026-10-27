@@ -44,7 +44,7 @@ pub struct Plugin {
     pub thumbnail: Option<PathBuf>,
     pub version: String,
     pub author: String,
-
+    pub file_path: Option<PathBuf>,
     pub tags: Vec<PluginTag>,
 
     pub glyph_version: String,
@@ -64,6 +64,7 @@ impl Plugin {
         thumbnail: Option<PathBuf>,
         version: String,
         author: String,
+        file_path: Option<PathBuf>,
         tags: Vec<PluginTag>,
         glyph_version: String,
         size: u64,
@@ -80,6 +81,7 @@ impl Plugin {
             thumbnail,
             version,
             author,
+            file_path,
             tags,
             glyph_version,
             size,
@@ -101,6 +103,7 @@ impl From<&PluginDto> for Plugin {
             thumbnail: None,
             version: "1.0.0".to_string(),
             author: dto.author.to_string(),
+            file_path: None,
             tags: dto.tags.clone(),
             glyph_version: env!("CARGO_PKG_VERSION").to_string(),
             size: 0,
@@ -132,24 +135,29 @@ impl Trashable for Plugin {
 
 #[typetag::serde]
 impl EntityLike for Plugin {
+    fn entity_type(&self) -> EntityType {
+        self.entity_type
+    }
     fn id(&self) -> Uuid {
         self.id
     }
-
     fn get_path(&self) -> PathBuf {
-        todo!()
+        self.file_path
+            .clone()
+            .unwrap_or_else(|| PathBuf::from("public/glyph-default-cover.svg"))
     }
 
+    fn set_path(&mut self, path: PathBuf) -> Result<(), String> {
+        self.file_path = Some(path);
+        Ok(())
+    }
     fn user_id(&self) -> Uuid {
         self.user_id
     }
     fn project_id(&self) -> Uuid {
         self.id
     }
-
-    fn entity_type(&self) -> EntityType {
-        self.entity_type
-    }
+    
     fn thumbnail(&self) -> PathBuf {
         self.thumbnail
             .clone()

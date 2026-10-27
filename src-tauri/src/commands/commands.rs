@@ -55,11 +55,11 @@ pub async fn create_entity(
         .expect("no app data dir")
         .join("Glyph");
 
-    let entity: Box<dyn EntityLike> = match data {
+    let mut entity: Box<dyn EntityLike> = match data {
         CreateEntityRequest::Project(dto) => {
-            let project = dto.into_entity(user_id);
+            let mut project = dto.into_entity(user_id);
 
-            writer::save_to_disk(&base_dir, &project).await?;
+            writer::save_to_disk(&base_dir, &mut project).await?;
             project_state
                 .add_project(project.clone())
                 .map_err(|e| e.to_string())?;
@@ -89,7 +89,7 @@ pub async fn create_entity(
 
         let app_data_dir = base_dir.join(&project.title);
 
-        writer::save_to_disk(&app_data_dir, entity.as_ref()).await?;
+        writer::save_to_disk(&app_data_dir, entity.as_mut()).await?;
         project_state.add_boxed_entity(entity.clone_box());
 
         project.weight += 1;
@@ -113,7 +113,7 @@ pub async fn create_entity(
 pub async fn update_entity(
     app: tauri::AppHandle,
     project_state: tauri::State<'_, ProjectManager>,
-    data: Box<dyn EntityLike>,
+    mut data: Box<dyn EntityLike>,
 ) -> Result<(), String> {
     let project = project_state
         .get_project()
@@ -124,7 +124,7 @@ pub async fn update_entity(
         .expect("no app data dir")
         .join("Glyph")
         .join(project.title);
-    writer::update_on_disk(&app_data_dir, data.as_ref()).await?;
+    writer::update_on_disk(&app_data_dir, data.as_mut()).await?;
     project_state.update_entity(data.clone_box())?;
     app.emit("OnEntityUpdated", data).map_err(|e| e.to_string())
 }
@@ -148,7 +148,7 @@ pub async fn soft_delete_entity(
     data.move_to_trash();
 
     deleter::_soft_delete(&app_data_dir, data.as_ref()).await?;
-    writer::update_on_disk(&app_data_dir.join("Trash"), data.as_ref()).await?;
+    writer::update_on_disk(&app_data_dir.join("Trash"), data.as_mut()).await?;
     project_state.update_entity(data.clone_box())?;
 
     app.emit("OnEntityMovedToTrash", data)

@@ -28,13 +28,14 @@ impl PluginDto {
             None,
             self.version.clone(),
             self.author.clone(),
+            None,
             self.tags.clone(),
             self.glyph_version.clone(),
             0,
             false,
-            self.css_code.clone(),
             self.html_code.clone(),
             self.js_code.clone(),
+            self.css_code.clone(),
         )
     }
 
